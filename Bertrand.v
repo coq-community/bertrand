@@ -435,7 +435,7 @@ apply Rle_trans with (INR (sqr (n + (n + 0))) / 2)%R.
 apply div_Rdiv with (m := 2); auto with real arith.
 unfold Rdiv in |- *; apply Rmult_le_compat; auto with real arith.
 apply sqr_Rsqrt.
-apply Rle_Rpower; auto with real.
+apply Rle_Rpower. unfold IZR; rewrite <- INR_IPR; auto with real.
 apply div_Rdiv; auto with real arith.
 rewrite Rmult_comm.
 apply Rmult_le_reg_l with (r := (/ Rpower (INR 4) (INR (2 * n) / INR 3))%R);
