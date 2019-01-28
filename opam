@@ -1,0 +1,27 @@
+opam-version: "1.2"
+maintainer: "palmskog@gmail.com"
+
+homepage: "https://github.com/coq-community/bertrand"
+dev-repo: "https://github.com/coq-community/bertrand.git"
+bug-reports: "https://github.com/coq-community/bertrand/issues"
+license: "LGPL 2.1"
+
+build: [make "-j%{jobs}%"]
+install: [make "install"]
+remove: ["rm" "-R" "%{lib}%/coq/user-contrib/Bertrand"]
+depends: [
+  "coq" {(>= "8.8" & < "8.9~")}
+]
+
+tags: [
+  "keyword:Knuth&#39;s algorithm"
+  "keyword:prime numbers"
+  "keyword:Bertrand&#39;s postulate"
+  "category:Mathematics/Arithmetic and Number Theory/Number theory"
+  "category:Computer Science/Decision Procedures and Certified Algorithms/Correctness proofs based on external tools"
+  "category:Miscellaneous/Extracted Programs/Arithmetic"
+  "logpath:Bertrand"
+]
+authors: [
+  "Laurent Théry"
+]
