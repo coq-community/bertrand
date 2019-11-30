@@ -19,7 +19,7 @@ Require Import Bertrand.
 
 Require Import WhyArrays.
 Require Import Zwf.
-Implicit Arguments well_founded [A].
+Arguments well_founded [A].
 
 (*Why*) Parameter n : Z.
 
@@ -202,7 +202,7 @@ intros a Pre10 m0 Post1 i0 Post2 Pre9 a0 Post3 Variant1 a1 i1 m1 Pre8 Pre7
 rewrite Post8; case Test7; intros (H1, H2); try discriminate; rewrite <- H1.
 rewrite <- H1 in Pre5; repeat split; auto with zarith.
 unfold Zdivides in |- *; apply pdiv_divides.
-replace 0 with (Zabs_nat 0); auto with zarith.
+replace 0 with (Z.abs_nat 0); auto with zarith.
 apply Zabs.Zabs_nat_lt; split; auto with zarith.
 cut (Zprime (access a1 j2)); [ intros H3; case H3; auto | intuition ].
 apply INV_inv_eq; auto.
@@ -259,7 +259,7 @@ case (Zle_lt_or_eq k j2); auto with zarith; intros H7.
 rewrite <- H1 in Pre4; case Pre4; auto with zarith.
 rewrite H7.
 unfold Zdivides in |- *; apply pdiv_not_divides; auto with zarith.
-replace 0 with (Zabs_nat 0); auto with zarith.
+replace 0 with (Z.abs_nat 0); auto with zarith.
 apply Zabs.Zabs_nat_lt; split; auto with zarith.
 cut (Zprime (access a1 j2)); [ intros (H5, H6); auto | intuition ].
 Contradict Test5; unfold mod_ in |- *; rewrite Test5; auto with zarith.
@@ -270,8 +270,8 @@ apply Zlt_not_le.
 rewrite H3; rewrite Post5.
 apply Zlt_inv_square; auto with zarith.
 unfold sqr in |- *; auto with zarith.
-apply Zlt_le_trans with (2 * access a1 (i1 - 1))%Z; auto with zarith.
-apply Zle_lt_trans with m1; auto with zarith.
+apply Z.lt_le_trans with (2 * access a1 (i1 - 1))%Z; auto with zarith.
+apply Z.le_lt_trans with m1; auto with zarith.
 unfold sqr in |- *.
 rewrite <- Znat.inj_mult.
 pattern m1 at 3 in |- *; rewrite <- inj_abs; auto with zarith arith.
@@ -395,9 +395,9 @@ exists (x + 1)%Z; rewrite H3; auto with zarith.
 split.
 intros k (H2, H3); replace k with (m1 + 1)%Z; auto with zarith.
 red in |- *; intros (H4, H5); Contradict H5.
-replace (Zabs_nat (m1 + 1)) with (S (Zabs_nat m1)).
+replace (Z.abs_nat (m1 + 1)) with (S (Z.abs_nat m1)).
 apply prime_not_prime_S; auto with zarith.
-case (prime_2_or_more (Zabs_nat (access a1 (i1 - 1)))).
+case (prime_2_or_more (Z.abs_nat (access a1 (i1 - 1)))).
 case Pre7; intros H5 (H6, (H7, (H8, (H9, H10)))); case (H9 (i1 - 1)%Z);
  auto with zarith.
 intros H5; rewrite <- H5.
@@ -419,7 +419,7 @@ repeat rewrite store_def_2; auto with zarith; intuition.
 rewrite H5; rewrite store_def_1; auto with zarith.
 rewrite store_def_2; auto with zarith.
 rewrite H5 in H3; case (Zle_lt_or_eq k (i1 - 1)); auto with zarith; intros HH.
-apply Zlt_trans with (access a1 (i1 - 1)).
+apply Z.lt_trans with (access a1 (i1 - 1)).
 case Pre7; intros H6 (H7, (H8, (H9, (H10, (H11, H12))))).
 apply H11; repeat split; auto with zarith.
 intuition.
@@ -441,7 +441,7 @@ unfold lexZ, pairZ in |- *; apply left_lex; auto with zarith.
 split; auto with zarith.
 split; auto with zarith.
 apply prime_def1.
-apply le_lt_trans with (Zabs_nat (access a1 (i1 - 1))); auto with zarith.
+apply le_lt_trans with (Z.abs_nat (access a1 (i1 - 1))); auto with zarith.
 apply le_Zle_inv.
 simpl in |- *; rewrite inj_abs; auto with zarith.
 apply lt_Zlt_inv.
@@ -470,13 +470,13 @@ split; auto with zarith.
 split; auto with zarith.
 generalize H5; case p; simpl in |- *; auto with zarith.
 intros H18; Contradict H18; auto with arith.
-unfold Zlt in |- *; auto.
+unfold Z.lt in |- *; auto.
 rewrite absolu_INR; auto.
-apply Zlt_le_trans with (1 := H7); auto with zarith.
+apply Z.lt_le_trans with (1 := H7); auto with zarith.
 case (Zle_lt_or_eq j2 (i1 - 1)); auto with zarith; intros H8.
 apply Zlt_le_weak; intuition.
 rewrite H8; auto with zarith.
-apply Zle_lt_trans with s1; auto with zarith.
+apply Z.le_lt_trans with s1; auto with zarith.
 replace (Z_of_nat p) with (Z_of_nat (Misc.sqr (p * p))).
 rewrite Post5; unfold sqr in |- *.
 apply Znat.inj_le; auto with arith; apply sqr_mono; auto with arith.
@@ -489,8 +489,8 @@ intros j2 Post12. split.
 case Post12; intros (H1, H2) [(H3, H4)| (H3, H4)]; try discriminate.
 split; auto with zarith.
 split; auto with zarith.
-case (Bertrand (Zabs_nat (access a1 (i1 - 1)))).
-case (prime_2_or_more (Zabs_nat (access a1 (i1 - 1)))); auto with arith.
+case (Bertrand (Z.abs_nat (access a1 (i1 - 1)))).
+case (prime_2_or_more (Z.abs_nat (access a1 (i1 - 1)))); auto with arith.
 cut (Zprime (access a1 (i1 - 1))); [ intros HH; case HH | intuition ];
  auto with zarith.
 intros HH; rewrite HH; auto with zarith.
@@ -503,19 +503,19 @@ rewrite <- (inj_abs (access a1 (i1 - 1))); auto with zarith.
 case (Zle_lt_or_eq (Z_of_nat x) m1); auto with zarith.
 case (Zle_lt_or_eq (Z_of_nat x) (m1 + 1)); auto with zarith.
 apply Zlt_succ_le.
-apply Zlt_le_trans with (2 * access a1 (i1 - 1))%Z; auto with zarith.
+apply Z.lt_le_trans with (2 * access a1 (i1 - 1))%Z; auto with zarith.
 rewrite <- (inj_abs (2 * access a1 (i1 - 1))); auto with zarith.
 rewrite absolu_comp_mult.
-replace (Zabs_nat 2) with 2; auto with zarith.
+replace (Z.abs_nat 2) with 2; auto with zarith.
 apply Znat.inj_lt; auto.
 intros H14; absurd (Zprime (Z_of_nat x)).
 rewrite H14.
 red in |- *; intros (H15, H16); Contradict H16.
-apply prime_div_prime with (p := Zabs_nat 2).
+apply prime_div_prime with (p := Z.abs_nat 2).
 apply lt_Zlt_inv; repeat rewrite inj_abs; auto with zarith.
 exact (primeb_correct 2).
 case H11; intros y H16.
-exists (Zabs_nat (y + 1)).
+exists (Z.abs_nat (y + 1)).
 rewrite H16.
 rewrite <- absolu_comp_mult.
 replace (2 * y + 1 + 1)%Z with ((y + 1) * 2)%Z; auto with zarith.
@@ -524,9 +524,9 @@ rewrite absolu_INR; auto.
 intros H14; absurd (Zprime (Z_of_nat x)).
 rewrite H14.
 red in |- *; intros (H15, H16); Contradict H16.
-apply prime_div_prime with (p := Zabs_nat (access a1 j2)); auto with zarith.
+apply prime_div_prime with (p := Z.abs_nat (access a1 j2)); auto with zarith.
 apply lt_Zlt_inv; repeat rewrite inj_abs; auto with zarith.
-apply Zle_lt_trans with (2 := H9).
+apply Z.le_lt_trans with (2 := H9).
 case (Zle_lt_or_eq j2 (i1 - 1)); auto with zarith; intros H16.
 apply Zlt_le_weak.
 case H13; intros H17 (H18, H19).
@@ -552,9 +552,9 @@ case (Zle_lt_or_eq k m1); auto with zarith; intros H8.
 case Pre7; intros H9 (H10, (H11, (H12, H13))); apply H12; auto with zarith.
 rewrite H8; auto.
 intros (H9, H10); Contradict H10.
-apply prime_div_prime with (p := Zabs_nat (access a1 j2)); auto with zarith.
+apply prime_div_prime with (p := Z.abs_nat (access a1 j2)); auto with zarith.
 apply lt_Zlt_inv; repeat rewrite inj_abs; auto with zarith.
-rewrite <- H8; apply Zle_lt_trans with (2 := H5).
+rewrite <- H8; apply Z.le_lt_trans with (2 := H5).
 case (Zle_lt_or_eq j2 (i1 - 1)); auto with zarith; intros H10.
 apply Zlt_le_weak.
 case Pre7; intros H11 (H12, (H13, (H14, (H15, (H16, H17))))); apply H16;
@@ -566,11 +566,11 @@ cut (Zprime (access a1 j2)); [ intros (H16, H17) | intuition ];
  auto with zarith.
 rewrite H7.
 intros (H8, H9); Contradict H9.
-apply prime_div_prime with (p := Zabs_nat 2).
+apply prime_div_prime with (p := Z.abs_nat 2).
 apply lt_Zlt_inv; repeat rewrite inj_abs; auto with zarith.
 exact (primeb_correct 2).
 cut (Zodd m1); [ intros (x, H11) | intuition ].
-exists (Zabs_nat (x + 1)).
+exists (Z.abs_nat (x + 1)).
 rewrite H11; rewrite <- absolu_comp_mult.
 replace (2 * x + 1 + 1)%Z with ((x + 1) * 2)%Z; auto with zarith.
 intuition.

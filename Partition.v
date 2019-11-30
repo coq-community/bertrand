@@ -29,7 +29,7 @@ Require Import Bertrand.
 Require Import List.
  
 Definition le_lt_dec : forall n m : nat, {n <= m} + {m < n}.
-fix 1; intros n m; case n.
+fix le_lt_dec 1; intros n m; case n.
 left; auto with arith.
 intros n1; case m.
 right; auto with arith.
