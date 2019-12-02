@@ -122,7 +122,7 @@ Ltac WhyArrays :=
   repeat rewrite store_def_1; repeat rewrite array_length_store.
 
 Ltac AccessStore i j H :=
-  elim (Z_eq_dec i j);
+  elim (Z.eq_dec i j);
    [ intro H; rewrite H; rewrite store_def_1; WhyArrays
    | intro H; rewrite store_def_2; [ idtac | idtac | idtac | exact H ] ].
 
