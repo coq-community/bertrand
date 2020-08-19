@@ -1,9 +1,9 @@
-# Correctness of Knuth&#39;s algorithm for prime numbers
+# Correctness of Knuth's algorithm for prime numbers
 
 [![Travis][travis-shield]][travis-link]
 [![Contributing][contributing-shield]][contributing-link]
 [![Code of Conduct][conduct-shield]][conduct-link]
-[![Gitter][gitter-shield]][gitter-link]
+[![Zulip][zulip-shield]][zulip-link]
 
 [travis-shield]: https://travis-ci.com/coq-community/bertrand.svg?branch=master
 [travis-link]: https://travis-ci.com/coq-community/bertrand/builds
@@ -14,13 +14,14 @@
 [conduct-shield]: https://img.shields.io/badge/%E2%9D%A4-code%20of%20conduct-%23f15a24.svg
 [conduct-link]: https://github.com/coq-community/manifesto/blob/master/CODE_OF_CONDUCT.md
 
-[gitter-shield]: https://img.shields.io/badge/chat-on%20gitter-%23c1272d.svg
-[gitter-link]: https://gitter.im/coq-community/Lobby
+[zulip-shield]: https://img.shields.io/badge/chat-on%20zulip-%23c1272d.svg
+[zulip-link]: https://coq.zulipchat.com/#narrow/stream/237663-coq-community-devs.20.26.20users
+
+
 
 A proof of correctness of the algorithm as described in
 "The Art of Computer Programming: Fundamental Algorithms"
 by Knuth, pages 147-149.
-
 
 
 ## Meta
@@ -32,11 +33,13 @@ by Knuth, pages 147-149.
 - License: [GNU Lesser General Public License v2.1](LICENSE)
 - Compatible Coq versions: Coq 8.8 or greater (use releases for other Coq versions)
 - Additional dependencies: none
+- Coq namespace: `Bertrand`
+- Related publication(s): none
 
 ## Building and installation instructions
 
-The easiest way to install the latest released version is via
-[OPAM](https://opam.ocaml.org/doc/Install.html):
+The easiest way to install the latest released version of Correctness of Knuth's algorithm for prime numbers
+is via [OPAM](https://opam.ocaml.org/doc/Install.html):
 
 ```shell
 opam repo add coq-released https://coq.inria.fr/opam/released
@@ -46,14 +49,12 @@ opam install coq-bertrand
 To instead build and install manually, do:
 
 ``` shell
-git clone https://github.com/coq-community/bertrand
+git clone https://github.com/coq-community/bertrand.git
 cd bertrand
 make   # or make -j <number-of-cores-on-your-machine>
 make install
 ```
 
-After installation, the included modules are available under
-the `Bertrand` namespace.
 
 ## Description
 
