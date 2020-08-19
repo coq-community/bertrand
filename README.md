@@ -51,7 +51,7 @@ To instead build and install manually, do:
 ``` shell
 git clone https://github.com/coq-community/bertrand.git
 cd bertrand
-make   # or make -j <number-of-cores-on-your-machine>
+make   # or make -j <number-of-cores-on-your-machine> 
 make install
 ```
 
