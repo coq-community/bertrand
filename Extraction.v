@@ -15,6 +15,6 @@
 
 
 Require Import Partition.
-Require Extraction.
+From Coq Require Extraction.
 
 Extraction "partition.ml" make_partition.
