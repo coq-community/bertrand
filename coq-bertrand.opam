@@ -5,19 +5,20 @@ version: "dev"
 homepage: "https://github.com/coq-community/bertrand"
 dev-repo: "git+https://github.com/coq-community/bertrand.git"
 bug-reports: "https://github.com/coq-community/bertrand/issues"
-license: ""
+license: "LGPL-2.1-or-later"
 
-synopsis: ""
+synopsis: "Correctness of Knuth's algorithm for prime numbers"
 description: """
-A proof of correctness of the algorithm as described in
-"The Art of Computer Programming: Fundamental Algorithms"
-by Knuth, pages 147-149.
+A proof of correctness of the algorithm for computing prime
+numbers as described in "The Art of Computer Programming:
+Fundamental Algorithms" by Knuth, pp. 147-149, as an
+application of Bertrand's postulate.
 """
 
 build: [make "-j%{jobs}%" ]
 install: [make "install"]
 depends: [
-  "coq" {(>= "8.8" & < "8.11~")}
+  "coq" {>= "8.8" & < "8.12~"}
 ]
 
 tags: [

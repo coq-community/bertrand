@@ -1,9 +1,10 @@
-# Correctness of Knuth's algorithm for prime numbers
+# Bertrand
 
 [![Travis][travis-shield]][travis-link]
 [![Contributing][contributing-shield]][contributing-link]
 [![Code of Conduct][conduct-shield]][conduct-link]
 [![Zulip][zulip-shield]][zulip-link]
+[![DOI][doi-shield]][doi-link]
 
 [travis-shield]: https://travis-ci.com/coq-community/bertrand.svg?branch=master
 [travis-link]: https://travis-ci.com/coq-community/bertrand/builds
@@ -18,10 +19,13 @@
 [zulip-link]: https://coq.zulipchat.com/#narrow/stream/237663-coq-community-devs.20.26.20users
 
 
+[doi-shield]: https://zenodo.org/badge/DOI/10.1007/10930755_20.svg
+[doi-link]: https://doi.org/10.1007/10930755_20
 
-A proof of correctness of the algorithm as described in
-"The Art of Computer Programming: Fundamental Algorithms"
-by Knuth, pages 147-149.
+A proof of correctness of the algorithm for computing prime
+numbers as described in "The Art of Computer Programming:
+Fundamental Algorithms" by Knuth, pp. 147-149, as an
+application of Bertrand's postulate.
 
 
 ## Meta
@@ -30,15 +34,16 @@ by Knuth, pages 147-149.
   - Laurent Théry (initial)
 - Coq-community maintainer(s):
   - Hugo Herbelin ([**@herbelin**](https://github.com/herbelin))
-- License: [GNU Lesser General Public License v2.1](LICENSE)
-- Compatible Coq versions: Coq 8.8 or greater (use releases for other Coq versions)
+- License: [GNU Lesser General Public License v2.1 or later](LICENSE)
+- Compatible Coq versions: Coq 8.8 to 8.11
 - Additional dependencies: none
 - Coq namespace: `Bertrand`
-- Related publication(s): none
+- Related publication(s):
+  - [Proving Pearl: Knuth's Algorithm for Prime Numbers](https://link.springer.com/chapter/10.1007%2F10930755_20) doi:[10.1007/10930755_20](https://doi.org/10.1007/10930755_20)
 
 ## Building and installation instructions
 
-The easiest way to install the latest released version of Correctness of Knuth's algorithm for prime numbers
+The easiest way to install the latest released version of Bertrand
 is via [OPAM](https://opam.ocaml.org/doc/Install.html):
 
 ```shell

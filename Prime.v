@@ -38,7 +38,7 @@ Qed.
 Lemma not_prime_1 : ~ prime 1.
 red in |- *; intros (H1, H2); auto.
 Qed.
-Hint Resolve div_ref all_divides_O SO_divides_all not_prime_O not_prime_1.
+Hint Resolve div_ref all_divides_O SO_divides_all not_prime_O not_prime_1 : core.
  
 Lemma lt_prime : forall p : nat, prime p -> 1 < p.
 intros p; case p.

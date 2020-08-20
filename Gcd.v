@@ -33,7 +33,7 @@ Require Export Power.
 Definition is_gcd (a b c : nat) : Prop :=
   divides c a /\
   divides c b /\ (forall d : nat, divides d a -> divides d b -> divides d c).
-Hint Resolve div_ref all_divides_O.
+Hint Resolve div_ref all_divides_O : core.
  
 Lemma is_gcd_unic :
  forall a b c d : nat, is_gcd a b c -> is_gcd a b d -> c = d.
@@ -119,7 +119,7 @@ Inductive gcd_spec : nat -> nat -> nat -> Prop :=
       forall a b c : nat, a < b -> gcd_spec a (b - a) c -> gcd_spec a b c
   | gcd_spec_ex3 :
       forall a b c : nat, b <= a -> gcd_spec (a - b) b c -> gcd_spec a b c.
-Hint Resolve gcd_spec_ex0 gcd_spec_ex1.
+Hint Resolve gcd_spec_ex0 gcd_spec_ex1 : core.
  
 Theorem gcd_inv_Or_aux : forall a b c : nat, gcd_spec a b c -> b = 0 -> a = c.
 intros a b c H'; elim H'; auto.
@@ -180,8 +180,8 @@ Definition gcd (a b : nat) := proj1_sig (gcd_ex a b).
 Lemma gcd_correct : forall a b : nat, gcd_spec a b (gcd a b).
 intros a b; unfold gcd in |- *; case (gcd_ex a b); simpl in |- *; auto.
 Qed.
-Hint Resolve gcd_correct.
- 
+Hint Resolve gcd_correct : core.
+
 Lemma gcd_spec_uniq :
  forall a b r1 r2 : nat, gcd_spec a b r1 -> gcd_spec a b r2 -> r1 = r2.
 intros a b r1 r2 H'; generalize r2; elim H'; clear H' a b r1 r2.

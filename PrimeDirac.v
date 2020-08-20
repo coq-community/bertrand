@@ -23,7 +23,7 @@ Require Export Binomial.
 Require Import ArithRing.
 Require Export Product.
 Require Import Wf_nat.
-Require Import Omega.
+Require Import Lia.
 
 Theorem prime_div_factorial_le :
  forall n p : nat, prime p -> divides p (factorial n) -> p <= n.
@@ -220,7 +220,7 @@ apply H3; auto with arith; exists n1; rewrite mult_comm; auto.
 red in |- *; intros (H4, H5); absurd (S n = 2).
 Contradict H; rewrite <- H; auto with arith.
 apply H5; auto with arith; exists (S n1); rewrite H2.
-omega.
+lia.
 Qed.
  
 Theorem div_plus : forall n m : nat, 0 < n -> div (n + m) n = 1 + div m n.

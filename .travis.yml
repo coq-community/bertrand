@@ -55,10 +55,13 @@ jobs:
   - env:
     - COQ=8.10
     <<: *NIX
+  - env:
+    - COQ=8.11
+    <<: *NIX
 
   # Test supported versions of Coq via OPAM
   - env:
-    - COQ_IMAGE=coqorg/coq:8.10
+    - COQ_IMAGE=coqorg/coq:8.11
     - PACKAGE=coq-bertrand.dev
     - NJOBS=2
     <<: *OPAM
