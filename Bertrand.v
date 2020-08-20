@@ -27,7 +27,7 @@ Require Import Rtrigo.
 Require Export PrimeDirac.
 Require Export Raux.
 Require Import ArithRing.
-Require Fourier.
+Require Import Lra.
 
 (** Upper Bound for (binonial 2n n) *)
 
@@ -313,13 +313,13 @@ repeat apply Rplus_lt_0_compat; auto with real.
 rewrite Rmult_1_r.
 apply Rlt_trans with (3 * (Rpower 2 (1 + 3) * (/ 2 / 3)))%R.
 replace (1+3)%R with (1+1+1+1)%R by ring.
-repeat rewrite Rpower_plus; repeat rewrite Rpower_1; Fourier.fourier.
+repeat rewrite Rpower_plus; repeat rewrite Rpower_1; lra.
 apply Rmult_lt_compat_l.
-Fourier.fourier.
+lra.
 apply Rmult_lt_compat_l.
 unfold Rpower in |- *; auto with real.
 unfold Rdiv in |- *; apply Rmult_lt_compat_r.
-Fourier.fourier.
+lra.
 apply ln_lt_2.
 cut
  (forall x y z : R,
@@ -335,22 +335,22 @@ unfold Rpower in |- *; auto with real.
 repeat apply Rmult_le_pos; auto with real.
 rewrite <- ln_1; auto with real.
 (* apply Rlt_le; apply Rinv_0_lt_compat; apply Rmult_lt_0_compat; auto with real.
-Fourier.fourier.*)
+lra.*)
 apply sqrt_positivity; auto with real.
 unfold Rpower in |- *; auto with real.
 apply sqrt_le_1; auto with real.
 unfold Rpower in |- *; auto with real.
 rewrite <- ln_1; auto with real.
 (* apply Rlt_le; apply Rinv_0_lt_compat; apply Rmult_lt_0_compat; auto with real.
-Fourier.fourier.*)
+lra.*)
 field; auto with real.
 split; apply Compare.not_eq_sym; apply Rlt_not_eq; auto with real.
 apply exp_inv.
 rewrite exp_ln.
 change (Rpower 2 2 = (1 + 3)%R) in |- *.
 replace (2)%R with (1+1)%R at 2 by ring.
-repeat rewrite Rpower_plus; repeat rewrite Rpower_1; (ring||Fourier.fourier).
-Fourier.fourier.
+repeat rewrite Rpower_plus; repeat rewrite Rpower_1; (ring||lra).
+lra.
 (* apply Compare.not_eq_sym; apply Rlt_not_eq; auto with real.
 apply Compare.not_eq_sym; apply Rlt_not_eq; auto with real. *)
 apply Rlt_le_trans with (2 := H1).
@@ -388,19 +388,19 @@ repeat rewrite <- Rmult_assoc; rewrite Rinv_r; auto with arith.
 rewrite Rmult_1_l.
 replace (3)%R with (1+1+1)%R at 2 by ring.
 repeat rewrite Rpower_plus; repeat rewrite Rpower_1; try ring.
-Fourier.fourier.
-Fourier.fourier.
-(* apply Compare.not_eq_sym; apply Rlt_not_eq; Fourier.fourier. *)
+lra.
+lra.
+(* apply Compare.not_eq_sym; apply Rlt_not_eq; lra. *)
 field.
 apply exp_inv.
 rewrite exp_ln.
 change (Rpower 2 2 = (1 + 3)%R) in |- *.
 replace (2)%R with (1+1)%R at 2 by ring.
 repeat rewrite Rpower_plus; repeat rewrite Rpower_1; try ring.
-Fourier.fourier.
-Fourier.fourier.
+lra.
+lra.
 unfold Rpower in |- *; auto with real.
-Fourier.fourier.
+lra.
 unfold Rpower in |- *; auto with real.
 Qed.
 
