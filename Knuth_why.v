@@ -13,12 +13,10 @@
 (* Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA *)
 (* 02110-1301 USA                                                     *)
 
-
-Require Import Knuth_def.
-Require Import Bertrand.
-
-Require Import WhyArrays.
 Require Import Zwf.
+Require Import Bertrand.
+Require Import WhyArrays.
+Require Import Knuth_def.
 Arguments well_founded [A].
 
 (*Why*) Parameter n : Z.
