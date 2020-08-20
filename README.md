@@ -24,8 +24,8 @@
 
 A proof of correctness of the algorithm for computing prime
 numbers as described in "The Art of Computer Programming:
-Fundamental Algorithms" by Knuth, pp. 147-149, as an
-application of Bertrand's postulate.
+Fundamental Algorithms" by Knuth, pp. 147-149, and an
+application using Bertrand's postulate.
 
 
 ## Meta
