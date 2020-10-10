@@ -17,6 +17,7 @@ Require Import Zwf.
 Require Import Bertrand.
 Require Import WhyArrays.
 Require Import Knuth_def.
+Require Import Lia.
 Arguments well_founded [A].
 
 (*Why*) Parameter n : Z.
@@ -394,7 +395,7 @@ split.
 intros k (H2, H3); replace k with (m1 + 1)%Z; auto with zarith.
 red in |- *; intros (H4, H5); Contradict H5.
 replace (Z.abs_nat (m1 + 1)) with (S (Z.abs_nat m1)).
-apply prime_not_prime_S; auto with zarith.
+apply prime_not_prime_S.
 case (prime_2_or_more (Z.abs_nat (access a1 (i1 - 1)))).
 case Pre7; intros H5 (H6, (H7, (H8, (H9, H10)))); case (H9 (i1 - 1)%Z);
  auto with zarith.
@@ -439,7 +440,7 @@ unfold lexZ, pairZ in |- *; apply left_lex; auto with zarith.
 split; auto with zarith.
 split; auto with zarith.
 apply prime_def1.
-apply le_lt_trans with (Z.abs_nat (access a1 (i1 - 1))); auto with zarith.
+apply le_lt_trans with (Z.abs_nat (access a1 (i1 - 1))).
 apply le_Zle_inv.
 simpl in |- *; rewrite inj_abs; auto with zarith.
 apply lt_Zlt_inv.
@@ -474,14 +475,14 @@ apply Z.lt_le_trans with (1 := H7); auto with zarith.
 case (Zle_lt_or_eq j2 (i1 - 1)); auto with zarith; intros H8.
 apply Zlt_le_weak; intuition.
 rewrite H8; auto with zarith.
-apply Z.le_lt_trans with s1; auto with zarith.
+apply Z.le_lt_trans with s1.
 replace (Z_of_nat p) with (Z_of_nat (Misc.sqr (p * p))).
 rewrite Post5; unfold sqr in |- *.
 apply Znat.inj_le; auto with arith; apply sqr_mono; auto with arith.
 rewrite sqr_mult2; auto.
 case Post12; intros (H10, H11) [(H12, H13)| (H12, H13)]; try discriminate;
  auto with zarith.
-omega.
+lia.
 (* b2 = false *)
 intros j2 Post12. split.
 case Post12; intros (H1, H2) [(H3, H4)| (H3, H4)]; try discriminate.
@@ -496,15 +497,15 @@ intros x (H5, (H6, H7)).
 case (Zle_or_lt (2 * access a1 (i1 - 1)) (m1 + 2)); auto.
 intros H8; absurd (Zprime (Z_of_nat x)); auto with zarith.
 case Pre7; intros (H9, H9') (H10, (H11, (H12, H13))).
-apply H12; split; auto with zarith.
+apply H12; split.
 rewrite <- (inj_abs (access a1 (i1 - 1))); auto with zarith.
 case (Zle_lt_or_eq (Z_of_nat x) m1); auto with zarith.
-case (Zle_lt_or_eq (Z_of_nat x) (m1 + 1)); auto with zarith.
+case (Zle_lt_or_eq (Z_of_nat x) (m1 + 1)); [|auto with zarith|].
 apply Zlt_succ_le.
-apply Z.lt_le_trans with (2 * access a1 (i1 - 1))%Z; auto with zarith.
-rewrite <- (inj_abs (2 * access a1 (i1 - 1))); auto with zarith.
+apply Z.lt_le_trans with (2 * access a1 (i1 - 1))%Z; [|auto with zarith].
+rewrite <- (inj_abs (2 * access a1 (i1 - 1))); [|auto with zarith].
 rewrite absolu_comp_mult.
-replace (Z.abs_nat 2) with 2; auto with zarith.
+replace (Z.abs_nat 2) with 2; [|auto with zarith].
 apply Znat.inj_lt; auto.
 intros H14; absurd (Zprime (Z_of_nat x)).
 rewrite H14.
@@ -573,7 +574,7 @@ rewrite H11; rewrite <- absolu_comp_mult.
 replace (2 * x + 1 + 1)%Z with ((x + 1) * 2)%Z; auto with zarith.
 intuition.
 rewrite H; unfold lexZ, pairZ in |- *; apply right_lex; auto with zarith.
-unfold Zwf in |- *; omega.
+unfold Zwf in |- *; lia.
 Qed. 
 
 (* Why obligation from file "Knuth.mlw", characters 481-1499 *)

@@ -33,6 +33,7 @@
 (* $Id$ *)
 
 Require Export ZArith.
+Require Import Lia.
 
 (**************************************)
 (* Functional arrays, for use in Why. *)
@@ -126,11 +127,11 @@ Ltac AccessStore i j H :=
    [ intro H; rewrite H; rewrite store_def_1; WhyArrays
    | intro H; rewrite store_def_2; [ idtac | idtac | idtac | exact H ] ].
 
-Ltac AccessSame := rewrite store_def_1; WhyArrays; try omega.
+Ltac AccessSame := rewrite store_def_1; WhyArrays; try lia.
 
-Ltac AccessOther := rewrite store_def_2; WhyArrays; try omega.
+Ltac AccessOther := rewrite store_def_2; WhyArrays; try lia.
 
-Ltac ArraySubst t := subst t; simpl in |- *; WhyArrays; try omega.
+Ltac ArraySubst t := subst t; simpl in |- *; WhyArrays; try lia.
 
 (* Syntax and pretty-print for arrays *)
 
