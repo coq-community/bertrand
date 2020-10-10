@@ -35,7 +35,7 @@ application using Bertrand's postulate.
 - Coq-community maintainer(s):
   - Hugo Herbelin ([**@herbelin**](https://github.com/herbelin))
 - License: [GNU Lesser General Public License v2.1 or later](LICENSE)
-- Compatible Coq versions: Coq 8.8 to 8.11
+- Compatible Coq versions: Coq 8.8 or later
 - Additional dependencies: none
 - Coq namespace: `Bertrand`
 - Related publication(s):
