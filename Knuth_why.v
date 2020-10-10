@@ -17,6 +17,7 @@ Require Import Zwf.
 Require Import Bertrand.
 Require Import WhyArrays.
 Require Import Knuth_def.
+Require Import Lia.
 Arguments well_founded [A].
 
 (*Why*) Parameter n : Z.
@@ -481,7 +482,7 @@ apply Znat.inj_le; auto with arith; apply sqr_mono; auto with arith.
 rewrite sqr_mult2; auto.
 case Post12; intros (H10, H11) [(H12, H13)| (H12, H13)]; try discriminate;
  auto with zarith.
-omega.
+lia.
 (* b2 = false *)
 intros j2 Post12. split.
 case Post12; intros (H1, H2) [(H3, H4)| (H3, H4)]; try discriminate.
@@ -573,7 +574,7 @@ rewrite H11; rewrite <- absolu_comp_mult.
 replace (2 * x + 1 + 1)%Z with ((x + 1) * 2)%Z; auto with zarith.
 intuition.
 rewrite H; unfold lexZ, pairZ in |- *; apply right_lex; auto with zarith.
-unfold Zwf in |- *; omega.
+unfold Zwf in |- *; lia.
 Qed. 
 
 (* Why obligation from file "Knuth.mlw", characters 481-1499 *)
