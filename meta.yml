@@ -24,8 +24,8 @@ authors:
   initial: true
 
 maintainers:
-- name: Hugo Herbelin
-  nickname: herbelin
+- name: Laurent Théry
+  nickname: thery
 
 license:
   fullname: GNU Lesser General Public License v2.1 or later

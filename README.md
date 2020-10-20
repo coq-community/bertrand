@@ -33,7 +33,7 @@ application using Bertrand's postulate.
 - Author(s):
   - Laurent Théry (initial)
 - Coq-community maintainer(s):
-  - Hugo Herbelin ([**@herbelin**](https://github.com/herbelin))
+  - Laurent Théry ([**@thery**](https://github.com/thery))
 - License: [GNU Lesser General Public License v2.1 or later](LICENSE)
 - Compatible Coq versions: Coq 8.8 or later
 - Additional dependencies: none
