@@ -1,6 +1,5 @@
 -R . Bertrand
 
-why/WhyArrays.v
 Bertrand.v
 Binomial.v
 Check128.v
@@ -10,8 +9,6 @@ Divides.v
 Extraction.v
 Factorial_bis.v
 Gcd.v
-Knuth_def.v
-Knuth_why.v
 Misc.v
 Partition.v
 Power.v

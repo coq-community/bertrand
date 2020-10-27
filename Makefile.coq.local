@@ -3,5 +3,8 @@ post-all:: run_partition.ml
 run_partition.ml: ex1.ml ex2.ml Extraction.vo
 	cat ex1.ml partition.ml ex2.ml > run_partition.ml
 
+why_res : Bertrand.vo
+	cd why; why3 replay Knuth
+
 clean::
 	$(HIDE)rm -f partition.ml partition.mli run_partition.ml

@@ -59,7 +59,16 @@ cd bertrand
 make   # or make -j <number-of-cores-on-your-machine> 
 make install
 ```
+If you want to test the program verfied with [Why3](why3.lri.fr),
+be sure to have [Why3](why3.lri.fr) and 
+[Alt-Ergo](https://alt-ergo.ocamlpro.com/) installed. Once the `Bertrand`
+library installed, do :
 
+``` shell
+make why_res
+```
+This has been tested with [Why3](why3.lri.fr) version `1.3.3` and
+[Alt-Ergo](https://alt-ergo.ocamlpro.com/) version `2.3.3`
 
 ## Description
 
