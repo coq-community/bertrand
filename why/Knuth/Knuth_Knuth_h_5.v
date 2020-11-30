@@ -12,6 +12,10 @@ Require number.Parity.
 Require number.Divisibility.
 Require number.Prime.
 
+(* Custom dependencies *)
+From Bertrand Require Import Bertrand.
+From Coq Require Import Lia.
+
 (* Why3 assumption *)
 Inductive ref (a:Type) :=
   | ref'mk : a -> ref a.
@@ -180,10 +184,8 @@ Theorem h1 :
   ((mixfix_lbrb a2 (i - 1%Z)%Z) < x)%Z /\
   (x < (2%Z * (mixfix_lbrb a2 (i - 1%Z)%Z))%Z)%Z.
 Proof.
-From Bertrand Require Import Bertrand.
-Require Import Lia.
 destruct (Bertrand (Z.to_nat (mixfix_lbrb a2 (i - 1)))) as [x [H1 H2]].
-  apply (Z2Nat.inj_le 2); generalize h; try lia.
+apply (Z2Nat.inj_le 2); generalize h; try lia.
 exists (Z.of_nat x); repeat split; try lia.
 intros n1 H3 [y H4].
 destruct H1 as [_ H1].
@@ -191,4 +193,3 @@ assert (H5 : x = Z.to_nat n1); try lia.
 apply H1; try lia.
 exists (Z.to_nat y); lia.
 Qed.
-

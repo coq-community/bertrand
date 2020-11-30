@@ -2,5 +2,3 @@
  (name Bertrand)
  (package coq-bertrand)
  (synopsis "Correctness of Knuth's algorithm for prime numbers"))
-
-(include_subdirs qualified)
