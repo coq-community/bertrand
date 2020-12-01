@@ -1,13 +1,13 @@
 # Bertrand
 
-[![Travis][travis-shield]][travis-link]
+[![CI][action-shield]][action-link]
 [![Contributing][contributing-shield]][contributing-link]
 [![Code of Conduct][conduct-shield]][conduct-link]
 [![Zulip][zulip-shield]][zulip-link]
 [![DOI][doi-shield]][doi-link]
 
-[travis-shield]: https://travis-ci.com/coq-community/bertrand.svg?branch=master
-[travis-link]: https://travis-ci.com/coq-community/bertrand/builds
+[action-shield]: https://github.com/coq-community/bertrand/workflows/CI/badge.svg?branch=master
+[action-link]: https://github.com/coq-community/bertrand/actions?query=workflow%3ACI
 
 [contributing-shield]: https://img.shields.io/badge/contributions-welcome-%23f7931e.svg
 [contributing-link]: https://github.com/coq-community/manifesto/blob/master/CONTRIBUTING.md
@@ -22,10 +22,8 @@
 [doi-shield]: https://zenodo.org/badge/DOI/10.1007/10930755_20.svg
 [doi-link]: https://doi.org/10.1007/10930755_20
 
-A proof of correctness of the algorithm for computing prime
-numbers as described in "The Art of Computer Programming:
-Fundamental Algorithms" by Knuth, pp. 147-149, and an
-application using Bertrand's postulate.
+A Coq proof of Bertrand's postulate: there always exists
+a prime between n and 2n for n greater than 2.
 
 
 ## Meta
@@ -59,31 +57,40 @@ cd bertrand
 make   # or make -j <number-of-cores-on-your-machine> 
 make install
 ```
-If you want to test the program verfied with [Why3](why3.lri.fr),
-be sure to have [Why3](why3.lri.fr) and 
-[Alt-Ergo](https://alt-ergo.ocamlpro.com/) installed. Once the `Bertrand`
-library installed, do :
 
-``` shell
-make why_res
-```
-This has been tested with [Why3](why3.lri.fr) version `1.3.3` and
-[Alt-Ergo](https://alt-ergo.ocamlpro.com/) version `2.3.3`
 
-## Description
+## Contents
 
 This project consists of:
 
-- A proof of correctness of the algorithm as described in
-  "The Art of Computer Programming: Fundamental Algorithms" by Knuth,
-  pages 147-149.
-
-- A proof of Bertrand's postulate: there always exists a prime between
+- A Coq proof of Bertrand's postulate: there always exists a prime between
   n and 2n for n greater than 2 (`Bertrand.v`).
+- A proof of correctness of an implementation of the algorithm for computing primes
+  described in "The Art of Computer Programming: Fundamental Algorithms" by Knuth,
+  pages 147-149. The proof uses the [Why3 tool](http://why3.lri.fr) to generate
+  verification conditions for the WhyML program that implements the algorithm.
+  These verification conditions can then be discharged by Coq and the
+  [Alt-Ergo](https://alt-ergo.ocamlpro.com) prover.
+- A little program in OCaml that generates a partition of 1..2n in pairs (i,j)
+  such that i+j is always prime (`run_partition.ml`). The proof of correctness
+  of this program is a direct consequence of Bertrand's postulate (`Partition.v`).
+  This nice application of Bertrand's postulate was suggested by Gérard Huet.
 
-- A little program that generates a partition of 1..2n in pairs (i,j)
-  such that i+j is always prime (`run_partition.ml`).
-  The proof of correctness of this program is a direct consequence of
-  Bertrand's postulate (`Partition.v`). This nice application of Bertrand's
-  postulate was suggested by Gérard Huet.
+## Checking WhyML program correctness
+
+To check the correctness of the WhyML program, first make sure
+the following packages are installed (in addition to Coq 8.12.1 and
+the proof of Bertrand's postulate):
+
+- [Alt-Ergo 2.3.3](https://alt-ergo.ocamlpro.com)
+- [Why3 1.3.3](http://why3.lri.fr) and its Coq library
+
+These packages can be installed via OPAM using the following command:
+```
+opam install alt-ergo.2.3.3 why3.1.3.3 why3-coq
+```
+Then, the Why3 proof can be replayed by running
+```
+make why
+```
 

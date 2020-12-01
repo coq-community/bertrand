@@ -3,7 +3,7 @@
 "http://why3.lri.fr/why3session.dtd">
 <why3session shape_version="6">
 <prover id="0" name="Alt-Ergo" version="2.3.3" timelimit="5" steplimit="0" memlimit="1000"/>
-<prover id="1" name="Coq" version="8.12.0" timelimit="0" steplimit="0" memlimit="0"/>
+<prover id="1" name="Coq" version="8.12.1" timelimit="0" steplimit="0" memlimit="0"/>
 <file format="whyml" proved="true">
 <path name=".."/><path name="Knuth.mlw"/>
 <theory name="Knuth" proved="true">
