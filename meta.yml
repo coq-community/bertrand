@@ -6,11 +6,13 @@ community: true
 action: true
 doi: 10.1007/10930755_20
 
-synopsis: Coq proof of Bertrand's postulate
+synopsis: Correctness of Knuth's algorithm for prime numbers
 
 description: |
-  A Coq proof of Bertrand's postulate: there always exists
-  a prime between n and 2n for n greater than 2.
+  A proof of correctness of the algorithm for computing prime
+  numbers as described in "The Art of Computer Programming:
+  Fundamental Algorithms" by Knuth, pp. 147-149, and an
+  application using Bertrand's postulate.
 
 publications:
 - pub_url: https://link.springer.com/chapter/10.1007%2F10930755_20
@@ -47,11 +49,13 @@ tested_coq_opam_versions:
 namespace: Bertrand
 
 keywords:
+- name: Knuth's algorithm
 - name: prime numbers
 - name: Bertrand's postulate
 
 categories:
 - name: Mathematics/Arithmetic and Number Theory/Number theory
+- name: Computer Science/Decision Procedures and Certified Algorithms/Correctness proofs based on external tools
 - name: Miscellaneous/Extracted Programs/Arithmetic
 
 documentation: |
