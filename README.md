@@ -26,11 +26,9 @@ Follow the instructions on https://github.com/coq-community/templates to regener
 [doi-shield]: https://zenodo.org/badge/DOI/10.1007/10930755_20.svg
 [doi-link]: https://doi.org/10.1007/10930755_20
 
-A proof of correctness of the algorithm for computing prime
-numbers as described in "The Art of Computer Programming:
-Fundamental Algorithms" by Knuth, pp. 147-149, and an
-application using Bertrand's postulate.
-
+A Coq proof of Bertrand's postulate, which says that there always
+exists a prime between n and 2n for n greater than 2. Includes
+an application of the postulate to compute partitions.
 
 ## Meta
 

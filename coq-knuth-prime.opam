@@ -11,8 +11,7 @@ synopsis: "Correctness of a WhyML implementation of Knuth's algorithm for prime 
 description: """
 A proof of correctness of a WhyML implementation of the algorithm
 for computing prime numbers as described in "The Art of Computer Programming:
-Fundamental Algorithms" by Knuth, pp. 147-149.
-"""
+Fundamental Algorithms" by Knuth, pp. 147-149."""
 
 build: [make "why"]
 depends: [
@@ -23,6 +22,12 @@ depends: [
   "coq-bertrand" {= version}
 ]
 
+tags: [
+  "category:Mathematics/Arithmetic and Number Theory/Number theory"
+  "category:Computer Science/Decision Procedures and Certified Algorithms/Correctness proofs based on external tools"
+  "keyword:Knuth's algorithm"
+  "keyword:Bertrand's postulate"
+]
 authors: [
   "Laurent Théry"
 ]

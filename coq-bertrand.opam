@@ -10,25 +10,22 @@ dev-repo: "git+https://github.com/coq-community/bertrand.git"
 bug-reports: "https://github.com/coq-community/bertrand/issues"
 license: "LGPL-2.1-or-later"
 
-synopsis: "Correctness of Knuth's algorithm for prime numbers"
+synopsis: "Coq proof of Bertrand's postulate on existence of primes"
 description: """
-A proof of correctness of the algorithm for computing prime
-numbers as described in "The Art of Computer Programming:
-Fundamental Algorithms" by Knuth, pp. 147-149, and an
-application using Bertrand's postulate.
-"""
+A Coq proof of Bertrand's postulate, which says that there always
+exists a prime between n and 2n for n greater than 2. Includes
+an application of the postulate to compute partitions."""
 
-build: [make "-j%{jobs}%" ]
+build: [make "-j%{jobs}%"]
 install: [make "install"]
 depends: [
-  "coq" {(>= "8.8" & < "8.13~") | (= "dev")}
+  "coq" {(>= "8.8" & < "8.15~") | (= "dev")}
 ]
 
 tags: [
   "category:Mathematics/Arithmetic and Number Theory/Number theory"
-  "category:Computer Science/Decision Procedures and Certified Algorithms/Correctness proofs based on external tools"
   "category:Miscellaneous/Extracted Programs/Arithmetic"
-  "keyword:Knuth's algorithm"
+  "keyword:primality"
   "keyword:prime numbers"
   "keyword:Bertrand's postulate"
   "logpath:Bertrand"
