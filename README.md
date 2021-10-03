@@ -1,13 +1,17 @@
+<!---
+This file was generated from `meta.yml`, please do not edit manually.
+Follow the instructions on https://github.com/coq-community/templates to regenerate.
+--->
 # Bertrand
 
-[![CI][action-shield]][action-link]
+[![Docker CI][docker-action-shield]][docker-action-link]
 [![Contributing][contributing-shield]][contributing-link]
 [![Code of Conduct][conduct-shield]][conduct-link]
 [![Zulip][zulip-shield]][zulip-link]
 [![DOI][doi-shield]][doi-link]
 
-[action-shield]: https://github.com/coq-community/bertrand/workflows/CI/badge.svg?branch=master
-[action-link]: https://github.com/coq-community/bertrand/actions?query=workflow%3ACI
+[docker-action-shield]: https://github.com/coq-community/bertrand/workflows/Docker%20CI/badge.svg?branch=master
+[docker-action-link]: https://github.com/coq-community/bertrand/actions?query=workflow:"Docker%20CI"
 
 [contributing-shield]: https://img.shields.io/badge/contributions-welcome-%23f7931e.svg
 [contributing-link]: https://github.com/coq-community/manifesto/blob/master/CONTRIBUTING.md
@@ -22,9 +26,9 @@
 [doi-shield]: https://zenodo.org/badge/DOI/10.1007/10930755_20.svg
 [doi-link]: https://doi.org/10.1007/10930755_20
 
-A Coq proof of Bertrand's postulate: there always exists
-a prime between n and 2n for n greater than 2.
-
+A Coq proof of Bertrand's postulate, which says that there always
+exists a prime between n and 2n for n greater than 2. Includes
+an application of the postulate to compute partitions.
 
 ## Meta
 
