@@ -1,22 +1,22 @@
--R . Bertrand
+-R theories Bertrand
 
-Bertrand.v
-Binomial.v
-Check128.v
-Div.v
-DivDirac.v
-Divides.v
-Extraction.v
-Factorial_bis.v
-Gcd.v
-Misc.v
-Partition.v
-Power.v
-PowerBinomial.v
-PowerDiv.v
-Prime.v
-PrimeDirac.v
-Product.v
-Raux.v
-Summation.v
-sTactic.v
+theories/Bertrand.v
+theories/Binomial.v
+theories/Check128.v
+theories/Div.v
+theories/DivDirac.v
+theories/Divides.v
+theories/Factorial_bis.v
+theories/Gcd.v
+theories/Misc.v
+theories/Partition.v
+theories/Power.v
+theories/PowerBinomial.v
+theories/PowerDiv.v
+theories/Prime.v
+theories/PrimeDirac.v
+theories/Product.v
+theories/Raux.v
+theories/Summation.v
+theories/sTactic.v
+src/Extraction.v

@@ -1,0 +1,4 @@
+(coq.theory
+ (name Bertrand)
+ (package coq-bertrand)
+ (synopsis "Coq proof of Bertrand's postulate on existence of primes"))
