@@ -80,20 +80,20 @@ This project consists of:
   of this program is a direct consequence of Bertrand's postulate (`Partition.v`).
   This nice application of Bertrand's postulate was suggested by Gérard Huet.
 
-## Checking WhyML program correctness
+## Replaying the WhyML program correctness proof
 
-To check the correctness of the WhyML program, first make sure
-the following packages are installed (in addition to Coq 8.12.1 and
-the proof of Bertrand's postulate):
+To replay the proof of correctness for the WhyML program for computing primes,
+first make sure the following packages are installed (in addition to Coq 8.13.2
+and the proof of Bertrand's postulate):
 
-- [Alt-Ergo 2.3.3](https://alt-ergo.ocamlpro.com)
-- [Why3 1.3.3](http://why3.lri.fr) and its Coq library
+- [Alt-Ergo 2.4.1](https://alt-ergo.ocamlpro.com)
+- [Why3 1.4.1](http://why3.lri.fr) and its Coq library
 
 These packages can be installed via OPAM using the following command:
 ```
-opam install alt-ergo.2.3.3 why3.1.3.3 why3-coq
+opam install alt-ergo.2.4.1 why3.1.4.1 why3-coq.1.4.1
 ```
-Then, the Why3 proof can be replayed by running
+Then, the proof can be replayed by running
 ```
 make why
 ```
