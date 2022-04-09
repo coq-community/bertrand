@@ -23,6 +23,7 @@ From Bertrand Require Export PowerDiv Binomial Product.
 
 Theorem prime_div_factorial_le :
  forall n p : nat, prime p -> divides p (factorial n) -> p <= n.
+Proof.
 intros n p H; elim n; auto.
 intros (x, H1); Contradict H; auto.
 replace p with 1; auto with arith.
@@ -38,7 +39,7 @@ intros H2; apply divides_le; auto.
 Qed.
 
 (** (prime_dirac n) is n if n is prime 1 otherwise *)
- 
+
 Definition prime_dirac (n : nat) :=
   match primeb n with
   | true => n
@@ -49,6 +50,7 @@ Theorem prod_prime_dirac_div :
  forall n m p : nat,
  (forall x : nat, n <= x -> x <= n + m -> divides (prime_dirac x) p) ->
  divides (prod_nm n m (fun x => prime_dirac x)) p.
+Proof.
 intros n m; elim m; auto.
 simpl in |- *; auto with arith.
 intros m1 H p H0.
@@ -80,10 +82,11 @@ rewrite mult_1_r in H2; rewrite <- H2; auto with arith.
 apply H0; auto with arith.
 apply le_trans with (1 := H4); auto with arith.
 Qed.
- 
+
 Theorem prime_dirac_divides_binomial :
  forall n m p : nat,
  n < p -> m < p -> p <= n + m -> divides (prime_dirac p) (binomial (n + m) n).
+Proof.
 intros n m p H H0 H1.
 unfold prime_dirac in |- *; generalize (primeb_correct p); case (primeb p);
  auto.
@@ -107,18 +110,20 @@ apply le_not_lt; apply prime_div_factorial_le; auto.
 Qed.
  
 Theorem prime_prime_dirac : forall p : nat, prime p -> prime_dirac p = p.
+Proof.
 intros p; unfold prime_dirac in |- *; generalize (primeb_correct p);
  case (primeb p); auto with arith.
 intros H H0; case H; auto.
 Qed.
- 
+
 Theorem not_prime_prime_dirac :
  forall p : nat, ~ prime p -> prime_dirac p = 1.
+Proof.
 intros p; unfold prime_dirac in |- *; generalize (primeb_correct p);
  case (primeb p); auto with arith.
 intros H H0; case H0; auto.
 Qed.
- 
+
 Theorem prod_power_div_aux :
  forall n p q : nat,
  0 < n ->
@@ -126,6 +131,7 @@ Theorem prod_power_div_aux :
  (forall x : nat, p < x -> prime x -> ~ divides x n) ->
  prod_nm 0 p (fun x : nat => power (prime_dirac x) (power_div n x)) =
  prod_nm 0 q (fun x : nat => power (prime_dirac x) (power_div n x)).
+Proof.
 intros n p q Hn H H0; case (le_lt_or_eq _ _ H); intros H1;
  [ idtac | rewrite H1 ]; auto.
 rewrite prod_nm_split with (r := p) (q := q); auto.
@@ -150,7 +156,7 @@ case (prime_2_or_more _ H3); auto with arith.
 intros H5; rewrite H5; auto with arith.
 intros H3; apply SO_power; auto with arith.
 Qed.
- 
+
 Theorem prod_power_div :
  forall n p q : nat,
  0 < n ->
@@ -158,11 +164,12 @@ Theorem prod_power_div :
  (forall x : nat, q < x -> prime x -> ~ divides x n) ->
  prod_nm 0 p (fun x : nat => power (prime_dirac x) (power_div n x)) =
  prod_nm 0 q (fun x : nat => power (prime_dirac x) (power_div n x)).
+Proof.
 intros n p q H H0 H1; case (le_or_lt p q); intros H2.
 apply prod_power_div_aux; auto.
 apply sym_equal; apply prod_power_div_aux; auto with arith.
 Qed.
- 
+
 Theorem prod_power_div_mult :
  forall n m p q r : nat,
  0 < n ->
@@ -173,6 +180,7 @@ Theorem prod_power_div_mult :
  prod_nm 0 r (fun x : nat => power (prime_dirac x) (power_div (n * m) x)) =
  prod_nm 0 p (fun x : nat => power (prime_dirac x) (power_div n x)) *
  prod_nm 0 q (fun x : nat => power (prime_dirac x) (power_div m x)).
+Proof.
 intros n m p q r H H0 H1 H2 H3.
 rewrite prod_power_div with (p := p) (q := r); auto with arith.
 rewrite prod_power_div with (p := q) (q := r); auto with arith.
@@ -190,16 +198,18 @@ intros x H4 H'4; red in |- *; intros H5; case (H3 x); auto with arith.
 apply divides_trans with (1 := H5); auto with arith.
 exists m; auto with arith.
 Qed.
- 
+
 Theorem prime_dirac_le_1 : forall n : nat, 1 <= prime_dirac n.
+Proof.
 intros n; generalize (prime_2_or_more n); unfold prime_dirac in |- *;
  generalize (primeb_correct n); case (primeb n); auto with arith.
 intros H1 H2; case (H2 H1); auto with arith; intros H3;
  rewrite H3 || apply lt_le_weak; auto with arith.
 Qed.
- 
+
 Theorem prod_prime_dirac_le_1 :
  forall n : nat, 1 <= prod_nm 0 n (fun x => prime_dirac x).
+Proof.
 intros n; elim n; auto.
 intros n0 H; rewrite prod_nm_f.
 apply le_trans with (prod_nm 0 n0 (fun x : nat => prime_dirac x) * 1);
@@ -207,8 +217,9 @@ apply le_trans with (prod_nm 0 n0 (fun x : nat => prime_dirac x) * 1);
 apply (fun m n p : nat => mult_le_compat_l p n m).
 apply prime_dirac_le_1.
 Qed.
- 
+
 Theorem prime_not_prime_S : forall n : nat, 2 < n -> prime n -> ~ prime (S n).
+Proof.
 intros n H (H1, H3); case (odd_or_even n); intros (n1, H2).
 absurd (n = 2).
 Contradict H; rewrite H; auto with arith.
@@ -218,15 +229,16 @@ Contradict H; rewrite <- H; auto with arith.
 apply H5; auto with arith; exists (S n1); rewrite H2.
 lia.
 Qed.
- 
+
 Theorem div_plus : forall n m : nat, 0 < n -> div (n + m) n = 1 + div m n.
+Proof.
 intros n m H; apply sym_equal; apply div_unique; auto.
 replace (n * (1 + div m n)) with (n + n * div m n);
  [ apply plus_le_compat_l; apply div_le | ring ]; auto with arith.
 replace (n * (1 + (1 + div m n))) with (n + n * (1 + div m n));
  [ apply plus_lt_compat_l; apply div_lt | ring ]; auto with arith.
 Qed.
- 
+
 Theorem prod_prime_le_aux :
  forall (c n : nat) (f : nat -> nat),
  0 < c ->
@@ -234,6 +246,7 @@ Theorem prod_prime_le_aux :
  (forall x : nat, x <= n + power 2 4 -> ~ prime x -> f x = 1) ->
  prod_nm 0 (n + power 2 4) (fun x => f x) <=
  power c (div (n + power 2 4) 2 - 1).
+Proof.
 intros c n.
 generalize (primeb_correct 0); intros P1; simpl in P1.
 generalize (primeb_correct 1); intros P2; simpl in P2.
@@ -328,7 +341,7 @@ rewrite plus_minus_assoc; auto with arith.
 simpl in |- *; replace (n0 + 16) with (2 + (n0 + 14)) by ring;
  rewrite div_plus; auto with arith.
 Qed.
- 
+
 Theorem prod_prime_le :
  forall (c n : nat) (f : nat -> nat),
  power 2 4 <= n ->
@@ -336,6 +349,7 @@ Theorem prod_prime_le :
  (forall x : nat, x <= n -> prime x -> f x <= c) ->
  (forall x : nat, x <= n -> ~ prime x -> f x = 1) ->
  prod_nm 0 n (fun x => f x) <= power c (div n 2 - 1).
+Proof.
 intros c n f H H0 H1 H2.
 rewrite (le_plus_minus (power 2 4) n); auto; rewrite plus_comm;
  apply prod_prime_le_aux; auto with arith.
@@ -345,11 +359,11 @@ intros x; rewrite plus_comm; rewrite <- (le_plus_minus (power 2 4) n);
  auto with arith.
 Qed.
 
-
 (** Majoration of the product of primes *)
- 
+
 Theorem prod_prime_lt :
  forall n : nat, 1 < n -> prod_nm 0 n (fun x => prime_dirac x) < power 4 n.
+Proof.
 intros n; pattern n in |- *; apply lt_wf_ind; clear n; intros n.
 case (odd_or_even n).
 intros (x, H2); rewrite H2.
@@ -435,6 +449,7 @@ Theorem factorization :
  0 < n ->
  (forall x : nat, p < x -> prime x -> ~ divides x n) ->
  n = prod_nm 0 p (fun x : nat => power (prime_dirac x) (power_div n x)).
+Proof.
 intros n; pattern n in |- *; apply lt_wf_ind; clear n.
 intros n H p H0 H1.
 cut

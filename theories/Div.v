@@ -36,17 +36,19 @@ Fixpoint pdiv_aux (m n p : nat) {struct p} : nat * nat :=
                 end
       end
   end.
- 
+
 Theorem ominus_id : forall n : nat, ominus n n = Some 0.
+Proof.
 simple induction n; auto.
 Qed.
- 
+
 Theorem pdiv_aux_def :
  forall m n p : nat,
  m <= p ->
  0 < n -> match pdiv_aux m n p with
           | (q, r) => m = q * n + r /\ r < n
           end.
+Proof.
 intros m n p; generalize m n; clear m n; elim p; clear p; simpl in |- *.
 intros m n H; inversion H; simpl in |- *; case n; simpl in |- *;
  auto with arith.
@@ -61,39 +63,45 @@ pattern s at 1 in |- *; replace s with (0 + s); auto with arith.
 intros H4 H5; split; auto.
 rewrite Hs; rewrite H4; simpl in |- *; auto with arith.
 Qed.
+
 (** Function that computes quotient and rest of a division *)
- 
+
 Definition pdiv (m n : nat) := pdiv_aux m n m.
- 
+
 Theorem pdiv_def :
  forall m n : nat,
  0 < n -> match pdiv m n with
           | (q, r) => m = q * n + r /\ r < n
           end.
+Proof.
 intros m n H; unfold pdiv in |- *; apply pdiv_aux_def with (p := m);
  auto with arith.
 Qed.
+
 (* Division : returns the quotient *)
- 
+
 Definition div (m n : nat) := fst (pdiv m n).
- 
+
 Theorem div_le : forall m n : nat, 0 < n -> n * div m n <= m.
+Proof.
 intros m n H; unfold div in |- *; generalize (pdiv_def m n H);
  case (pdiv m n); simpl in |- *.
 intros q r (H1, H2); rewrite H1; auto with arith.
 rewrite (mult_comm n); auto with arith.
 Qed.
- 
+
 Theorem div_lt : forall m n : nat, 0 < n -> m < n * (1 + div m n).
+Proof.
 intros m n H; unfold div in |- *; generalize (pdiv_def m n H);
  case (pdiv m n); simpl in |- *.
 intros q r (H1, H2); rewrite H1; auto with arith.
 rewrite (mult_comm n); simpl in |- *; auto with arith.
 rewrite (plus_comm n); simpl in |- *; auto with arith.
 Qed.
- 
+
 Theorem div_unique :
  forall m n p : nat, 0 < n -> n * p <= m -> m < n * (1 + p) -> p = div m n.
+Proof.
 intros m n p H H0 H1.
 case (le_or_lt p (div m n)); intros H2.
 case (le_lt_or_eq _ _ H2); intros H3; auto.
@@ -107,6 +115,7 @@ Qed.
  
 Theorem div_mult_le :
  forall m n p : nat, 0 < n -> p * div m n <= div (p * m) n.
+Proof.
 intros m n p H1.
 apply lt_n_Sm_le; change (p * div m n < 1 + div (p * m) n) in |- *.
 apply lt_mult_right_anti with (z := n).
@@ -117,9 +126,10 @@ apply (fun m n p : nat => mult_le_compat_l p n m).
 apply div_le; auto.
 apply div_lt; auto.
 Qed.
- 
+
 Theorem div_mult_lt :
  forall m n p : nat, 0 < n -> 0 < p -> div (p * m) n < p * (1 + div m n).
+Proof.
 intros m n p H H1; apply lt_mult_right_anti with (z := n).
 apply le_lt_trans with (p * m).
 apply div_le; auto.
@@ -127,10 +137,12 @@ replace (n * (p * (1 + div m n))) with (p * (n * (1 + div m n)));
  [ idtac | repeat rewrite mult_assoc; rewrite (mult_comm p); auto ].
 apply mult_lt_bis; try apply div_lt; auto.
 Qed.
+
 (* Correspond to Proposition 1 of page 1 *)
- 
+
 Theorem div_mult_lt2 :
  forall m n p : nat, 0 < n -> div (2 * m) n <= 2 * div m n + 1.
+Proof.
 intros m n p H.
 apply lt_n_Sm_le.
 replace (S (2 * div m n + 1)) with (2 * (1 + div m n));
@@ -138,9 +150,10 @@ replace (S (2 * div m n + 1)) with (2 * (1 + div m n));
  | repeat (rewrite <- plus_n_O || rewrite <- plus_n_Sm; simpl in |- *) ];
  auto.
 Qed.
- 
+
 Theorem div_divides_S :
  forall p q : nat, 0 < q -> divides q (S p) -> div (S p) q = S (div p q).
+Proof.
 intros p q H (qr, H1); apply sym_equal; auto.
 apply trans_equal with qr.
 generalize (pdiv_def p q H); unfold div in |- *; case (pdiv p q);
@@ -165,6 +178,7 @@ Qed.
  
 Theorem div_not_divides_S :
  forall p q : nat, 0 < q -> ~ divides q (S p) -> div (S p) q = div p q.
+Proof.
 intros p q H H1; apply sym_equal; apply div_unique; auto.
 apply le_trans with p; auto with arith.
 apply div_le; auto with arith.
@@ -182,36 +196,41 @@ rewrite H2.
 rewrite plus_n_Sm; auto.
 rewrite H4; simpl in |- *; ring.
 Qed.
- 
+
 Theorem divides_pdiv :
  forall p q : nat, 0 < q -> divides q p -> snd (pdiv p q) = 0.
+Proof.
 intros p q H (q1, H1); generalize (pdiv_def p q H); case (pdiv p q);
  simpl in |- *.
 intros q2 r2 (H2, H3).
 apply (div_unic_r p q q2 q1); split; auto.
 rewrite H1; ring.
 Qed.
- 
+
 Theorem not_divides_pdiv :
  forall p q : nat, 0 < q -> ~ divides q p -> snd (pdiv p q) <> 0.
+Proof.
 intros p q H; generalize (pdiv_def p q H); case (pdiv p q); simpl in |- *.
 intros q1 r1 (H1, H2) H3; red in |- *; intros H4; case H3; exists q1;
  rewrite H1; rewrite H4; ring.
 Qed.
- 
+
 Theorem pdiv_divides :
  forall n m : nat, 0 < m -> snd (pdiv n m) = 0 -> divides m n.
+Proof.
 intros n m H; generalize (pdiv_def n m H); case (pdiv n m); simpl in |- *.
 intros n1 m1 (H1, H2) H3; exists n1; rewrite H1; rewrite H3;
  rewrite <- plus_n_O; auto.
 Qed.
- 
+
 Theorem pdiv_not_divides :
  forall n m : nat, 0 < m -> snd (pdiv n m) <> 0 -> ~ divides m n.
+Proof.
 intros n m H H0; red in |- *; intros H1; case H0; apply divides_pdiv; auto.
 Qed.
+
 (* Divisibility is decidable *)
- 
+
 Definition divides1_dec : forall n m : nat, {divides n m} + {~ divides n m}.
 intros n m; case n.
 case m.
@@ -228,14 +247,16 @@ Defined.
  
 Theorem divides_div :
  forall p q : nat, 0 < p -> divides p q -> q = div q p * p.
+Proof.
 intros p q Hp (x, H); rewrite H.
 apply f_equal2 with (f := mult); auto with arith.
 apply div_unique; auto with arith.
 rewrite (mult_comm x); auto with arith.
 rewrite (mult_comm x); auto with arith.
 Qed.
- 
+
 Theorem lt_div_O : forall p q : nat, p < q -> div p q = 0.
+Proof.
 intros p q H.
 generalize (pdiv_def p q); unfold div in |- *; case (pdiv p q); simpl in |- *.
 intros q1 r1; case q1; simpl in |- *; auto with arith.

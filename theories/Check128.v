@@ -31,13 +31,13 @@ Fixpoint prime_between (n m : nat) {struct m} : bool :=
        | O => false
        | S m1 => prime_between (S n) m1
        end.
- 
+
 Theorem prime_between_correct :
  forall n m : nat,
  if prime_between n m
  then exists p : nat, prime p /\ n <= p /\ p <= n + m
  else forall p : nat, n <= p -> p <= n + m -> ~ prime p.
-
+Proof.
 intros n m; generalize n; clear n; elim m; clear m; simpl in |- *; auto.
 intros n; generalize (primeb_correct n); case (primeb n); auto.
 intros H; exists n; repeat (split; auto with arith).
@@ -53,14 +53,14 @@ simpl in |- *; rewrite <- plus_n_Sm; intros H1 p H2; inversion H2;
  auto with arith.
 rewrite <- H0; auto.
 Qed.
- 
 
-(** Bertrand's postulat is decidable *)
+(** Bertrand's postulate is decidable *)
 
 Theorem postulate_dec :
  forall n : nat,
  {(exists p : nat, prime p /\ n < p /\ p < 2 * n)} +
  {(forall p : nat, n < p -> p < 2 * n -> ~ prime p)}.
+Proof.
 intros n; case n.
 right; simpl in |- *; intros p H1 H2; inversion H2.
 intros n1; case n1.
@@ -96,12 +96,13 @@ Fixpoint check_postulate (n : nat) : bool :=
           end
       end
   end.
- 
+
 Theorem check_postulate_correct :
  forall m : nat,
  check_postulate m = true ->
  forall n : nat,
  2 <= n -> n <= m -> exists p : nat, prime p /\ n < p /\ p < 2 * n.
+Proof.
 intros m; elim m; simpl in |- *; auto.
 intros H n H0 H1; generalize H0; inversion H1; auto.
 intros H3; inversion H3.
@@ -121,10 +122,11 @@ intros; discriminate.
 Qed.
 
 (** Check the postulate from 1 to 128 *)
- 
+
 Theorem postulate_correct_128 :
  forall n : nat,
  2 <= n -> n <= power 2 7 -> exists p : nat, prime p /\ n < p /\ p < 2 * n.
+Proof.
 apply check_postulate_correct.
 vm_compute;reflexivity.
 Qed.

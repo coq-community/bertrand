@@ -30,23 +30,26 @@ Definition div_dirac (p q : nat) :=
   | O => 1
   | _ => 0
   end.
- 
+
 Theorem div_dirac_prop1 :
  forall p q : nat, 0 < q -> divides q p -> div_dirac p q = 1.
+Proof.
 intros p q H H1; unfold div_dirac in |- *; rewrite divides_pdiv; auto.
 Qed.
- 
+
 Theorem div_dirac_prop2 :
  forall p q : nat, 0 < q -> ~ divides q p -> div_dirac p q = 0.
+Proof.
 intros p q H H1; unfold div_dirac in |- *;
  generalize (not_divides_pdiv p q H H1); case (snd (pdiv p q));
  auto with arith.
 intros H2; case H2; auto.
 Qed.
- 
+
 Theorem div_dirac_div :
  forall p q : nat,
  0 < p -> 0 < q -> div p q = sum_nm 1 (pred p) (fun x => div_dirac x q).
+Proof.
 intros p q H H0; generalize H; clear H.
 elim p; auto with arith.
 intros H1; inversion H1.
