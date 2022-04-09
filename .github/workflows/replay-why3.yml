@@ -1,0 +1,52 @@
+name: Replay Why3 Proof
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  replay:
+    # the OS must be GNU/Linux to be able to use the docker-coq-action
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v2
+      - uses: coq-community/docker-coq-action@v1
+        with:
+          custom_image: 'coqorg/coq:8.13'
+          custom_script: |
+            startGroup "Print opam config and prepare"
+              opam config list; opam repo list; opam list
+              sudo apt-get update -y -q
+            endGroup
+            startGroup "Build bertrand dependencies"
+              opam pin add -n -y -k path coq-bertrand .
+              opam update -y
+              opam install -y -j $(nproc) coq-bertrand --deps-only
+            endGroup
+            startGroup "Build bertrand"
+              opam install -y -v -j $(nproc) coq-bertrand
+              opam list
+            endGroup
+            startGroup "Build knuth dependencies"
+              opam pin add -n -y -k path coq-knuth-prime-whyml .
+              opam update -y
+              opam install --confirm-level=unsafe-yes -j $(nproc) coq-knuth-prime-whyml --deps-only
+            endGroup
+            startGroup "Build knuth"
+              opam install -y -v -j $(nproc) coq-knuth-prime-whyml
+              opam list
+            endGroup
+            startGroup "Uninstallation test"
+              opam remove -y coq-knuth-prime-whyml
+              opam remove -y coq-bertrand
+            endGroup
+
+# See also:
+# https://github.com/coq-community/docker-coq-action#readme
+# https://github.com/erikmd/docker-coq-github-action-demo
