@@ -20,10 +20,7 @@ jobs:
         with:
           custom_image: 'coqorg/coq:8.13'
           custom_script: |
-            startGroup "Print opam config and prepare"
-              opam config list; opam repo list; opam list
-              sudo apt-get update -y -q
-            endGroup
+            {{before_install}}
             startGroup "Build bertrand dependencies"
               opam pin add -n -y -k path coq-bertrand .
               opam update -y
@@ -34,6 +31,7 @@ jobs:
               opam list
             endGroup
             startGroup "Build knuth dependencies"
+              sudo apt-get update -y -q
               opam pin add -n -y -k path coq-knuth-prime-whyml .
               opam update -y
               opam install --confirm-level=unsafe-yes -j $(nproc) coq-knuth-prime-whyml --deps-only
