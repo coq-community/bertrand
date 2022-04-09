@@ -19,9 +19,8 @@
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
 
-Require Export Prime.
-Require Export Misc.
-Require Import Arith.
+From Coq Require Import Arith.
+From Bertrand Require Export Prime Misc.
 
 (** Check if there is a prime between n and n+m *)
 

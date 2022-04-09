@@ -18,12 +18,8 @@
     Proof of Bertrand's conjecture: PrimeDirac.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Export PowerDiv.
-Require Export Binomial.
-Require Import ArithRing.
-Require Export Product.
-Require Import Wf_nat.
-Require Import Lia.
+From Coq Require Import ArithRing Wf_nat Lia.
+From Bertrand Require Export PowerDiv Binomial Product.
 
 Theorem prime_div_factorial_le :
  forall n p : nat, prime p -> divides p (factorial n) -> p <= n.

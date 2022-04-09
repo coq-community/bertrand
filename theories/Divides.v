@@ -19,14 +19,10 @@
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
 
-Require Import Arith.
-Require Import ArithRing.
-Require Import Peano_dec.
-Require Import Compare_dec.
-Require Import Wf_nat.
-Require Export Misc.
-Require Export Euclid.
-Require Export Power.
+From Coq Require Import Arith ArithRing Peano_dec Wf_nat.
+From Coq Require Export Euclid.
+From Bertrand Require Export Misc Power.
+
 (** Division as a predicate *)
  
 Definition is_div (a b q r : nat) : Prop := r < b /\ a = q * b + r.

@@ -19,13 +19,9 @@
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
 
-Require Import Arith.
-Require Import ArithRing.
-Require Import Peano_dec.
-Require Import Compare_dec.
-Require Import Wf_nat.
-Require Export Prime.
-Require Export Power.
+From Coq Require Import Arith ArithRing Peano_dec Wf_nat.
+From Bertrand Require Export Prime Power.
+
 (*********************************************************************
   * Gcd as a predicate *)
 

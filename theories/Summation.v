@@ -19,9 +19,8 @@
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
 
-Require Import Arith.
-Require Import ArithRing.
-Require Export Misc.
+From Coq Require Import Arith ArithRing.
+From Bertrand Require Export Misc.
 
 (**  	Iterated Sum: 
          (sum_nm n m) = f(n)+f(n+1)+...+f(n+m+1) 

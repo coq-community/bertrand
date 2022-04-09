@@ -18,16 +18,12 @@
     Proof of Bertrand's conjecture: Raux.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Export Misc.
-Require Export Arith.
-Require Export Div.
-Require Import ZArith.
-Require Import Classical_Prop.
-Require Import Rbase.
-Require Import Rfunctions.
-Require Import Ranalysis.
-Require Export Rpower.
-Require Import Rtrigo.
+
+From Coq Require Export Arith.
+From Coq Require Import ZArith Classical_Prop.
+From Coq Require Import Rbase Rfunctions Ranalysis Rtrigo.
+From Coq Require Export Rpower.
+From Bertrand Require Export Misc Div.
 
 Hint Resolve exp_pos: real.
 Hint Resolve exp_increasing: real.

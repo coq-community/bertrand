@@ -18,12 +18,8 @@
     Proof of Bertrand's conjecture: Binomial.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Import Arith.
-Require Import ArithRing.
-Require Import Wf_nat.
-Require Export Factorial_bis.
-Require Export Summation.
-Require Export Power.
+From Coq Require Import Arith ArithRing Wf_nat.
+From Bertrand Require Export Factorial_bis Summation Power.
 
 (**  	Binomial Coefficient defined using Pascal's triangle *)
 Fixpoint binomial (a : nat) : nat -> nat :=

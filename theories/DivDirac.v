@@ -18,9 +18,9 @@
     Proof of Bertrand's conjecture: DivDirac.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Import ArithRing.
-Require Export Div.
-Require Import Summation.
+From Coq Require Import ArithRing.
+From Bertrand Require Export Div.
+From Bertrand Require Import Summation.
 
 (** Define a function that returns 1 if the second argument divides the 
     first one, 0 otherwise*)

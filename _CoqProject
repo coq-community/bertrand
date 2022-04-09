@@ -1,4 +1,4 @@
--R theories Bertrand
+-Q theories Bertrand
 
 theories/Bertrand.v
 theories/Binomial.v

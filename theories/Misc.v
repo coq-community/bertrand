@@ -18,11 +18,8 @@
     Proof of Bertrand's conjecture: Misc.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Import Arith.
-Require Import ArithRing.
-Require Import Compare_dec.
-Require Export sTactic.
-
+From Coq Require Import Arith ArithRing.
+From Bertrand Require Export sTactic.
 
 (** Some facts about arithmetics *)
  

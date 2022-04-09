@@ -18,10 +18,9 @@
     Proof of Bertrand's conjecture: Product.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Import Arith.
-Require Import ArithRing.
-Require Export Misc.
-Require Import Power.
+From Coq Require Import Arith ArithRing.
+From Bertrand Require Export Misc.
+From Bertrand Require Import Power.
 
 (**  	Iterated Product:
      (prod_nm n m f) = f(n).f(n+1)...f(n+m+1)

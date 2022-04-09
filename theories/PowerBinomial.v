@@ -18,9 +18,8 @@
     Proof of Bertrand's conjecture: PowerBinomial.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Export PrimeDirac.
-Require Import Wf_nat.
-Require Import ArithRing.
+From Coq Require Import Wf_nat ArithRing.
+From Bertrand Require Export PrimeDirac.
 
 (** Exact expression for the maximal exponent of binomial 2n n.  *)
  

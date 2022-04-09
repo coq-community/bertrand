@@ -19,10 +19,8 @@
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
 
-Require Import Arith.
-Require Import ArithRing.
-Require Export Misc.
-
+From Coq Require Import Arith ArithRing.
+From Bertrand Require Export Misc.
 
 (**  (power x n) computes x to the power n *)
  

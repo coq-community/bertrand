@@ -18,12 +18,8 @@
     Proof of Bertrand's conjecture: PowerDiv.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Export Div.
-Require Import ArithRing.
-Require Export Gcd.
-Require Export Factorial_bis.
-Require Export DivDirac.
-Require Export Summation.
+From Coq Require Import ArithRing.
+From Bertrand Require Export Div Gcd Factorial_bis DivDirac Summation.
 
 (** Auxillary function that tries to find the maximal exponent of q that
    divides p*)

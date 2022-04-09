@@ -18,11 +18,9 @@
     Proof of Bertrand's conjecture: Prime.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Export Divides.
-Require Import Arith.
-Require Import ArithRing.
-Require Import Wf_nat.
-Require Import Div.
+From Coq Require Import Arith ArithRing Wf_nat.
+From Bertrand Require Export Divides.
+From Bertrand Require Import Div.
 
 (** Definition of the prime predicate *)
 Definition prime (a : nat) : Prop :=

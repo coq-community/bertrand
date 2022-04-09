@@ -19,14 +19,8 @@
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
 
-Require Import Div2.
-Require Import Even.
-Require Import Wf_nat.
-Require Import Arith.
-Require Import Compare_dec.
-Require Import ArithRing.
-Require Import Bertrand.
-Require Import List.
+From Coq Require Import Div2 Even Wf_nat Arith ArithRing List.
+From Bertrand Require Import Bertrand.
  
 Definition le_lt_dec : forall n m : nat, {n <= m} + {m < n}.
 fix le_lt_dec 1; intros n m; case n.

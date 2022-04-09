@@ -18,11 +18,11 @@
     Proof of Bertrand's conjecture: Div.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Export Power.
-Require Import ArithRing.
-Require Export Arith.
-Require Export Divides.
-Require Import Misc.
+From Coq Require Import ArithRing.
+From Coq Require Export Arith.
+From Bertrand Require Export Power Divides.
+From Bertrand Require Import Misc.
+
 (** Auxillary function to compute the quotient and rest of a division *)
  
 Fixpoint pdiv_aux (m n p : nat) {struct p} : nat * nat :=

@@ -19,7 +19,7 @@
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
 
-Require Import Arith.
+From Coq Require Import Arith.
 
 (**  	Factorial*)
  
