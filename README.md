@@ -69,16 +69,34 @@ This project consists of:
 
 - A Coq proof of Bertrand's postulate: there always exists a prime between
   n and 2n for n greater than 2 (`Bertrand.v`).
+- A little program in OCaml, based on code extracted from Coq,
+  that generates a partition of 1..2n in pairs (i,j) such that i+j
+  is always prime (`run_partition.ml`). The proof of correctness
+  of this program is a direct consequence of Bertrand's postulate (`Partition.v`).
+  This nice application of Bertrand's postulate was suggested by Gérard Huet.
 - A proof of correctness of an implementation of the algorithm for computing primes
   described in "The Art of Computer Programming: Fundamental Algorithms" by Knuth,
   pages 147-149. The proof uses the [Why3 tool](http://why3.lri.fr) to generate
   verification conditions for the WhyML program that implements the algorithm.
   These verification conditions can then be discharged by Coq and the
   [Alt-Ergo](https://alt-ergo.ocamlpro.com) prover.
-- A little program in OCaml that generates a partition of 1..2n in pairs (i,j)
-  such that i+j is always prime (`run_partition.ml`). The proof of correctness
-  of this program is a direct consequence of Bertrand's postulate (`Partition.v`).
-  This nice application of Bertrand's postulate was suggested by Gérard Huet.
+
+## Extracting and running the OCaml partition program
+
+To extract code and obtain the program, run
+```shell
+make run_partition.ml
+```
+
+Next, open an OCaml toplevel (e.g., `ocaml`) and do
+```ocaml
+#use "run_partition.ml";;
+```
+
+To get a partition from 1...30:
+```ocaml
+let part30 = part 15;;
+```
 
 ## Replaying the WhyML program correctness proof
 
