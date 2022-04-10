@@ -1,5 +1,5 @@
-run_partition.ml: src/ex1.ml src/ex2.ml src/Extraction.vo
-	cat src/ex1.ml partition.ml src/ex2.ml > run_partition.ml
+run_partition.ml: ocaml/ex1.ml ocaml/ex2.ml ocaml/Extraction.vo
+	cat ocaml/ex1.ml partition.ml ocaml/ex2.ml > run_partition.ml
 
 clean::
 	$(HIDE)rm -f partition.ml partition.mli run_partition.ml
