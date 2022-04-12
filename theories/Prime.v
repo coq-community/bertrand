@@ -171,7 +171,7 @@ apply divides_le; auto with arith.
 Contradict H1; rewrite H1; auto with arith.
 intros H3; Contradict H.
 apply max_div_prop2; auto with arith.
-apply le_lt_trans with (1 := H2); auto with arith.
+apply Nat.le_lt_trans with (1 := H2); auto with arith.
 generalize H0 H4; case b; auto with arith.
 intros HH1 HH2; case HH2; auto.
 intros n1; case n1; auto with arith.
@@ -202,11 +202,11 @@ rewrite H1; rewrite H5; auto with arith.
 case (divides_prime_divides x); auto with arith.
 intros y (H5, H6); case (H0 y); auto with arith.
 cut (y <= x); [ intros H7 | apply divides_le ]; auto.
-apply le_trans with (x * y); auto with arith.
+apply Nat.le_trans with (x * y); auto with arith.
 apply le_mult; auto with arith.
 rewrite H1; auto with arith.
 apply le_mult; auto with arith.
-apply le_trans with (1 := H7); auto.
+apply Nat.le_trans with (1 := H7); auto.
 Contradict H4; rewrite H4; auto with arith.
 apply divides_trans with (1 := H6); exists b; auto with arith.
 rewrite Nat.mul_comm; auto.
@@ -217,9 +217,9 @@ intros n1; case n1; auto with arith.
 intros H4; case H4; auto with arith.
 intros y (H5, H6); case (H0 y); auto with arith.
 cut (y <= b); [ intros H7 | apply divides_le ]; auto.
-apply le_trans with (x * y); auto with arith.
+apply Nat.le_trans with (x * y); auto with arith.
 apply le_mult; auto with arith.
-apply le_trans with (1 := H7); auto with arith.
+apply Nat.le_trans with (1 := H7); auto with arith.
 rewrite H1; auto with arith.
 Contradict H; rewrite H1; rewrite H; rewrite Nat.mul_comm; auto with arith.
 apply divides_trans with (1 := H6).

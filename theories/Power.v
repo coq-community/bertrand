@@ -112,8 +112,8 @@ Proof.
 intros p q; elim p; simpl in |- *; auto with arith.
 intros p1; case p1; simpl in |- *; auto with arith.
 rewrite Nat.mul_comm; simpl in |- *; auto with arith.
-intros n H H0 H1; apply le_lt_trans with (q * S n); auto with arith.
-apply le_trans with (2 * S n); auto with arith.
+intros n H H0 H1; apply Nat.le_lt_trans with (q * S n); auto with arith.
+apply Nat.le_trans with (2 * S n); auto with arith.
 simpl in |- *; auto with arith.
 repeat (rewrite <- plus_n_Sm; simpl in |- *); auto with arith.
 repeat rewrite (fun x => Nat.mul_comm x (S n));

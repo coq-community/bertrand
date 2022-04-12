@@ -292,7 +292,7 @@ intros x H1; apply div_dirac_power_div; auto with arith.
 apply lt_prime; auto.
 red in |- *; intros H2; Contradict H1; auto with arith.
 apply lt_not_le; apply lt_S_n; rewrite <- (S_pred n 0); auto with arith.
-apply lt_le_trans with (power p n).
+apply Nat.lt_le_trans with (power p n).
 apply power_id_lt; auto with arith.
 apply lt_prime; auto.
 apply divides_le; auto with arith.
@@ -307,7 +307,7 @@ rewrite sum_nm_ext with (n := 1 + (1 + n)) (g := fun x : nat => 0); auto.
 rewrite sum_nm_c with (c := 0); ring.
 intros x H.
 apply lt_div_O.
-apply lt_le_trans with (power p n); auto with arith.
+apply Nat.lt_le_trans with (power p n); auto with arith.
 apply power_id_lt; auto with arith.
 apply lt_prime; auto.
 apply power_le_mono; auto with arith.
@@ -319,7 +319,7 @@ rewrite sum_nm_ext with (n := 1 + (1 + r)) (g := fun x : nat => 0); auto.
 rewrite sum_nm_c with (c := 0); ring.
 intros x H.
 apply lt_div_O.
-apply lt_le_trans with (1 := Hr); auto with arith.
+apply Nat.lt_le_trans with (1 := Hr); auto with arith.
 apply power_le_mono; auto with arith.
 apply Nat.lt_trans with 1; auto with arith.
 apply lt_prime; auto.

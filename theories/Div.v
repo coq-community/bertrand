@@ -57,7 +57,7 @@ generalize (ominus_def m n); case (ominus m n); auto with arith.
 intros s Hs; generalize (Rec s n); case (pdiv_aux s n p1).
 intros q r H3; case H3; auto with arith.
 apply lt_n_Sm_le.
-apply lt_le_trans with (2 := H1).
+apply Nat.lt_le_trans with (2 := H1).
 rewrite Hs.
 pattern s at 1 in |- *; replace s with (0 + s); auto with arith.
 intros H4 H5; split; auto.
@@ -106,10 +106,10 @@ intros m n p H H0 H1.
 case (le_or_lt p (div m n)); intros H2.
 case (le_lt_or_eq _ _ H2); intros H3; auto.
 absurd (n * div m n <= m).
-apply lt_not_le; apply lt_le_trans with (1 := H1); auto with arith.
+apply lt_not_le; apply Nat.lt_le_trans with (1 := H1); auto with arith.
 apply div_le; auto.
 absurd (m < n * (1 + div m n)).
-apply le_not_lt; apply le_trans with (2 := H0); auto with arith.
+apply le_not_lt; apply Nat.le_trans with (2 := H0); auto with arith.
 apply div_lt; auto.
 Qed.
  
@@ -119,7 +119,7 @@ Proof.
 intros m n p H1.
 apply lt_n_Sm_le; change (p * div m n < 1 + div (p * m) n) in |- *.
 apply lt_mult_right_anti with (z := n).
-apply le_lt_trans with (p * m).
+apply Nat.le_lt_trans with (p * m).
 replace (n * (p * div m n)) with (p * (n * div m n));
  [ idtac | repeat rewrite mult_assoc; rewrite (Nat.mul_comm p); auto ].
 apply (fun m n p : nat => mult_le_compat_l p n m).
@@ -131,7 +131,7 @@ Theorem div_mult_lt :
  forall m n p : nat, 0 < n -> 0 < p -> div (p * m) n < p * (1 + div m n).
 Proof.
 intros m n p H H1; apply lt_mult_right_anti with (z := n).
-apply le_lt_trans with (p * m).
+apply Nat.le_lt_trans with (p * m).
 apply div_le; auto.
 replace (n * (p * (1 + div m n))) with (p * (n * (1 + div m n)));
  [ idtac | repeat rewrite mult_assoc; rewrite (Nat.mul_comm p); auto ].
@@ -180,7 +180,7 @@ Theorem div_not_divides_S :
  forall p q : nat, 0 < q -> ~ divides q (S p) -> div (S p) q = div p q.
 Proof.
 intros p q H H1; apply sym_equal; apply div_unique; auto.
-apply le_trans with p; auto with arith.
+apply Nat.le_trans with p; auto with arith.
 apply div_le; auto with arith.
 generalize (pdiv_def p q H); unfold div in |- *; case (pdiv p q);
  simpl in |- *.
@@ -262,6 +262,6 @@ generalize (pdiv_def p q); unfold div in |- *; case (pdiv p q); simpl in |- *.
 intros q1 r1; case q1; simpl in |- *; auto with arith.
 intros n H0; (absurd (q <= p); auto with arith).
 case H0; auto with arith.
-apply le_lt_trans with (2 := H); auto with arith.
+apply Nat.le_lt_trans with (2 := H); auto with arith.
 intros H1 H2; rewrite H1; auto with arith.
 Qed.

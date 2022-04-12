@@ -175,10 +175,10 @@ Proof.
 intros n m f g; generalize n; elim m; clear n m.
 simpl in |- *; auto with arith.
 intros m H n H0; repeat rewrite prod_nm_f; auto with arith.
-apply le_trans with (prod_nm n m f * g (n + S m)); auto with arith.
+apply Nat.le_trans with (prod_nm n m f * g (n + S m)); auto with arith.
 repeat rewrite (fun x => Nat.mul_comm x (g (n + S m)));
  apply (fun m n p : nat => mult_le_compat_l p n m).
 apply H; auto with arith.
 intros x H1 H2; apply H0; auto with arith.
-apply le_trans with (1 := H2); auto with arith.
+apply Nat.le_trans with (1 := H2); auto with arith.
 Qed.

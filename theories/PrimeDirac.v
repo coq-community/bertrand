@@ -74,13 +74,13 @@ case H1; intros H8 H9; apply sym_equal; apply H9; auto with arith.
 red in |- *; intros H10; Contradict H5; auto; rewrite H10; auto with arith.
 apply SO_divides_all.
 apply H0; auto with arith.
-apply le_trans with (1 := H4); auto with arith.
+apply Nat.le_trans with (1 := H4); auto with arith.
 repeat rewrite mult_1_r.
 apply H; auto with arith.
 intros x1 H3 H4.
 rewrite mult_1_r in H2; rewrite <- H2; auto with arith.
 apply H0; auto with arith.
-apply le_trans with (1 := H4); auto with arith.
+apply Nat.le_trans with (1 := H4); auto with arith.
 Qed.
 
 Theorem prime_dirac_divides_binomial :
@@ -212,7 +212,7 @@ Theorem prod_prime_dirac_le_1 :
 Proof.
 intros n; elim n; auto.
 intros n0 H; rewrite prod_nm_f.
-apply le_trans with (prod_nm 0 n0 (fun x : nat => prime_dirac x) * 1);
+apply Nat.le_trans with (prod_nm 0 n0 (fun x : nat => prime_dirac x) * 1);
  auto with arith.
 apply (fun m n p : nat => mult_le_compat_l p n m).
 apply prime_dirac_le_1.
@@ -281,7 +281,7 @@ rewrite (H1 12); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
 rewrite (H1 14); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
 rewrite (H1 15); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
 rewrite (H1 16); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-apply le_trans with (power c 6).
+apply Nat.le_trans with (power c 6).
 simpl in |- *; repeat rewrite mult_1_r; repeat apply le_mult; auto; apply H0;
  repeat apply le_n_S; auto with arith.
 change (power c 6 <= power c 7) in |- *; apply power_le_mono; auto.
@@ -314,9 +314,9 @@ replace (power c (1 + div (n0 + power 2 4) 2 - 1)) with
 apply le_mult; auto with arith.
 apply Rec; auto with arith.
 intros x H5 H6; apply H0; auto with arith.
-apply le_trans with (1 := H5); auto with arith.
+apply Nat.le_trans with (1 := H5); auto with arith.
 intros x H5 H6; apply H1; auto with arith.
-apply le_trans with (1 := H5); auto with arith.
+apply Nat.le_trans with (1 := H5); auto with arith.
 pattern c at 2 in |- *; rewrite <- (power_SO c); rewrite power_mult.
 rewrite plus_minus_assoc; auto with arith.
 rewrite <- plus_n_Sm; auto with arith.
@@ -330,9 +330,9 @@ replace (power c (1 + div (n0 + power 2 4) 2 - 1)) with
 apply le_mult; auto with arith.
 apply Rec; auto with arith.
 intros x H5 H6; apply H0; auto with arith.
-apply le_trans with (1 := H5); auto with arith.
+apply Nat.le_trans with (1 := H5); auto with arith.
 intros x H5 H6; apply H1; auto with arith.
-apply le_trans with (1 := H5); auto with arith.
+apply Nat.le_trans with (1 := H5); auto with arith.
 case (prime_dec (0 + S (S (n0 + power 2 4)))); intros Hp'.
 simpl in |- *; auto with arith.
 rewrite H1; auto with arith.
@@ -399,7 +399,7 @@ rewrite prod_nm_split with (r := x1 + 1); auto with arith.
     replace (2 * x1 + 1) with (x1 + 1 + x1); auto with arith; 
     ring.
 apply
- le_lt_trans
+ Nat.le_lt_trans
   with
     (prod_nm 0 (x1 + 1) (fun x : nat => prime_dirac x) *
      binomial (2 * x1 + 1) (x1 + 1)).
@@ -415,17 +415,17 @@ apply prod_prime_dirac_div.
 intros x H H0.
 replace (2 * x1 + 1) with (x1 + 1 + x1); [ idtac | ring ].
 apply prime_dirac_divides_binomial; auto with arith.
-apply lt_le_trans with (2 := H); auto with arith.
-apply lt_le_trans with (2 := H); auto with arith.
+apply Nat.lt_le_trans with (2 := H); auto with arith.
+apply Nat.lt_le_trans with (2 := H); auto with arith.
 rewrite Nat.add_comm; auto with arith.
 replace (x1 + 1 + x1) with (x1 + 2 + (x1 - 1)); auto.
 pattern x1 at 4 in |- *;
  (rewrite le_plus_minus with (n := 1); [ ring | auto ]).
 apply plus_minus.
-repeat rewrite plus_assoc_reverse.
+repeat rewrite <- Nat.add_assoc.
 rewrite <- le_plus_minus; [ ring | auto ].
 apply
- le_lt_trans
+ Nat.le_lt_trans
   with (prod_nm 0 (x1 + 1) (fun x : nat => prime_dirac x) * power 2 (2 * x1)).
 apply (fun m n p : nat => mult_le_compat_l p n m).
 apply binomial_odd.
@@ -501,7 +501,7 @@ intros x2; case (power_div n (S (S x2))).
 simpl in |- *; auto.
 intros n0 H8 H9 H10; absurd (divides (S (S x2)) n); auto.
 apply H9; auto with arith.
-apply le_lt_trans with (1 := H8); auto with arith.
+apply Nat.le_lt_trans with (1 := H8); auto with arith.
 rewrite <- (fun x => power_SO (S (S x)));
  apply divides_trans with (power (S (S x2)) (S n0)); 
  auto with arith.

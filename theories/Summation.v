@@ -186,7 +186,7 @@ intros m H n H0; repeat rewrite sum_nm_f; auto with arith.
 apply plus_le_compat; auto with arith.
 apply H; auto with arith.
 intros x H1 H2; apply H0; auto with arith.
-apply le_trans with (1 := H2); auto with arith.
+apply Nat.le_trans with (1 := H2); auto with arith.
 Qed.
 
 Theorem sum_nm_minus :
@@ -201,8 +201,8 @@ repeat rewrite sum_nm_f.
 rewrite minus_plus_le; auto with arith.
 rewrite H; auto.
 intros x H1 H2; apply H0; auto with arith.
-apply le_trans with (1 := H2); auto with arith.
+apply Nat.le_trans with (1 := H2); auto with arith.
 apply sum_nm_le; auto.
 intros x H1 H2; apply H0; auto with arith.
-apply le_trans with (1 := H2); auto with arith.
+apply Nat.le_trans with (1 := H2); auto with arith.
 Qed.

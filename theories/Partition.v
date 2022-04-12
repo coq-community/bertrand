@@ -134,7 +134,7 @@ simpl in |- *; rewrite <- plus_n_Sm; auto with arith.
 intros H1 (H2, H3).
 intros m1 (H5, H6).
 cut (m1 <= p);
- [ intros Hm1 | apply le_trans with (1 := H6); auto with arith ].
+ [ intros Hm1 | apply Nat.le_trans with (1 := H6); auto with arith ].
 split.
 case (le_lt_dec m1 (2 * S n)); intros H7; auto with arith.
 case (le_lt_dec (p - 2 * S n) m1); intros H8; auto with arith.
@@ -165,7 +165,7 @@ split; auto.
 split; auto.
 apply plus_lt_reg_l with (p := m1); auto with arith.
 rewrite le_plus_minus_r; auto with arith.
-apply le_lt_trans with (2 := H1); auto with arith.
+apply Nat.le_lt_trans with (2 := H1); auto with arith.
 rewrite <- plus_n_O; auto.
 rewrite Nat.add_comm; rewrite le_plus_minus_r; auto with arith.
 absurd (2 * S n < m1); auto with arith.

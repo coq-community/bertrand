@@ -1,5 +1,7 @@
 -Q theories Bertrand
 
+-arg -w -arg -deprecated-hint-without-locality
+
 theories/Bertrand.v
 theories/Binomial.v
 theories/Check128.v

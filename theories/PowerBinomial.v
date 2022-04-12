@@ -50,7 +50,7 @@ apply f_equal2 with (f := power_div); auto with arith.
 apply sym_equal; replace (2 * n) with (n + n);
  [ rewrite <- binomial_fact | simpl in |- * ]; ring.
 replace (2 * n) with (n + n); try apply binomial_lt; auto with arith; ring.
-apply le_lt_trans with (2 := H1).
+apply Nat.le_lt_trans with (2 := H1).
 simpl in |- *; auto with arith.
 intros x H2 H3.
 apply div_mult_le; auto with arith.
@@ -74,7 +74,7 @@ case
  (max_such (fun x : nat => power p x <= 2 * n)
     (fun x : nat => le_dec (power p x) (2 * n)) (2 * n)); 
  auto.
-intros H'2 (H1, H2); apply le_trans with (2 := H1).
+intros H'2 (H1, H2); apply Nat.le_trans with (2 := H1).
 apply power_le_mono; auto with arith.
 rewrite power_div_binomial with (r := 0); auto with arith.
 change (div (2 * n) (power p 1) - 2 * div n (power p 1) <= 0) in |- *.
@@ -83,7 +83,7 @@ apply sym_equal; apply lt_div_O.
 apply not_le_lt; apply H2; auto with arith.
 apply not_le_lt; apply H2; auto with arith.
 replace (2 + 0) with (2 * 1); auto with arith.
-intros n1 H'1 (H1, H2); apply le_trans with (2 := H1).
+intros n1 H'1 (H1, H2); apply Nat.le_trans with (2 := H1).
 replace (S n1) with (S n1 * 1); auto with arith.
 rewrite <- sum_nm_c with (p := 1) (c := 1).
 rewrite power_div_binomial with (r := n1); auto with arith.
@@ -110,7 +110,7 @@ intros n p H H0 H1; generalize (power_div_binomial1 n p H H0).
 case (power_div (binomial (2 * n) n) p); auto with arith.
 intros n1; case n1; auto with arith.
 intros n2 H2; Contradict H2; auto with arith.
-apply lt_not_le; apply lt_le_trans with (power p 2); auto with arith.
+apply lt_not_le; apply Nat.lt_le_trans with (power p 2); auto with arith.
 apply power_le_mono; auto with arith.
 apply Nat.lt_trans with 1; auto with arith; apply lt_prime; auto with arith.
 Qed.
@@ -134,7 +134,7 @@ replace (div n p) with 1; auto with arith.
 apply div_unique; auto with arith.
 rewrite mult_1_r; auto.
 apply plus_lt_reg_l with (p := p).
-apply le_lt_trans with (n + n); auto with arith.
+apply Nat.le_lt_trans with (n + n); auto with arith.
 replace (n + n) with (2 * n); auto with arith.
 replace (p + p * (1 + 1)) with (3 * p); auto with arith.
 rewrite (Nat.mul_comm p); simpl in |- *; ring.
@@ -143,7 +143,7 @@ apply div_unique; auto with arith.
 rewrite (Nat.mul_comm p); auto with arith.
 replace (p * (1 + 2)) with (3 * p); auto with arith.
 apply Nat.lt_trans with (2 := Hn); auto.
-apply lt_le_trans with (1 := Hp1).
+apply Nat.lt_le_trans with (1 := Hp1).
 replace (power p (2 + 0)) with (p * p).
 case (prime_2_or_more p); auto with arith.
 intros H1; Contradict Hp1; auto with arith.
