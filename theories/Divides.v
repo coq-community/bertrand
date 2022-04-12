@@ -71,7 +71,7 @@ Lemma div_SxS :
  0 < r -> is_div x y q r -> is_div (pred x) y q (pred r).
 Proof.
 intros x y q r H' (H'1, H'2); split; auto.
-apply le_lt_trans with (2 := H'1); auto with arith.
+apply Nat.le_lt_trans with (2 := H'1); auto with arith.
 rewrite H'2; generalize H'; case r; simpl in |- *; auto.
 intros H'3; Contradict H'3; auto with arith.
 intros r'; rewrite <- plus_n_Sm; auto.
@@ -82,21 +82,21 @@ Lemma div_unic_q :
  is_div a b q1 r1 -> is_div a b q2 r2 -> q1 = q2.
 Proof.
 intros a b q1 q2 r1 r2 (H0, H1) (H2, H3).
-case (le_or_lt q1 q2); intros H4.
-case (le_lt_or_eq _ _ H4); auto; clear H4; intros H4.
-Contradict H0; auto; apply le_not_lt.
-apply (fun p n m : nat => plus_le_reg_l n m p) with (q1 * b).
+case (Nat.le_gt_cases q1 q2); intros H4.
+case (proj1 (Nat.lt_eq_cases _ _) H4); auto; clear H4; intros H4.
+Contradict H0; auto; apply Nat.le_ngt.
+apply (fun p n m : nat => Nat.add_le_mono_l n m p) with (q1 * b).
 rewrite <- H1; rewrite H3; auto with arith.
-apply le_trans with (q2 * b + 0); auto with arith.
+apply Nat.le_trans with (q2 * b + 0); auto with arith.
 replace (q1 * b + b) with (S q1 * b);
- [ repeat rewrite (fun x => mult_comm x b) | simpl in |- * ]; 
+ [ repeat rewrite (fun x => Nat.mul_comm x b) | simpl in |- * ]; 
  auto with arith.
-Contradict H2; auto; apply le_not_lt.
-apply (fun p n m : nat => plus_le_reg_l n m p) with (q2 * b).
+Contradict H2; auto; apply Nat.le_ngt.
+apply (fun p n m : nat => Nat.add_le_mono_l n m p) with (q2 * b).
 rewrite <- H3; rewrite H1; auto with arith.
-apply le_trans with (q1 * b + 0); auto with arith.
+apply Nat.le_trans with (q1 * b + 0); auto with arith.
 replace (q2 * b + b) with (S q2 * b);
- [ repeat rewrite (fun x => mult_comm x b) | simpl in |- * ]; 
+ [ repeat rewrite (fun x => Nat.mul_comm x b) | simpl in |- * ]; 
  auto with arith.
 Qed.
 
@@ -105,7 +105,7 @@ Lemma div_unic_r :
  is_div a b q1 r1 -> is_div a b q2 r2 -> r1 = r2.
 Proof.
 intros a b q1 q2 r1 r2 (H0, H1) (H2, H3).
-apply plus_reg_l with (q1 * b).
+apply Nat.add_cancel_l with (q1 * b).
 rewrite <- H1; rewrite H3; rewrite (div_unic_q a b q1 q2 r1 r2); try split;
  auto with arith.
 Qed.
@@ -123,14 +123,14 @@ Proof.
 intros x y q r (H1, H2).
 apply div_unic_r with (a := x * y) (b := y) (q1 := q) (q2 := x); split;
  auto with arith.
-apply le_lt_trans with (m := r); auto with arith.
+apply Nat.le_lt_trans with (m := r); auto with arith.
 Qed.
 
 Lemma mult_div_q : forall x y q r : nat, is_div (x * y) y q r -> q = x.
 Proof.
 intros x y q r (H1, H2).
 apply div_unic_q with (a := x * y) (b := y) (r1 := r) (r2 := 0); split; auto.
-apply le_lt_trans with (m := r); auto with arith.
+apply Nat.le_lt_trans with (m := r); auto with arith.
 Qed.
 
 Lemma diveucl_divex :
@@ -177,7 +177,7 @@ Lemma divides_dec' :
 Proof.
 intros x y; case y; auto.
 right; red in |- *; intros (q, (H1, H2)); Contradict H1; auto with arith.
-intros y'; case (eucl_dev (S y') (gt_Sn_O y') x).
+intros y'; case (eucl_dev (S y') (Nat.lt_0_succ y') x).
 intros q r; case r; auto.
 intros H' H'0; left; exists q; split; try rewrite H'0; auto with arith.
 intros n H' H'0; right; red in |- *; intros (q1, (H1, H2)); absurd (0 = S n);
@@ -191,7 +191,7 @@ Proof.
 intros x y; case x; case y; auto.
 left; exists 0; auto.
 intros n; right; red in |- *; intros (q, H').
-rewrite (mult_comm q 0) in H'; discriminate.
+rewrite (Nat.mul_comm q 0) in H'; discriminate.
 intros n; left; exists 0; auto.
 intros x' y'; case (divides_dec' (S x') (S y')); auto.
 intros H'; left; apply div_divides; auto.
@@ -220,9 +220,12 @@ Lemma divides_plus2 :
  forall a b c : nat, divides a b -> divides a (b + c) -> divides a c.
 Proof.
 intros a b c (q1, H1) (q2, H2); exists (q2 - q1).
-rewrite mult_minus_distr_r.
-rewrite <- H1; rewrite <- H2.
-rewrite minus_plus; auto.
+rewrite Nat.mul_sub_distr_r.
+rewrite <- H1.
+rewrite <- H2.
+rewrite Nat.add_comm.
+rewrite Nat.add_sub.
+reflexivity.
 Qed.
 
 Theorem divides_le : forall a b : nat, b <> 0 -> divides a b -> a <= b.
@@ -239,13 +242,13 @@ Proof.
 intros a b; case a; case b; auto.
 intros b' (q1, H1) H2; rewrite H1; auto with arith.
 intros a' H1 (q2, H2); rewrite H2; auto with arith.
-intros b' a' H' H'0; apply le_antisym; apply divides_le; auto.
+intros b' a' H' H'0; apply Nat.le_antisymm; apply divides_le; auto.
 Qed.
 
 Lemma not_lt_div : forall a b : nat, 0 < b -> b < a -> ~ divides a b.
 Proof.
 intros a b H'1 H'2; red in |- *; intros H'3; Contradict H'2; auto with arith.
-apply le_not_lt; apply divides_le; auto.
+apply Nat.le_ngt; apply divides_le; auto.
 apply sym_not_eq; auto with arith.
 Qed.
 
@@ -267,7 +270,7 @@ Theorem divides_mult2 :
 Proof.
 intros a b c H (r, H1); exists r.
 apply eq_mult with c; auto with arith.
-apply sym_not_eq; apply lt_O_neq; auto.
+apply Nat.neq_0_lt_0; auto.
 rewrite H1; ring.
 Qed.
 
@@ -283,6 +286,7 @@ Theorem divides_power :
 Proof.
 intros a b c; exists (power c (b - a)).
 rewrite power_mult.
-rewrite plus_comm; rewrite <- le_plus_minus; auto with arith.
+rewrite (Nat.sub_add _ _ H).
+reflexivity.
 Qed.
 Hint Resolve divides_power: arith.

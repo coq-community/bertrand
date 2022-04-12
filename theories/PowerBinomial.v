@@ -32,7 +32,7 @@ Theorem power_div_binomial :
  sum_nm 1 r (fun x => div (2 * n) (power p x) - 2 * div n (power p x)).
 Proof.
 intros n p r H H0 H1.
-cut (0 < p); [ intros Hp | apply lt_trans with (2 := lt_prime _ H) ];
+cut (0 < p); [ intros Hp | apply Nat.lt_trans with (2 := lt_prime _ H) ];
  auto with arith.
 rewrite <-
  sum_nm_minus
@@ -65,7 +65,7 @@ Theorem power_div_binomial1 :
 Proof.
 intros n p H H0.
 cut (1 < p); [ intros Hp | apply lt_prime ]; auto.
-cut (0 < p); [ intros Hp1 | apply lt_trans with (2 := Hp) ]; auto.
+cut (0 < p); [ intros Hp1 | apply Nat.lt_trans with (2 := Hp) ]; auto.
 case
  (max_such_prop (fun x : nat => power p x <= 2 * n)
     (fun x => le_dec (power p x) (2 * n)) (2 * n)).
@@ -90,11 +90,11 @@ rewrite power_div_binomial with (r := n1); auto with arith.
 apply power_le_mono; auto with arith.
 apply sum_nm_le; auto with arith.
 intros x H3 H4; apply minus_le.
-rewrite plus_comm; apply div_mult_lt2; auto with arith.
+rewrite Nat.add_comm; apply div_mult_lt2; auto with arith.
 apply power_lt_O; auto with arith.
 case (le_or_lt (2 + n1) (2 * n)); intros Hl.
 apply not_le_lt; apply H2; auto with arith.
-apply lt_trans with (1 := Hl).
+apply Nat.lt_trans with (1 := Hl).
 apply power_id_lt; auto with arith.
 Qed.
 
@@ -112,7 +112,7 @@ intros n1; case n1; auto with arith.
 intros n2 H2; Contradict H2; auto with arith.
 apply lt_not_le; apply lt_le_trans with (power p 2); auto with arith.
 apply power_le_mono; auto with arith.
-apply lt_trans with 1; auto with arith; apply lt_prime; auto with arith.
+apply Nat.lt_trans with 1; auto with arith; apply lt_prime; auto with arith.
 Qed.
 
 (**  Exact value of the maximal exponent of (binomial 2n n) 
@@ -125,7 +125,7 @@ Theorem power_div_binomial3 :
 Proof.
 intros n p Hp Hn Hp1 Hp2.
 cut (1 < p); [ intros Hp3 | apply lt_prime ]; auto.
-cut (0 < p); [ intros Hp4 | apply lt_trans with (2 := Hp3) ]; auto.
+cut (0 < p); [ intros Hp4 | apply Nat.lt_trans with (2 := Hp3) ]; auto.
 rewrite power_div_binomial with (r := 0); auto with arith.
 change (div (2 * n) (power p 1) - 2 * div n (power p 1) = 0) in |- *.
 repeat rewrite power_SO.
@@ -137,18 +137,18 @@ apply plus_lt_reg_l with (p := p).
 apply le_lt_trans with (n + n); auto with arith.
 replace (n + n) with (2 * n); auto with arith.
 replace (p + p * (1 + 1)) with (3 * p); auto with arith.
-rewrite (mult_comm p); simpl in |- *; ring.
+rewrite (Nat.mul_comm p); simpl in |- *; ring.
 simpl in |- *; ring.
 apply div_unique; auto with arith.
-rewrite (mult_comm p); auto with arith.
+rewrite (Nat.mul_comm p); auto with arith.
 replace (p * (1 + 2)) with (3 * p); auto with arith.
-apply lt_trans with (2 := Hn); auto.
+apply Nat.lt_trans with (2 := Hn); auto.
 apply lt_le_trans with (1 := Hp1).
 replace (power p (2 + 0)) with (p * p).
 case (prime_2_or_more p); auto with arith.
 intros H1; Contradict Hp1; auto with arith.
 apply le_not_lt.
-rewrite (fun x => mult_comm x p); rewrite H1; auto with arith.
-repeat rewrite (fun x => mult_comm x p); auto with arith.
+rewrite (fun x => Nat.mul_comm x p); rewrite H1; auto with arith.
+repeat rewrite (fun x => Nat.mul_comm x p); auto with arith.
 simpl in |- *; rewrite mult_1_r; auto.
 Qed.

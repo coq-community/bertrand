@@ -32,15 +32,15 @@ intros H'0; Contradict H'0; auto with arith.
 intros n H'; Contradict H'; auto with arith.
 intros n n0 H'; case t.
 intros H'0; Contradict H'0; auto with arith.
-intros n1 H'0; apply lt_trans with (m := S n0 * S n1); auto with arith.
-rewrite (mult_comm (S n0)); rewrite (mult_comm (S n)); auto with arith.
+intros n1 H'0; apply Nat.lt_trans with (m := S n0 * S n1); auto with arith.
+rewrite (Nat.mul_comm (S n0)); rewrite (Nat.mul_comm (S n)); auto with arith.
 Qed.
 
 Theorem le_mult_right : forall x y : nat, 0 < y -> x <= x * y.
 Proof.
 intros x y; case y.
 intros H'; Contradict H'; auto with arith.
-intros n H'; rewrite mult_comm; simpl in |- *; auto with arith.
+intros n H'; rewrite Nat.mul_comm; simpl in |- *; auto with arith.
 Qed.
  
 Lemma lt_minus_O_lt : forall n m : nat, m < n -> 0 < n - m.
@@ -48,7 +48,7 @@ Proof.
 intros n m H'.
 apply plus_lt_reg_l with (p := m).
 rewrite <- le_plus_minus; auto with arith.
-rewrite plus_comm; auto.
+rewrite Nat.add_comm; auto.
 Qed.
  
 Lemma eq_minus : forall a b c : nat, c < a -> a - c = b - c -> a = b.
@@ -93,10 +93,10 @@ Lemma mult_SO : forall x y : nat, x * y = 1 -> x = 1.
 Proof.
 intros x; case x; simpl in |- *; auto.
 intros x' y; case y; simpl in |- *; auto.
-rewrite mult_comm; intros; discriminate.
+rewrite Nat.mul_comm; intros; discriminate.
 intros n H'; case (mult_eqO x' (S n)).
 apply plus_eqO with (y := n).
-rewrite plus_comm; apply eq_add_S; auto.
+rewrite Nat.add_comm; apply eq_add_S; auto.
 intros H'0; rewrite H'0; auto.
 intros; discriminate.
 Qed.
@@ -130,7 +130,7 @@ Proof.
 intros a b c; case c; auto.
 intros H'; case H'; auto.
 intros n H' H'0; apply simpl_mult_r with (n := S n);
- repeat rewrite mult_comm with (m := S n); auto with arith.
+ repeat rewrite Nat.mul_comm with (m := S n); auto with arith.
 Qed.
  
 Lemma le_plus_le : forall a b c d : nat, a <= b -> a + c = b + d -> d <= c.
@@ -147,7 +147,7 @@ Qed.
 Lemma plus_minus_assoc : forall a b c : nat, b <= a -> a - b + c = a + c - b.
 Proof.
 simple induction c.
-repeat rewrite plus_comm with (m := 0); simpl in |- *; auto with arith.
+repeat rewrite Nat.add_comm with (m := 0); simpl in |- *; auto with arith.
 intros n H0 H1; repeat rewrite <- plus_n_Sm.
 rewrite H0; auto with arith.
 Qed.
@@ -191,7 +191,7 @@ case (le_or_lt a c); intros H1.
 replace (a - c) with 0; auto with arith.
 apply sym_equal; apply minus_O; auto with arith.
 rewrite <- le_plus_minus; auto with arith.
-rewrite plus_comm; auto with arith.
+rewrite Nat.add_comm; auto with arith.
 Qed.
 
 (** A generic function to find the maximal natural number such that
@@ -257,7 +257,7 @@ Qed.
 Theorem le_mult : forall m n p q : nat, n <= p -> m <= q -> n * m <= p * q.
 Proof.
 intros m n p q H1 H2; apply le_trans with (p * m); auto with arith.
-repeat rewrite (fun x => mult_comm x m); auto with arith.
+repeat rewrite (fun x => Nat.mul_comm x m); auto with arith.
 Qed.
 
 Theorem mult_id_le_inv : forall n m : nat, n * n <= m * m -> n <= m.
@@ -406,5 +406,5 @@ apply le_trans with (1 := H1).
 apply lt_n_Sm_le; apply mult_id_lt_inv.
 apply le_lt_trans with m0.
 apply sqr_le; auto.
-apply lt_trans with (S m0); auto with arith; apply sqr_lt; auto.
+apply Nat.lt_trans with (S m0); auto with arith; apply sqr_lt; auto.
 Qed.

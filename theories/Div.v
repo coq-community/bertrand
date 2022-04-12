@@ -87,7 +87,7 @@ Proof.
 intros m n H; unfold div in |- *; generalize (pdiv_def m n H);
  case (pdiv m n); simpl in |- *.
 intros q r (H1, H2); rewrite H1; auto with arith.
-rewrite (mult_comm n); auto with arith.
+rewrite (Nat.mul_comm n); auto with arith.
 Qed.
 
 Theorem div_lt : forall m n : nat, 0 < n -> m < n * (1 + div m n).
@@ -95,8 +95,8 @@ Proof.
 intros m n H; unfold div in |- *; generalize (pdiv_def m n H);
  case (pdiv m n); simpl in |- *.
 intros q r (H1, H2); rewrite H1; auto with arith.
-rewrite (mult_comm n); simpl in |- *; auto with arith.
-rewrite (plus_comm n); simpl in |- *; auto with arith.
+rewrite (Nat.mul_comm n); simpl in |- *; auto with arith.
+rewrite (Nat.add_comm n); simpl in |- *; auto with arith.
 Qed.
 
 Theorem div_unique :
@@ -121,7 +121,7 @@ apply lt_n_Sm_le; change (p * div m n < 1 + div (p * m) n) in |- *.
 apply lt_mult_right_anti with (z := n).
 apply le_lt_trans with (p * m).
 replace (n * (p * div m n)) with (p * (n * div m n));
- [ idtac | repeat rewrite mult_assoc; rewrite (mult_comm p); auto ].
+ [ idtac | repeat rewrite mult_assoc; rewrite (Nat.mul_comm p); auto ].
 apply (fun m n p : nat => mult_le_compat_l p n m).
 apply div_le; auto.
 apply div_lt; auto.
@@ -134,7 +134,7 @@ intros m n p H H1; apply lt_mult_right_anti with (z := n).
 apply le_lt_trans with (p * m).
 apply div_le; auto.
 replace (n * (p * (1 + div m n))) with (p * (n * (1 + div m n)));
- [ idtac | repeat rewrite mult_assoc; rewrite (mult_comm p); auto ].
+ [ idtac | repeat rewrite mult_assoc; rewrite (Nat.mul_comm p); auto ].
 apply mult_lt_bis; try apply div_lt; auto.
 Qed.
 
@@ -161,7 +161,7 @@ generalize (pdiv_def p q H); unfold div in |- *; case (pdiv p q);
 intros q1 r1 (H2, H3).
 apply eq_mult with q; auto with arith.
 apply sym_not_equal; auto with arith.
-repeat rewrite (mult_comm q); auto with arith.
+repeat rewrite (Nat.mul_comm q); auto with arith.
 rewrite <- H1; rewrite H2.
 cut (S r1 = q); [ intros H4 | idtac ].
 rewrite plus_n_Sm; rewrite H4; simpl in |- *; ring.
@@ -172,8 +172,8 @@ exists q1; auto with arith.
 rewrite <- plus_n_Sm; rewrite <- H2; auto.
 rewrite H1; exists qr; auto.
 apply div_unique; auto with arith.
-rewrite H1; rewrite (mult_comm q); auto with arith.
-rewrite H1; repeat rewrite (mult_comm qr); auto with arith.
+rewrite H1; rewrite (Nat.mul_comm q); auto with arith.
+rewrite H1; repeat rewrite (Nat.mul_comm qr); auto with arith.
 Qed.
  
 Theorem div_not_divides_S :
@@ -188,7 +188,7 @@ intros q1 r1 (H2, H3).
 rewrite H2.
 rewrite plus_n_Sm; auto.
 rewrite <- mult_n_Sm; auto.
-repeat rewrite (mult_comm q); auto with arith.
+repeat rewrite (Nat.mul_comm q); auto with arith.
 apply plus_lt_compat_l; auto with arith.
 case (le_lt_or_eq (S r1) q); auto.
 intros H4; case H1; exists (S q1).
@@ -235,7 +235,7 @@ Definition divides1_dec : forall n m : nat, {divides n m} + {~ divides n m}.
 intros n m; case n.
 case m.
 left; exists 0; auto.
-intros n1; right; red in |- *; intros (x, H1); rewrite mult_comm in H1;
+intros n1; right; red in |- *; intros (x, H1); rewrite Nat.mul_comm in H1;
  discriminate.
 intros n1; generalize (pdiv_divides m (S n1));
  generalize (pdiv_not_divides m (S n1)); case (pdiv m (S n1)); 
@@ -251,8 +251,8 @@ Proof.
 intros p q Hp (x, H); rewrite H.
 apply f_equal2 with (f := mult); auto with arith.
 apply div_unique; auto with arith.
-rewrite (mult_comm x); auto with arith.
-rewrite (mult_comm x); auto with arith.
+rewrite (Nat.mul_comm x); auto with arith.
+rewrite (Nat.mul_comm x); auto with arith.
 Qed.
 
 Theorem lt_div_O : forall p q : nat, p < q -> div p q = 0.

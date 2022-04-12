@@ -59,9 +59,9 @@ Qed.
 Lemma power_power : forall x a b : nat, power (power x a) b = power x (a * b).
 Proof.
 simple induction b; simpl in |- *; auto.
-rewrite mult_comm; simpl in |- *; auto.
-intros n H'; rewrite mult_comm with (m := S n); simpl in |- *;
- rewrite (mult_comm n); rewrite H'; apply power_mult.
+rewrite Nat.mul_comm; simpl in |- *; auto.
+intros n H'; rewrite Nat.mul_comm with (m := S n); simpl in |- *;
+ rewrite (Nat.mul_comm n); rewrite H'; apply power_mult.
 Qed.
 
 Lemma SO_power : forall x : nat, power 1 x = 1.
@@ -83,7 +83,7 @@ Proof.
 intros p q r H H0; elim H0; simpl in |- *; intros; auto with arith;
  pattern (power r p) at 1 in |- *; replace (power r p) with (1 * power r p);
  auto with arith.
-repeat rewrite (fun x y z => mult_comm x (power y z)); auto with arith.
+repeat rewrite (fun x y z => Nat.mul_comm x (power y z)); auto with arith.
 apply mult_lt_bis; auto with arith.
 apply power_lt_O; auto with arith.
 apply lt_mult_right; auto with arith.
@@ -111,12 +111,12 @@ Theorem power_id_lt : forall p q : nat, 0 < p -> 1 < q -> p < power q p.
 Proof.
 intros p q; elim p; simpl in |- *; auto with arith.
 intros p1; case p1; simpl in |- *; auto with arith.
-rewrite mult_comm; simpl in |- *; auto with arith.
+rewrite Nat.mul_comm; simpl in |- *; auto with arith.
 intros n H H0 H1; apply le_lt_trans with (q * S n); auto with arith.
 apply le_trans with (2 * S n); auto with arith.
 simpl in |- *; auto with arith.
 repeat (rewrite <- plus_n_Sm; simpl in |- *); auto with arith.
-repeat rewrite (fun x => mult_comm x (S n));
+repeat rewrite (fun x => Nat.mul_comm x (S n));
  apply (fun m n p : nat => mult_le_compat_l p n m); 
  auto with arith.
 Qed.

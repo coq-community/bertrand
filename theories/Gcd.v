@@ -89,10 +89,10 @@ case (zerop a'); intros lta'; [ rewrite lta'; auto | idtac ].
 case (zerop b'); intros ltb'; [ rewrite ltb'; auto | idtac ].
 case (lt_eq_lt_dec a' b'); intros Ca'b';
  [ case Ca'b'; clear Ca'b'; intros Ca'b' | idtac ].
-replace b' with (b' - a' + a'); auto with arith; rewrite plus_comm;
+replace b' with (b' - a' + a'); auto with arith; rewrite Nat.add_comm;
  auto with arith.
 replace b' with (0 + b'); [ rewrite Ca'b' | idtac ]; auto with arith.
-replace a' with (a' - b' + b'); auto with arith; rewrite plus_comm;
+replace a' with (a' - b' + b'); auto with arith; rewrite Nat.add_comm;
  auto with arith.
 Qed.
 
@@ -110,10 +110,10 @@ case (zerop a'); intros lta'; [ rewrite lta'; auto | idtac ].
 case (zerop b'); intros ltb'; [ rewrite ltb'; auto | idtac ].
 case (lt_eq_lt_dec a' b'); intros Ca'b';
  [ case Ca'b'; clear Ca'b'; intros Ca'b' | idtac ].
-replace b' with (b' - a' + a'); auto with arith; rewrite plus_comm;
+replace b' with (b' - a' + a'); auto with arith; rewrite Nat.add_comm;
  auto with arith.
 replace b' with (0 + b'); [ rewrite Ca'b' | idtac ]; auto with arith.
-replace a' with (a' - b' + b'); auto with arith; rewrite plus_comm;
+replace a' with (a' - b' + b'); auto with arith; rewrite Nat.add_comm;
  auto with arith.
 Qed.
 
@@ -171,7 +171,7 @@ intros a; exists a; auto.
 intros b; exists b; auto.
 intros a b Rr; case Rr; intros r Hr; exists r.
 apply gcd_spec_ex3; auto with arith.
-rewrite plus_comm; rewrite minus_plus; auto; rewrite <- minus_n_n; auto.
+rewrite Nat.add_comm; rewrite minus_plus; auto; rewrite <- minus_n_n; auto.
 intros a b Rr; case Rr; intros r Hr; exists r.
 case (zerop a); intros lta.
 rewrite lta; simpl in |- *.
@@ -181,7 +181,7 @@ rewrite <- minus_n_n; auto.
 rewrite <- lta; auto.
 apply gcd_spec_ex2; auto with arith.
 pattern b at 1 in |- *; replace b with (0 + b); auto with arith.
-rewrite plus_comm; rewrite minus_plus; auto; rewrite <- minus_n_n; auto.
+rewrite Nat.add_comm; rewrite minus_plus; auto; rewrite <- minus_n_n; auto.
 Qed.
 
 (** gcd as a function *) 
@@ -245,7 +245,7 @@ apply gcd_spec_ex3; auto.
 rewrite <- minus_n_n; auto.
 apply gcd_spec_ex2; auto with arith.
 replace a with (0 + a); auto with arith.
-rewrite plus_comm; rewrite minus_plus.
+rewrite Nat.add_comm; rewrite minus_plus.
 apply gcd_correct; auto.
 Qed.
 
@@ -257,7 +257,7 @@ rewrite lta; simpl in |- *; rewrite gcd_def0l; auto.
 apply gcd_spec_ex3; auto with arith.
 rewrite <- minus_n_n; auto.
 apply gcd_spec_ex3; auto with arith.
-rewrite plus_comm; rewrite minus_plus.
+rewrite Nat.add_comm; rewrite minus_plus.
 apply gcd_correct; auto.
 Qed.
 
@@ -273,14 +273,14 @@ apply divides_plus1; auto.
 intros d H' H'0.
 apply H3; auto.
 apply divides_plus2 with (b := a); auto.
-rewrite plus_comm; auto.
+rewrite Nat.add_comm; auto.
 intros a b (H1, (H2, H3)); rewrite <- gcd_def3; split; auto.
 apply divides_plus1; auto.
 split; auto.
 intros d H' H'0.
 apply H3; auto.
 apply divides_plus2 with (b := b); auto.
-rewrite plus_comm; auto.
+rewrite Nat.add_comm; auto.
 Qed.
 
 Theorem is_gcd_inv : forall a b c : nat, is_gcd a (a + b) c -> is_gcd a b c.
@@ -314,7 +314,7 @@ Proof.
 intros x a b H' H'0; replace b with (b * gcd x a).
 apply preEuclid; auto with arith.
 exists b; auto with arith.
-rewrite mult_comm; auto.
+rewrite Nat.mul_comm; auto.
 rewrite (is_gcd_unic x a (gcd x a) 1); auto with arith.
 apply gcd_is_gcd; auto.
 Qed.
@@ -349,5 +349,5 @@ intros n2 H'3; Contradict H'3; auto with arith.
 intros n0 H' H'0 H'1.
 case (divides_dec p (power w n0)); intros H; auto.
 apply L_Euclides1 with (a := power w n0); auto.
-rewrite mult_comm; auto.
+rewrite Nat.mul_comm; auto.
 Qed.

@@ -48,25 +48,25 @@ unfold power_div_aux in |- *.
 generalize (pdiv_def p q); case (pdiv p q); fold power_div_aux in |- *.
 intros q1 r1; case r1.
 intros H4; case H4.
-apply lt_trans with (2 := H2); auto with arith.
+apply Nat.lt_trans with (2 := H2); auto with arith.
 rewrite <- plus_n_O; intros H5 H6; rewrite H5.
 case (Rec q1 q); auto with arith.
 apply lt_mult_right_anti with q; auto with arith.
-repeat rewrite (mult_comm q); simpl in |- *; rewrite <- H5; auto.
+repeat rewrite (Nat.mul_comm q); simpl in |- *; rewrite <- H5; auto.
 apply lt_mult_right_anti with q; auto with arith.
 replace (q * q1) with p; auto with arith.
-repeat rewrite (mult_comm q); auto.
-simpl in |- *; repeat rewrite (mult_comm q1).
+repeat rewrite (Nat.mul_comm q); auto.
+simpl in |- *; repeat rewrite (Nat.mul_comm q1).
 intros H7 H8; split.
 apply divides_mult1; auto.
 red in |- *; intros H9; case H8; apply divides_mult2 with (2 := H9); auto.
 intros r2 H4; case H4; simpl in |- *.
-apply lt_trans with (2 := H2); auto with arith.
+apply Nat.lt_trans with (2 := H2); auto with arith.
 intros H5 H6; split.
 apply SO_divides_all.
 red in |- *; intros (q2, H7); absurd (S r2 = 0); auto with arith.
 apply (div_unic_r p q q1 q2); split; auto.
-apply lt_trans with (2 := H2); auto with arith.
+apply Nat.lt_trans with (2 := H2); auto with arith.
 rewrite H7; ring.
 Qed.
 
@@ -110,14 +110,14 @@ case H2.
 apply divides_trans with (power q (power_div p q)).
 exists (power q (power_div p q - (1 + r))).
 rewrite power_mult.
-rewrite plus_comm; rewrite <- le_plus_minus; auto with arith.
+rewrite Nat.add_comm; rewrite <- le_plus_minus; auto with arith.
 apply power_div_divides; auto.
 absurd (divides (power q (1 + power_div p q)) p).
 apply power_div_not_divides; auto.
 apply divides_trans with (2 := H1).
 exists (power q (r - (1 + power_div p q))).
 rewrite power_mult.
-rewrite plus_comm; rewrite <- le_plus_minus; auto with arith.
+rewrite Nat.add_comm; rewrite <- le_plus_minus; auto with arith.
 Qed.
 
 Theorem power_div_mult_prime :
@@ -138,8 +138,8 @@ exists q1.
 apply eq_mult with (power p (power_div q p + power_div r p)).
 apply sym_not_eq; apply lt_O_neq.
 rewrite <- power_mult; apply lt_O_mult; auto with arith.
-apply power_lt_O; apply lt_trans with 1; auto with arith.
-apply power_lt_O; apply lt_trans with 1; auto with arith.
+apply power_lt_O; apply Nat.lt_trans with 1; auto with arith.
+apply power_lt_O; apply Nat.lt_trans with 1; auto with arith.
 replace (power p (power_div q p + power_div r p) * (q1 * p)) with (q * r).
 rewrite <- power_mult; auto with arith.
 apply sym_equal; pattern q at 1 in |- *;
@@ -147,9 +147,9 @@ apply sym_equal; pattern q at 1 in |- *;
  auto with arith.
 pattern r at 1 in |- *; rewrite (divides_div (power p (power_div r p)) r).
 ring.
-apply power_lt_O; apply lt_trans with 1; auto with arith.
+apply power_lt_O; apply Nat.lt_trans with 1; auto with arith.
 apply power_div_divides; auto with arith.
-apply power_lt_O; apply lt_trans with 1; auto with arith.
+apply power_lt_O; apply Nat.lt_trans with 1; auto with arith.
 apply power_div_divides; auto with arith.
 rewrite H0; simpl in |- *; ring.
 intros (q2, H2); case (power_div_not_divides q p); auto with arith.
@@ -157,14 +157,14 @@ exists q2.
 pattern q at 1 in |- *; rewrite (divides_div (power p (power_div q p)) q);
  auto with arith.
 rewrite H2; simpl in |- *; ring.
-apply power_lt_O; apply lt_trans with 1; auto with arith.
+apply power_lt_O; apply Nat.lt_trans with 1; auto with arith.
 apply power_div_divides; auto with arith.
 intros (q2, H2); case (power_div_not_divides r p); auto with arith.
 exists q2.
 pattern r at 1 in |- *; rewrite (divides_div (power p (power_div r p)) r);
  auto with arith.
 rewrite H2; simpl in |- *; ring.
-apply power_lt_O; apply lt_trans with 1; auto with arith.
+apply power_lt_O; apply Nat.lt_trans with 1; auto with arith.
 apply power_div_divides; auto with arith.
 Qed.
 
@@ -232,7 +232,7 @@ apply power_lt_O; auto with arith.
 apply divides_trans with (power q (power_div p q)).
 exists (power q (power_div p q - (1 + x))); rewrite power_mult;
  auto with arith.
-rewrite (fun x y z => plus_comm x (y + z)); rewrite <- le_plus_minus;
+rewrite (fun x y z => Nat.add_comm x (y + z)); rewrite <- le_plus_minus;
  auto with arith.
 rewrite (S_pred (power_div p q) 0); simpl in |- *; auto with arith.
 apply power_div_divides; auto with arith.
@@ -250,7 +250,7 @@ apply power_lt_O; auto with arith.
 apply divides_trans with (power q (power_div p q)).
 exists (power q (power_div p q - (1 + x))); rewrite power_mult;
  auto with arith.
-rewrite (fun x y z => plus_comm x (y + z)); rewrite <- le_plus_minus;
+rewrite (fun x y z => Nat.add_comm x (y + z)); rewrite <- le_plus_minus;
  auto with arith.
 rewrite (S_pred (power_div p q) 0); simpl in |- *; auto with arith.
 apply power_div_divides; auto with arith.
@@ -298,7 +298,7 @@ apply lt_prime; auto.
 apply divides_le; auto with arith.
 apply divides_trans with (2 := H2); auto with arith.
 intros; apply div_dirac_div; auto with arith.
-apply power_lt_O; apply lt_trans with 1; auto with arith.
+apply power_lt_O; apply Nat.lt_trans with 1; auto with arith.
 apply lt_prime; auto.
 case (le_or_lt n r); intros H1.
 case (le_lt_or_eq _ _ H1); clear H1; intros H1.
@@ -311,7 +311,7 @@ apply lt_le_trans with (power p n); auto with arith.
 apply power_id_lt; auto with arith.
 apply lt_prime; auto.
 apply power_le_mono; auto with arith.
-apply lt_trans with 1; auto with arith.
+apply Nat.lt_trans with 1; auto with arith.
 apply lt_prime; auto.
 rewrite H1; auto.
 rewrite sum_nm_split with (q := n) (r := r); auto.
@@ -321,6 +321,6 @@ intros x H.
 apply lt_div_O.
 apply lt_le_trans with (1 := Hr); auto with arith.
 apply power_le_mono; auto with arith.
-apply lt_trans with 1; auto with arith.
+apply Nat.lt_trans with 1; auto with arith.
 apply lt_prime; auto.
 Qed.

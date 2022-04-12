@@ -66,7 +66,7 @@ cut (divides (prime_dirac x1) p); auto with arith.
 unfold prime_dirac in |- *; generalize (primeb_correct x1); case (primeb x1);
  fold prime_dirac in |- *; intros H5 H6.
 apply L_Euclides1 with (a := n + S m1); auto with arith.
-rewrite mult_comm; rewrite <- H2; auto.
+rewrite Nat.mul_comm; rewrite <- H2; auto.
 red in |- *; intros H7; absurd (x1 = n + S m1).
 red in |- *; intros H8; Contradict H4; auto.
 rewrite H8; auto with arith.
@@ -94,13 +94,13 @@ intros H2.
 apply L_Euclides1 with (a := factorial m); auto with arith.
 apply L_Euclides1 with (a := factorial n); auto with arith.
 rewrite <- mult_assoc_reverse.
-rewrite (fun x y z => mult_comm (x * y) z).
+rewrite (fun x y z => Nat.mul_comm (x * y) z).
 rewrite binomial_fact.
 generalize H1; elim m; simpl in |- *; auto with arith.
 rewrite <- plus_n_O; intros H3; Contradict H; auto with arith.
 intros m1; repeat rewrite <- plus_n_Sm.
 intros H3 H4; inversion H4; auto.
-exists (factorial (n + m1)); rewrite mult_comm; simpl in |- *; auto.
+exists (factorial (n + m1)); rewrite Nat.mul_comm; simpl in |- *; auto.
 apply divides_trans with (1 := H3 H6).
 exists (S (n + m1)); auto.
 red in |- *; intros H3; Contradict H; auto with arith.
@@ -223,7 +223,7 @@ Proof.
 intros n H (H1, H3); case (odd_or_even n); intros (n1, H2).
 absurd (n = 2).
 Contradict H; rewrite H; auto with arith.
-apply H3; auto with arith; exists n1; rewrite mult_comm; auto.
+apply H3; auto with arith; exists n1; rewrite Nat.mul_comm; auto.
 red in |- *; intros (H4, H5); absurd (S n = 2).
 Contradict H; rewrite <- H; auto with arith.
 apply H5; auto with arith; exists (S n1); rewrite H2.
@@ -351,11 +351,11 @@ Theorem prod_prime_le :
  prod_nm 0 n (fun x => f x) <= power c (div n 2 - 1).
 Proof.
 intros c n f H H0 H1 H2.
-rewrite (le_plus_minus (power 2 4) n); auto; rewrite plus_comm;
+rewrite (le_plus_minus (power 2 4) n); auto; rewrite Nat.add_comm;
  apply prod_prime_le_aux; auto with arith.
-intros x; rewrite plus_comm; rewrite <- (le_plus_minus (power 2 4) n);
+intros x; rewrite Nat.add_comm; rewrite <- (le_plus_minus (power 2 4) n);
  auto with arith.
-intros x; rewrite plus_comm; rewrite <- (le_plus_minus (power 2 4) n);
+intros x; rewrite Nat.add_comm; rewrite <- (le_plus_minus (power 2 4) n);
  auto with arith.
 Qed.
 
@@ -376,7 +376,7 @@ cut (2 * S (S x2) = S (S x2 + S (S x2))); [ intros H3 | auto with arith ].
 rewrite H3; rewrite prod_nm_f.
 replace (prime_dirac (0 + S (S x2 + S (S x2)))) with 1.
 rewrite mult_1_r; auto.
-apply lt_trans with (power 4 (S x2 + S (S x2))); auto with arith.
+apply Nat.lt_trans with (power 4 (S x2 + S (S x2))); auto with arith.
 apply Rec; auto with arith.
 rewrite H3; auto with arith.
 rewrite <- plus_n_Sm; auto with arith.
@@ -388,7 +388,7 @@ intros (H4, H5); absurd (S (S (x2 + S (S x2))) = 2); auto with arith.
 rewrite <- plus_n_Sm; red in |- *; intros H6; discriminate.
 apply H5; auto.
 exists (S (S x2)); auto with arith.
-rewrite mult_comm; rewrite H3; auto with arith.
+rewrite Nat.mul_comm; rewrite H3; auto with arith.
 simpl in |- *; repeat rewrite <- plus_n_Sm; rewrite <- plus_n_O;
  auto with arith.
 intros (x1, H1); rewrite H1; intros Rec H2.
@@ -417,7 +417,7 @@ replace (2 * x1 + 1) with (x1 + 1 + x1); [ idtac | ring ].
 apply prime_dirac_divides_binomial; auto with arith.
 apply lt_le_trans with (2 := H); auto with arith.
 apply lt_le_trans with (2 := H); auto with arith.
-rewrite plus_comm; auto with arith.
+rewrite Nat.add_comm; auto with arith.
 replace (x1 + 1 + x1) with (x1 + 2 + (x1 - 1)); auto.
 pattern x1 at 4 in |- *;
  (rewrite le_plus_minus with (n := 1); [ ring | auto ]).
@@ -430,7 +430,7 @@ apply
 apply (fun m n p : nat => mult_le_compat_l p n m).
 apply binomial_odd.
 replace (power 4 (2 * x1 + 1)) with (power 4 (x1 + 1) * power 2 (2 * x1)).
-repeat rewrite (fun x y => mult_comm x (power 2 y)).
+repeat rewrite (fun x y => Nat.mul_comm x (power 2 y)).
 apply mult_lt_bis; auto with arith.
 apply power_lt_O; auto with arith.
 apply Rec; auto with arith.
@@ -472,7 +472,7 @@ intros H2 H3 H4.
 2: apply sym_equal; apply prod_power_div_mult; auto with arith.
 2: rewrite <- H4; auto.
 2: apply H2; rewrite H4; inversion Hx; simpl in |- *; auto with arith.
-2: rewrite H4; rewrite mult_comm; inversion Hx; simpl in |- *;
+2: rewrite H4; rewrite Nat.mul_comm; inversion Hx; simpl in |- *;
     try rewrite <- plus_n_Sm; auto with arith.
 2: intros p0 H2 x H3 H4; red in |- *; intros H5; Contradict H3;
     auto with arith.
@@ -517,7 +517,7 @@ intros b H8 H9; apply le_antisym.
 case (le_or_lt (S (S n0)) b); auto; intros H10.
 case (H7 b); auto with arith.
 generalize H8 H9; case b; simpl in |- *; auto with arith.
-intros (x, H11); rewrite mult_comm in H11; discriminate.
+intros (x, H11); rewrite Nat.mul_comm in H11; discriminate.
 intros x; case x; auto with arith.
 intros H11 H12; case H12; auto.
 apply divides_le; auto.

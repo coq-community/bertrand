@@ -147,7 +147,7 @@ red in |- *; intros H; apply (not_even_and_odd p); auto with arith.
 replace p with (2 * m1); auto with arith.
 simpl in |- *; pattern m1 at 1 in |- *; rewrite <- H.
 rewrite <- plus_n_O.
-rewrite plus_comm; apply le_plus_minus_r; auto.
+rewrite Nat.add_comm; apply le_plus_minus_r; auto.
 cut (forall x : nat, 2 * x = Div2.double x);
  [ intros tmp; rewrite tmp | idtac ].
 rewrite <- even_double; auto with arith.
@@ -159,7 +159,7 @@ case (le_lt_dec (p - m1) (2 * S n)); intros H9; auto with arith.
 case (le_lt_dec (p - 2 * S n) (p - m1)); intros H10; auto with arith.
 split.
 apply sym_equal; apply plus_minus.
-apply sym_equal; rewrite plus_comm.
+apply sym_equal; rewrite Nat.add_comm.
 apply le_plus_minus_r; auto with arith.
 split; auto.
 split; auto.
@@ -167,7 +167,7 @@ apply plus_lt_reg_l with (p := m1); auto with arith.
 rewrite le_plus_minus_r; auto with arith.
 apply le_lt_trans with (2 := H1); auto with arith.
 rewrite <- plus_n_O; auto.
-rewrite plus_comm; rewrite le_plus_minus_r; auto with arith.
+rewrite Nat.add_comm; rewrite le_plus_minus_r; auto with arith.
 absurd (2 * S n < m1); auto with arith.
 apply plus_lt_reg_l with (p := p).
 pattern p at 1 in |- *; rewrite <- (le_plus_minus_r m1); auto with arith.
@@ -179,7 +179,7 @@ absurd (m1 < p - 2 * S n); auto with arith.
 apply plus_lt_reg_l with (p := 2 * S n); auto with arith.
 rewrite le_plus_minus_r; auto with arith.
 rewrite <- (le_plus_minus_r m1 p); auto with arith.
-rewrite (plus_comm m1); auto with arith.
+rewrite (Nat.add_comm m1); auto with arith.
 case (Rf1 m1); auto with arith.
 split; auto with arith.
 cut (forall x : nat, 2 * x = Div2.double x);
@@ -200,7 +200,7 @@ intros H14; absurd (2 * div2 (pred (p - 2 * S n)) < f1 m1); auto with arith.
 cut (forall x : nat, 2 * x = Div2.double x);
  [ intros tmp; rewrite tmp | idtac ].
 rewrite <- even_double; auto with arith.
-apply lt_trans with (2 := H14).
+apply Nat.lt_trans with (2 := H14).
 apply lt_S_n.
 rewrite <- S_pred with (m := 0); auto with arith.
 apply le_lt_n_Sm; auto with arith.
@@ -354,5 +354,5 @@ case (HR1 _ _ H1).
 intros H2 (H3, (H4, H5)); auto.
 rewrite H5; auto.
 case (Hf i); auto with arith.
-rewrite (plus_comm i); intuition.
+rewrite (Nat.add_comm i); intuition.
 Qed.

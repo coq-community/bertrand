@@ -148,11 +148,11 @@ intros Ht; Contradict Ht; auto with arith.
 rewrite <- plus_n_O; rewrite power_SO; auto.
 intros n0 H11; pattern x at 1 in |- *; rewrite <- power_SO; auto with arith.
 apply power_le_mono; auto with arith.
-apply lt_trans with (2 := H7); auto with arith.
+apply Nat.lt_trans with (2 := H7); auto with arith.
 apply le_lt_trans with (2 := Hd); auto with arith.
 apply power_div_binomial1; auto with arith.
 apply power_div_divides; auto with arith.
-apply lt_trans with (2 := H7); auto with arith.
+apply Nat.lt_trans with (2 := H7); auto with arith.
 apply le_lt_trans with (2 := Hd); auto with arith.
 change (sqr 1 <= sqr (2 * n)) in |- *.
 apply sqr_mono.
@@ -205,7 +205,7 @@ apply lt_le_trans with (2 * power 2 7); auto with arith; simpl in |- *;
 apply upper_bound; auto with arith.
 apply lt_n_Sm_le.
 apply lt_mult_right_anti with (z := 2).
-apply lt_trans with (sqr (2 * n)).
+apply Nat.lt_trans with (sqr (2 * n)).
 apply lt_S_n; apply mult_id_lt_inv; auto with arith.
 apply le_lt_trans with (2 * n).
 apply le_trans with (2 * power 2 3); auto with arith.

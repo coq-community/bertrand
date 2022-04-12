@@ -64,7 +64,7 @@ Lemma binomial_fact :
  binomial (n + m) n * (factorial n * factorial m) = factorial (n + m).
 Proof.
 intros m; elim m; clear m.
-intros n; rewrite plus_comm; simpl in |- *; rewrite binomial_def3; ring.
+intros n; rewrite Nat.add_comm; simpl in |- *; rewrite binomial_def3; ring.
 intros m H' n; elim n; clear n.
 simpl in |- *; ring.
 intros n H'0.
@@ -98,10 +98,10 @@ intros n m.
 apply simpl_mult_r with (n := factorial n); auto with arith.
 apply simpl_mult_r with (n := factorial m); auto with arith.
 repeat rewrite mult_assoc_reverse.
-pattern (n + m) at 2 in |- *; rewrite plus_comm.
-pattern (factorial n * factorial m) at 2 in |- *; rewrite mult_comm.
+pattern (n + m) at 2 in |- *; rewrite Nat.add_comm.
+pattern (factorial n * factorial m) at 2 in |- *; rewrite Nat.mul_comm.
 repeat rewrite binomial_fact; auto.
-rewrite (plus_comm n); auto.
+rewrite (Nat.add_comm n); auto.
 Qed.
 
 Theorem binomial_mono_S :
@@ -113,15 +113,15 @@ clear n; intros n Rec m; case m; clear m.
 case n; simpl in |- *; auto with arith.
 intros m; rewrite <- plus_n_O; rewrite <- plus_n_Sm; intros Hm.
 case (le_lt_or_eq (S (S (m + m))) n); auto with arith; intros H1.
-rewrite (plus_comm (binomial n (S m))).
+rewrite (Nat.add_comm (binomial n (S m))).
 apply plus_le_compat; auto.
 apply le_trans with (binomial n (S m)); auto with arith.
 apply Rec; rewrite <- plus_n_O; auto with arith.
-apply lt_trans with (S m + m); auto with arith.
+apply Nat.lt_trans with (S m + m); auto with arith.
 apply Rec; rewrite <- plus_n_O; rewrite <- plus_n_Sm; auto with arith.
 replace n with (S (S m) + m).
 rewrite binomial_comp with (n := S (S m)).
-rewrite (plus_comm (binomial (S (S m) + m) (S m))); auto with arith.
+rewrite (Nat.add_comm (binomial (S (S m) + m) (S m))); auto with arith.
 Qed.
 
 Theorem binomial_mono :
@@ -221,7 +221,7 @@ case (le_lt_or_eq 0 n); auto with arith; intros H1.
 apply mult_S_le_reg_l with (n := 1).
 pattern 2 at 3 in |- *; rewrite <- (power_SO 2).
 rewrite power_mult.
-replace (1 + 2 * n) with (2 * n + 1) by apply plus_comm.
+replace (1 + 2 * n) with (2 * n + 1) by apply Nat.add_comm.
 replace (2 * binomial (2 * n + 1) (n + 1)) with
  (binomial (2 * n + 1) n + binomial (2 * n + 1) (n + 1)).
 rewrite binomial2.
@@ -234,7 +234,7 @@ apply
 rewrite sum_nm_split with (r := 1).
 apply le_trans with (sum_nm n 1 (fun x : nat => binomial (2 * n + 1) x));
  auto with arith.
-replace (n + 1) with (S n); simpl in |- *; auto; rewrite plus_comm; auto.
+replace (n + 1) with (S n); simpl in |- *; auto; rewrite Nat.add_comm; auto.
 replace 1 with (0 + 1); auto with arith.
 simpl in |- *; rewrite <- (S_pred n 0); auto with arith.
 apply plus_minus; auto with arith; ring.
@@ -289,7 +289,7 @@ apply binomial_mono.
 rewrite H5; auto with arith.
 rewrite <- H5; auto with arith.
 apply sym_equal; apply plus_minus; auto with arith.
-rewrite plus_comm; apply le_plus_minus; auto with arith.
+rewrite Nat.add_comm; apply le_plus_minus; auto with arith.
 pattern (2 * n) at 1 in |- *; rewrite (le_plus_minus x (2 * n));
  auto with arith.
 rewrite binomial_comp with (n := x).
@@ -321,6 +321,6 @@ intros n0 H Hn0; replace (2 * S (S n0)) with (S (S (2 * S n0)));
  auto with arith.
 2: simpl in |- *; repeat rewrite <- plus_n_Sm; auto.
 repeat rewrite binomial_def4; auto with arith.
-apply le_plus_trans; rewrite plus_comm; auto with arith.
+apply le_plus_trans; rewrite Nat.add_comm; auto with arith.
 pattern (2 * n) at 4 in |- *; rewrite <- H3; auto.
 Qed.

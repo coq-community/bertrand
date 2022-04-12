@@ -85,7 +85,7 @@ intros p H1 H2; inversion H2.
 intros n1; case n1.
 intros p H1 H2; inversion H2.
 red in |- *; intros (x, H3).
-rewrite mult_comm in H3; discriminate.
+rewrite Nat.mul_comm in H3; discriminate.
 inversion H0.
 intros n2; unfold max_div in |- *;
  case
@@ -133,11 +133,11 @@ simpl in |- *; auto with arith.
 intros n2; generalize (max_div_prop1 (S (S n2)));
  generalize (max_div_prop2 (S (S n2))); generalize (max_div_prop3 (S (S n2)));
  unfold primeb in |- *; case (max_div (S (S n2))).
-intros H' H (x, H0); rewrite mult_comm in H0; discriminate.
+intros H' H (x, H0); rewrite Nat.mul_comm in H0; discriminate.
 intros n3; case n3.
 intros H' H H0; split; auto with arith.
 intros b; case b.
-intros (x, H1); rewrite mult_comm in H1; discriminate.
+intros (x, H1); rewrite Nat.mul_comm in H1; discriminate.
 intros n0 H1 H2; case (le_lt_or_eq (S n0) (S (S n2))); auto.
 apply divides_le; auto with arith.
 intros H3; case (H (S n0)); auto with arith.
@@ -177,7 +177,7 @@ intros HH1 HH2; case HH2; auto.
 intros n1; case n1; auto with arith.
 intros HH1; case HH1; auto with arith.
 Contradict H1; case H; intros x H3; rewrite H3; rewrite <- H1;
- rewrite mult_comm; auto with arith.
+ rewrite Nat.mul_comm; auto with arith.
 case (Rec (max_div n)); auto with arith.
 apply max_div_prop3; auto with arith.
 intros x (H3, H4); exists x; split; auto.
@@ -209,10 +209,10 @@ apply le_mult; auto with arith.
 apply le_trans with (1 := H7); auto.
 Contradict H4; rewrite H4; auto with arith.
 apply divides_trans with (1 := H6); exists b; auto with arith.
-rewrite mult_comm; auto.
+rewrite Nat.mul_comm; auto.
 case (divides_prime_divides b); auto with arith.
 generalize H2 H; rewrite H1; case b; auto with arith.
-intros H4; rewrite mult_comm; intros H5; Contradict H5; auto with arith.
+intros H4; rewrite Nat.mul_comm; intros H5; Contradict H5; auto with arith.
 intros n1; case n1; auto with arith.
 intros H4; case H4; auto with arith.
 intros y (H5, H6); case (H0 y); auto with arith.
@@ -221,7 +221,7 @@ apply le_trans with (x * y); auto with arith.
 apply le_mult; auto with arith.
 apply le_trans with (1 := H7); auto with arith.
 rewrite H1; auto with arith.
-Contradict H; rewrite H1; rewrite H; rewrite mult_comm; auto with arith.
+Contradict H; rewrite H1; rewrite H; rewrite Nat.mul_comm; auto with arith.
 apply divides_trans with (1 := H6).
 exists x; auto with arith.
 Qed.

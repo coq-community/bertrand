@@ -45,10 +45,10 @@ Lemma sum_nm_f :
  sum_nm n (S m) f = sum_nm n m f + f (n + S m).
 Proof.
 intros n m; generalize n; clear n; elim m; simpl in |- *; auto with arith.
-intros n f; repeat rewrite (fun x y => plus_comm x (S y)); simpl in |- *;
+intros n f; repeat rewrite (fun x y => Nat.add_comm x (S y)); simpl in |- *;
  auto.
 intros n Rec m' f.
-rewrite Rec; repeat (rewrite (plus_comm m'); simpl in |- *); auto with arith.
+rewrite Rec; repeat (rewrite (Nat.add_comm m'); simpl in |- *); auto with arith.
 Qed.
 
 Lemma sum_nm_ext :
@@ -57,11 +57,11 @@ Lemma sum_nm_ext :
  sum_nm n m f = sum_nm n m g.
 Proof.
 intros n m; generalize n; clear n; elim m; simpl in |- *; auto.
-intros n f g H0; generalize (H0 0); rewrite plus_comm; simpl in |- *;
+intros n f g H0; generalize (H0 0); rewrite Nat.add_comm; simpl in |- *;
  auto with arith.
 intros m' Rec n f g H0.
 rewrite (Rec (S n) f g).
-generalize (H0 0); rewrite plus_comm; simpl in |- *; intros tmp;
+generalize (H0 0); rewrite Nat.add_comm; simpl in |- *; intros tmp;
  auto with arith.
 intros x H'; simpl in |- *; rewrite plus_n_Sm; auto with arith.
 Qed.
@@ -92,11 +92,11 @@ Lemma inv_sum_nm :
  (forall x : nat, x <= i -> P (f (n + x))) -> P (sum_nm n i f).
 Proof.
 intros P n i f; generalize n; clear n; elim i; simpl in |- *; auto.
-intros n H H0; generalize (H0 0); rewrite plus_comm; simpl in |- *;
+intros n H H0; generalize (H0 0); rewrite Nat.add_comm; simpl in |- *;
  auto with arith.
 intros i' Rec n Pi Hx.
 apply Pi; auto.
-generalize (Hx 0); rewrite plus_comm; simpl in |- *; intros tmp;
+generalize (Hx 0); rewrite Nat.add_comm; simpl in |- *; intros tmp;
  auto with arith.
 apply Rec; auto.
 intros x H'; simpl in |- *; rewrite plus_n_Sm; auto with arith.
