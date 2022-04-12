@@ -13,8 +13,7 @@
 (* Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA *)
 (* 02110-1301 USA                                                     *)
 
-
-Require Import Partition.
 From Coq Require Extraction.
+From Bertrand Require Import Partition.
 
 Extraction "partition.ml" make_partition.

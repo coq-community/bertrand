@@ -18,16 +18,12 @@
     Proof of Bertrand's conjecture: PowerDiv.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Export Div.
-Require Import ArithRing.
-Require Export Gcd.
-Require Export Factorial_bis.
-Require Export DivDirac.
-Require Export Summation.
+From Coq Require Import ArithRing.
+From Bertrand Require Export Div Gcd Factorial_bis DivDirac Summation.
 
 (** Auxillary function that tries to find the maximal exponent of q that
    divides p*)
- 
+
 Fixpoint power_div_aux (p q n : nat) {struct n} : nat :=
   match pdiv p q with
   | (p1, O) => match n with
@@ -36,7 +32,7 @@ Fixpoint power_div_aux (p q n : nat) {struct n} : nat :=
                end
   | (p1, _) => 0
   end.
- 
+
 Theorem power_div_aux_def :
  forall p q n : nat,
  0 < p ->
@@ -44,6 +40,7 @@ Theorem power_div_aux_def :
  p < power q n ->
  divides (power q (power_div_aux p q n)) p /\
  ~ divides (power q (1 + power_div_aux p q n)) p.
+Proof.
 intros p q n; generalize p q; clear p q; elim n.
 intros p q H H0 H1; Contradict H1; auto with arith.
 intros n1 Rec p q H1 H2 H3.
@@ -77,31 +74,35 @@ Qed.
  (power_div p q): find the maximal power of q that divides p *)
 
 Definition power_div (p q : nat) := power_div_aux p q p.
- 
+
 Theorem power_div_id : forall n : nat, 0 < n -> power_div n n = 1.
+Proof.
 intros n; case n; unfold power_div in |- *; simpl in |- *; auto with arith.
 intros n1; unfold pdiv in |- *; simpl in |- *.
 rewrite ominus_id; case n1; simpl in |- *; auto with arith.
 Qed.
- 
+
 Theorem power_div_divides :
  forall p q : nat, 0 < p -> 1 < q -> divides (power q (power_div p q)) p.
+Proof.
 intros p q H1 H2; case (power_div_aux_def p q p); auto with arith.
 apply power_id_lt; auto.
 Qed.
- 
+
 Theorem power_div_not_divides :
  forall p q : nat,
  0 < p -> 1 < q -> ~ divides (power q (1 + power_div p q)) p.
+Proof.
 intros p q H1 H2; case (power_div_aux_def p q p); auto with arith.
 apply power_id_lt; auto.
 Qed.
- 
+
 Theorem power_div_inv :
  forall p q r : nat,
  0 < p ->
  1 < q ->
  divides (power q r) p -> ~ divides (power q (1 + r)) p -> r = power_div p q.
+Proof.
 intros p q r H H0 H1 H2.
 case (le_or_lt r (power_div p q)); intros H3.
 case (le_lt_or_eq _ _ H3); intros H4; auto.
@@ -118,11 +119,12 @@ exists (power q (r - (1 + power_div p q))).
 rewrite power_mult.
 rewrite plus_comm; rewrite <- le_plus_minus; auto with arith.
 Qed.
- 
+
 Theorem power_div_mult_prime :
  forall p q r : nat,
  0 < q ->
  0 < r -> prime p -> power_div (q * r) p = power_div q p + power_div r p.
+Proof.
 intros p q r Hq Hr H; cut (1 < p); [ intros Hp | apply lt_prime; auto ].
 apply sym_equal; apply power_div_inv; auto with arith.
 rewrite <- power_mult; apply divides_mult.
@@ -165,13 +167,13 @@ rewrite H2; simpl in |- *; ring.
 apply power_lt_O; apply lt_trans with 1; auto with arith.
 apply power_div_divides; auto with arith.
 Qed.
-(**)
- 
+
 Theorem power_div_fact_prime :
  forall p n : nat,
  0 < n ->
  prime p ->
  power_div (factorial n) p = sum_nm 1 (pred n) (fun x => power_div x p).
+Proof.
 intros p n; elim n.
 intros H1; inversion H1.
 intros n1; case n1.
@@ -184,13 +186,14 @@ rewrite Rec; auto with arith.
 replace (pred (S (S n2))) with (S (pred (S n2))); auto with arith.
 rewrite sum_nm_f; simpl in |- *; ring.
 Qed.
- 
+
 Theorem div_dirac_power_div :
  forall p q r : nat,
  0 < p ->
  1 < q ->
  ~ divides (power q (2 + r)) p ->
  power_div p q = sum_nm 1 r (fun x => div_dirac p (power q x)).
+Proof.
 intros p q r H H0 Hr.
 case (gt_O_eq (power_div p q)); intros H1.
 case (le_lt_or_eq (pred (power_div p q)) r).
@@ -265,15 +268,15 @@ red in |- *; intros H3; case (power_div_not_divides p q); auto with arith.
 rewrite <- H1; apply divides_trans with (2 := H3); auto with arith.
 Qed.
 
-
 (** Relate the power_div of the factorial using quotient *)
- 
+
 Theorem power_div_fact_prime_div :
  forall p n r : nat,
  0 < n ->
  n < power p (2 + r) ->
  prime p ->
  power_div (factorial n) p = sum_nm 1 r (fun x => div n (power p x)).
+Proof.
 intros p n r Hn Hr Hp.
 apply trans_equal with (sum_nm 1 n (fun x : nat => div n (power p x))).
 rewrite

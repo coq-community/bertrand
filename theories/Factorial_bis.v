@@ -19,7 +19,7 @@
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
 
-Require Import Arith.
+From Coq Require Import Arith.
 
 (**  	Factorial*)
  
@@ -30,6 +30,7 @@ Fixpoint factorial (n : nat) : nat :=
   end.
 
 Theorem lt_factorial_O : forall n : nat, 0 < factorial n.
+Proof.
 intros n; elim n; simpl in |- *; auto with arith.
 Qed.
 Hint Resolve lt_factorial_O: arith.

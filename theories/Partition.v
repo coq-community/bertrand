@@ -19,26 +19,11 @@
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
 
-Require Import Div2.
-Require Import Even.
-Require Import Wf_nat.
-Require Import Arith.
-Require Import Compare_dec.
-Require Import ArithRing.
-Require Import Bertrand.
-Require Import List.
- 
-Definition le_lt_dec : forall n m : nat, {n <= m} + {m < n}.
-fix le_lt_dec 1; intros n m; case n.
-left; auto with arith.
-intros n1; case m.
-right; auto with arith.
-intros m1; case (le_lt_dec n1 m1); intros H1.
-left; auto with arith.
-right; auto with arith.
-Defined.
+From Coq Require Import Div2 Even Wf_nat Arith ArithRing List.
+From Bertrand Require Import Bertrand.
 
 Theorem prime_2 : forall p : nat, prime p -> p = 2 \/ odd p.
+Proof.
 intros p H.
 case (even_or_odd p); auto; intros H1; left.
 case H; intros H2 H3; apply H3; auto with arith.
@@ -46,14 +31,15 @@ exists (div2 p); auto with arith.
 apply trans_equal with (Div2.double (div2 p)); auto with arith.
 unfold Div2.double in |- *; ring.
 Qed.
- 
+
 Theorem lt_mult_inv : forall a b c : nat, a * b < a * c -> b < c.
+Proof.
 intros a; case a.
 intros b c H1; inversion H1.
 intros a1 b c H; case (le_or_lt c b); auto; intros H1.
 absurd (S a1 * c <= S a1 * b); auto with arith.
 Qed.
- 
+
 Fixpoint bertrand_fun_aux (n m : nat) {struct m} : nat :=
   match primeb n with
   | true => n
@@ -62,13 +48,14 @@ Fixpoint bertrand_fun_aux (n m : nat) {struct m} : nat :=
              | S m1 => bertrand_fun_aux (S n) m1
              end
   end.
- 
+
 Theorem bertrand_fun_aux_correct :
  forall n m : nat,
  match bertrand_fun_aux n m with
  | O => forall p : nat, n <= p /\ p <= n + m -> ~ prime p
  | S p => n <= S p /\ S p <= n + m /\ prime (S p)
  end.
+Proof.
 intros n m; generalize n; elim m; simpl in |- *; auto; clear n m.
 intros n; generalize (primeb_correct n); case (primeb n).
 case n; simpl in |- *; auto with arith.
@@ -88,7 +75,7 @@ intros H3; rewrite <- H3; auto.
 intros n1 (H1, (H2, H3)); split; auto with arith; split; auto with arith.
 rewrite <- plus_Snm_nSm; auto with arith.
 Qed.
- 
+
 Definition bertrand_fun :
   forall n : nat, {p : nat | 1 < n -> n < p /\ p < 2 * n /\ prime p}.
 intros n; exists (bertrand_fun_aux (S n) (pred (pred n))).
@@ -109,7 +96,7 @@ replace (2 * n) with (S (S n + pred (pred n))); auto with arith.
 rewrite plus_Snm_nSm; rewrite <- (S_pred (pred n) 0); auto with arith.
 rewrite plus_n_Sm; rewrite <- (S_pred n 0); auto with arith; ring.
 Defined.
- 
+
 Definition Partition :
   forall n : nat,
   {f : nat -> nat |
@@ -253,7 +240,7 @@ apply plus_lt_reg_l with (p := 2 * S n); auto with arith.
 rewrite le_plus_minus_r; auto with arith.
 rewrite <- plus_n_O; auto.
 Defined.
- 
+
 Fixpoint make_partition_aux (f : nat -> nat) (n : nat) {struct n} :
  list (nat * nat) :=
   match n with
@@ -264,13 +251,14 @@ Fixpoint make_partition_aux (f : nat -> nat) (n : nat) {struct n} :
       | right _ => (n, f n) :: make_partition_aux f n1
       end
   end.
- 
+
 Theorem make_partition_aux_correct :
  forall (n : nat) (f : nat -> nat),
  (forall i j : nat,
   In (i, j) (make_partition_aux f n) -> 1 <= i /\ i <= n /\ i < j /\ j = f i) /\
  (forall i : nat,
   1 <= i /\ i <= n /\ i < f i -> In (i, f i) (make_partition_aux f n)).
+Proof.
 intros n f; elim n; simpl in |- *; auto.
 split.
 intros i j H; elim H.
@@ -292,7 +280,7 @@ intros H2 (H3, H4); auto with arith.
 intros i (H1, (H2, H3)).
 case (le_lt_or_eq _ _ H2); auto with arith.
 Qed.
- 
+
 Definition make_partition : nat -> list (nat * nat).
 intros n; case (Partition n).
 intros f1 Hf1.
@@ -316,6 +304,7 @@ Theorem make_partition_correct :
   In (i, j) (make_partition n) ->
   (1 <= i /\ i <= 2 * n) /\ 1 <= j /\ j <= 2 * n) /\
  (forall i j : nat, In (i, j) (make_partition n) -> prime (i + j)).
+Proof.
 intros n; unfold make_partition in |- *.
 case (Partition n).
 intros f Hf; split.
@@ -367,4 +356,3 @@ rewrite H5; auto.
 case (Hf i); auto with arith.
 rewrite (plus_comm i); intuition.
 Qed.
-

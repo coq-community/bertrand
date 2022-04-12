@@ -18,14 +18,10 @@
     Proof of Bertrand's conjecture: Binomial.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Import Arith.
-Require Import ArithRing.
-Require Import Wf_nat.
-Require Export Factorial_bis.
-Require Export Summation.
-Require Export Power.
+From Coq Require Import Arith ArithRing Wf_nat.
+From Bertrand Require Export Factorial_bis Summation Power.
 
-(**  	Binomial Coefficient defined using Pascal's triangle *)
+(** Binomial Coefficient defined using Pascal's triangle *)
 Fixpoint binomial (a : nat) : nat -> nat :=
   fun b : nat =>
   match a, b with
@@ -34,12 +30,15 @@ Fixpoint binomial (a : nat) : nat -> nat :=
   | S a', S b' => binomial a' (S b') + binomial a' b'
   end.
 
-(** Basic properties of binomial coefficients *) 
+(** Basic properties of binomial coefficients *)
+
 Lemma binomial_def1 : forall n : nat, binomial n 0 = 1.
+Proof.
 simple induction n; auto.
 Qed.
- 
+
 Lemma binomial_def2 : forall n m : nat, n < m -> binomial n m = 0.
+Proof.
 simple induction n; simpl in |- *; auto.
 intros m; case m; simpl in |- *; auto.
 intros H'; inversion H'; auto.
@@ -47,20 +46,23 @@ intros n0 H' m; case m; simpl in |- *; auto.
 intros H'0; Contradict H'0; auto with arith.
 intros n1 H'0; repeat rewrite H'; auto with arith.
 Qed.
- 
+
 Lemma binomial_def3 : forall n : nat, binomial n n = 1.
+Proof.
 simple induction n; intros; simpl in |- *; auto.
 rewrite (binomial_def2 n0 (S n0)); auto.
 Qed.
  
 Lemma binomial_def4 :
  forall n k : nat, binomial (S n) (S k) = binomial n (S k) + binomial n k.
+Proof.
 simpl in |- *; auto.
 Qed.
- 
+
 Lemma binomial_fact :
  forall m n : nat,
  binomial (n + m) n * (factorial n * factorial m) = factorial (n + m).
+Proof.
 intros m; elim m; clear m.
 intros n; rewrite plus_comm; simpl in |- *; rewrite binomial_def3; ring.
 intros m H' n; elim n; clear n.
@@ -77,6 +79,7 @@ replace (n + S m) with (S n + m); simpl in |- *; auto; ring.
 Qed.
 
 Theorem binomial_lt : forall n m : nat, 0 < n -> 0 < binomial (n + m) n.
+Proof.
 intros n; elim n.
 intros m H; inversion H.
 intros n1; case n1.
@@ -87,9 +90,10 @@ change (0 < binomial (S n2 + m) (S (S n2)) + binomial (S n2 + m) (S n2))
 apply lt_le_trans with (0 + binomial (S n2 + m) (S n2)); auto with arith.
 apply (Rec m); auto with arith.
 Qed.
- 
+
 Theorem binomial_comp :
  forall n m : nat, binomial (n + m) n = binomial (n + m) m.
+Proof.
 intros n m.
 apply simpl_mult_r with (n := factorial n); auto with arith.
 apply simpl_mult_r with (n := factorial m); auto with arith.
@@ -102,6 +106,7 @@ Qed.
 
 Theorem binomial_mono_S :
  forall n m : nat, 2 * m < n -> binomial n m <= binomial n (S m).
+Proof.
 intros n; elim n; simpl in |- *; auto with arith.
 intros m; case m; simpl in |- *; auto with arith.
 clear n; intros n Rec m; case m; clear m.
@@ -118,9 +123,10 @@ replace n with (S (S m) + m).
 rewrite binomial_comp with (n := S (S m)).
 rewrite (plus_comm (binomial (S (S m) + m) (S m))); auto with arith.
 Qed.
- 
+
 Theorem binomial_mono :
  forall n m p : nat, 2 * m < n -> binomial n (S m - p) <= binomial n (S m).
+Proof.
 intros n m p H; elim p; auto.
 intros p1 H1; apply le_trans with (2 := H1).
 case (le_or_lt p1 m); intros H2.
@@ -132,12 +138,13 @@ apply (fun m n p : nat => mult_le_compat_l p n m); apply minus_le;
 repeat rewrite minus_O; auto with arith.
 Qed.
 
+(** Pascal theorem *)
 
-(**  Pascal theorem *)
 Theorem exp_Pascal :
  forall a b n : nat,
  power (a + b) n =
  sum_nm 0 n (fun k : nat => binomial n k * (power a (n - k) * power b k)).
+Proof.
 simple induction n; auto; clear n.
 intros n; case n; clear n.
 simpl in |- *; intros; ring.
@@ -197,6 +204,7 @@ Qed.
 (** Pascal theorem for a=b=1 *)
 Theorem binomial2 :
  forall n : nat, power 2 n = sum_nm 0 n (fun x => binomial n x).
+Proof.
 intros n; replace 2 with (1 + 1); auto with arith.
 rewrite exp_Pascal.
 apply sum_nm_ext.
@@ -207,6 +215,7 @@ Qed.
  
 Theorem binomial_odd :
  forall n : nat, binomial (2 * n + 1) (n + 1) <= power 2 (2 * n).
+Proof.
 intros n.
 case (le_lt_or_eq 0 n); auto with arith; intros H1.
 apply mult_S_le_reg_l with (n := 1).
@@ -245,6 +254,7 @@ Qed.
 
 Theorem binomial_even :
  forall n : nat, 0 < n -> power 2 (2 * n) <= 2 * n * binomial (2 * n) n.
+Proof.
 intros n Hn.
 cut (S (2 * n - 2) = 2 * n - 1);
  [ intros H1
@@ -314,4 +324,3 @@ repeat rewrite binomial_def4; auto with arith.
 apply le_plus_trans; rewrite plus_comm; auto with arith.
 pattern (2 * n) at 4 in |- *; rewrite <- H3; auto.
 Qed.
- 

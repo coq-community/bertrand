@@ -18,12 +18,11 @@
     Proof of Bertrand's conjecture: PowerBinomial.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Export PrimeDirac.
-Require Import Wf_nat.
-Require Import ArithRing.
+From Coq Require Import Wf_nat ArithRing.
+From Bertrand Require Export PrimeDirac.
 
 (** Exact expression for the maximal exponent of binomial 2n n.  *)
- 
+
 Theorem power_div_binomial :
  forall n p r : nat,
  prime p ->
@@ -31,6 +30,7 @@ Theorem power_div_binomial :
  2 * n < power p (2 + r) ->
  power_div (binomial (2 * n) n) p =
  sum_nm 1 r (fun x => div (2 * n) (power p x) - 2 * div n (power p x)).
+Proof.
 intros n p r H H0 H1.
 cut (0 < p); [ intros Hp | apply lt_trans with (2 := lt_prime _ H) ];
  auto with arith.
@@ -58,10 +58,11 @@ apply power_lt_O; auto with arith.
 Qed.
 
 (**  Upper bound for p^maxExp(binomial 2n n,p) *)
- 
+
 Theorem power_div_binomial1 :
  forall n p : nat,
  prime p -> 0 < n -> power p (power_div (binomial (2 * n) n) p) <= 2 * n.
+Proof.
 intros n p H H0.
 cut (1 < p); [ intros Hp | apply lt_prime ]; auto.
 cut (0 < p); [ intros Hp1 | apply lt_trans with (2 := Hp) ]; auto.
@@ -99,11 +100,12 @@ Qed.
 
 (**  Upper bound for the maximal exponent of (binomial 2n n) 
      in a special case *)
- 
+
 Theorem power_div_binomial2 :
  forall n p : nat,
  prime p ->
  0 < n -> 2 * n < power p 2 -> power_div (binomial (2 * n) n) p <= 1.
+Proof.
 intros n p H H0 H1; generalize (power_div_binomial1 n p H H0).
 case (power_div (binomial (2 * n) n) p); auto with arith.
 intros n1; case n1; auto with arith.
@@ -115,11 +117,12 @@ Qed.
 
 (**  Exact value of the maximal exponent of (binomial 2n n) 
      in a special case *)
- 
+
 Theorem power_div_binomial3 :
  forall n p : nat,
  prime p ->
  2 < n -> 2 * n < 3 * p -> p <= n -> power_div (binomial (2 * n) n) p = 0.
+Proof.
 intros n p Hp Hn Hp1 Hp2.
 cut (1 < p); [ intros Hp3 | apply lt_prime ]; auto.
 cut (0 < p); [ intros Hp4 | apply lt_trans with (2 := Hp3) ]; auto.
@@ -149,4 +152,3 @@ rewrite (fun x => mult_comm x p); rewrite H1; auto with arith.
 repeat rewrite (fun x => mult_comm x p); auto with arith.
 simpl in |- *; rewrite mult_1_r; auto.
 Qed.
-

@@ -18,16 +18,9 @@
     Proof of Bertrand's conjecture: Bertrand.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Import Wf_nat.
-Require Export PowerBinomial.
-Require Export Check128.
-Require Export RIneq.
-Require Import Ranalysis.
-Require Import Rtrigo.
-Require Export PrimeDirac.
-Require Export Raux.
-Require Import ArithRing.
-Require Import Lra.
+From Coq Require Export RIneq.
+From Coq Require Import Wf_nat Ranalysis Rtrigo ArithRing Lra.
+From Bertrand Require Export Raux PowerBinomial Check128 PrimeDirac.
 
 (** Upper Bound for (binonial 2n n) *)
 
@@ -37,6 +30,7 @@ Theorem upper_bound :
  (forall p : nat, n < p -> p < 2 * n -> ~ prime p) ->
  binomial (2 * n) n <
  power (2 * n) (div (sqr (2 * n)) 2 - 1) * power 4 (div (2 * n) 3).
+Proof.
 intros n H H0.
 cut (0 < n); [ intros Hn | apply lt_le_trans with (2 := H); simpl in |- * ];
  auto with arith.
@@ -195,6 +189,7 @@ Theorem no_prime_imp_spec_inegality :
  power 2 7 <= n ->
  (forall p : nat, n < p -> p < 2 * n -> ~ prime p) ->
  power 4 n < power (2 * n) (div (sqr (2 * n)) 2) * power 4 (div (2 * n) 3).
+Proof.
 intros n H H0.
 apply le_lt_trans with (2 * n * binomial (2 * n) n).
 replace 4 with (power 2 2); auto with arith.
@@ -228,6 +223,7 @@ Theorem spec_fun_bound :
  forall x : R,
  (Rpower 2 (1 + (1 + (1 + (1 + 3)))) <= x)%R ->
  (Rpower (2 * x) (sqrt (2 * x) / 2) < Rpower (1 + 3) (x / 3))%R.
+Proof.
 intros x H.
 cut (0 < x)%R;
  [ intros Hx
@@ -408,6 +404,7 @@ Qed.
  
 Theorem Bertrand :
  forall n : nat, 2 <= n -> exists p : nat, prime p /\ n < p /\ p < 2 * n.
+Proof.
 intros n H.
 case (le_or_lt n (power 2 7)); intros H1.
 apply postulate_correct_128; auto.

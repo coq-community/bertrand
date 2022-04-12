@@ -3,11 +3,11 @@
 (*           Auxillary Functions                            *)
 (*==========================================================*)
 
-let rec  p2n = function 
+let rec p2n = function 
   O -> 0
 |(S n) -> (p2n n)+1
 
-let rec  n2p n = if n=0 then O else S (n2p (n-1))
+let rec n2p n = if n=0 then O else S (n2p (n-1))
 
 let part n = 
   let rec map = function
@@ -19,4 +19,4 @@ let part n =
 (*           Example: partition from 1...20                 *)
 (*==========================================================*)
 
-let _ = part 10
+let part20 = part 10

@@ -18,39 +18,41 @@
     Proof of Bertrand's conjecture: Prime.v
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
-Require Export Divides.
-Require Import Arith.
-Require Import ArithRing.
-Require Import Wf_nat.
-Require Import Div.
+From Coq Require Import Arith ArithRing Wf_nat.
+From Bertrand Require Export Divides.
+From Bertrand Require Import Div.
 
 (** Definition of the prime predicate *)
 Definition prime (a : nat) : Prop :=
   a <> 1 /\ (forall b : nat, divides b a -> b <> 1 -> a = b).
- 
+
 Lemma not_prime_O : ~ prime 0.
+Proof.
 red in |- *; intros (H1, H2).
 absurd (0 = 2); auto with arith.
 apply H2; auto.
 apply all_divides_O.
 Qed.
- 
+
 Lemma not_prime_1 : ~ prime 1.
+Proof.
 red in |- *; intros (H1, H2); auto.
 Qed.
 Hint Resolve div_ref all_divides_O SO_divides_all not_prime_O not_prime_1 : core.
- 
+
 Lemma lt_prime : forall p : nat, prime p -> 1 < p.
+Proof.
 intros p; case p.
 intros H1; Contradict H1; auto.
 intros n; case n; auto with arith.
 intros H1; Contradict H1; auto.
 Qed.
- 
+
 Lemma prime_2_or_more : forall p : nat, prime p -> p = 2 \/ 2 < p.
+Proof.
 intros p H; case (lt_prime p H); auto with arith.
 Qed.
- 
+
 (** Find the maximal divisor of n *)
 Definition max_div (n : nat) :=
   match n with
@@ -59,8 +61,9 @@ Definition max_div (n : nat) :=
   | S (S n1) =>
       max_such (fun x => divides x n) (fun x => divides1_dec x n) (S n1)
   end.
- 
+
 Theorem max_div_prop1 : forall n : nat, divides (max_div n) n.
+Proof.
 intros n; case n.
 exists 0; ring.
 intros n1; case n1.
@@ -73,9 +76,10 @@ intros n2; unfold max_div in |- *;
 exists 1; split; auto with arith.
 intros H (H0, H1); auto.
 Qed.
- 
+
 Theorem max_div_prop2 :
  forall n p : nat, max_div n < p -> p < n -> ~ divides p n.
+Proof.
 intros n; case n.
 intros p H1 H2; inversion H2.
 intros n1; case n1.
@@ -91,8 +95,9 @@ intros n2; unfold max_div in |- *;
 exists 1; split; auto with arith.
 intros H (H0, H'0) p H1 H2; apply H'0; auto with arith.
 Qed.
- 
+
 Theorem max_div_prop3 : forall n : nat, 1 < n -> max_div n < n.
+Proof.
 intros n; case n.
 intros H1; inversion H1.
 intros n1; case n1.
@@ -105,7 +110,7 @@ intros n2; unfold max_div in |- *;
 exists 1; split; auto with arith.
 intros H H0 H1; auto with arith.
 Qed.
- 
+
 (** Check if a number is prime *)
 
 Definition primeb (n : nat) : bool :=
@@ -117,9 +122,10 @@ Definition primeb (n : nat) : bool :=
                 | _ => false
                 end
   end.
- 
+
 Theorem primeb_correct :
  forall n : nat, if primeb n then prime n else ~ prime n.
+Proof.
 intros n; case n; auto with arith.
 simpl in |- *; auto with arith.
 intros n1; case n1; auto with arith.
@@ -141,15 +147,17 @@ intros n0 H H0 H1; red in |- *; intros (H2, H4).
 absurd (S (S n2) <= S (S n0)); auto with arith.
 rewrite (H4 (S (S n0))); auto.
 Qed.
- 
+
 Definition prime_dec : forall n : nat, {prime n} + {~ prime n}.
+Proof.
 intros n; generalize (primeb_correct n); case (primeb n).
 intros H1; left; auto.
 intros H1; right; auto.
 Defined.
- 
+
 Theorem divides_prime_divides :
  forall n : nat, 1 < n -> exists p : nat, prime p /\ divides p n.
+Proof.
 intros n; pattern n in |- *; apply lt_wf_ind.
 clear n; intros n Rec H1.
 case (le_or_lt (max_div n) 1); intros H2.
@@ -176,10 +184,11 @@ intros x (H3, H4); exists x; split; auto.
 apply divides_trans with (1 := H4).
 apply max_div_prop1; auto with arith.
 Qed.
- 
+
 Theorem prime_def1 :
  forall n : nat,
  1 < n -> (forall p : nat, prime p -> p * p <= n -> ~ divides p n) -> prime n.
+Proof.
 intros n H H0; split; auto with arith.
 Contradict H; rewrite H; auto with arith.
 intros b (x, H1) H2.
@@ -219,6 +228,7 @@ Qed.
 
 Theorem prime_div_prime :
  forall p n : nat, p < n -> prime p -> divides p n -> ~ prime n.
+Proof.
 intros p n H1 H2 H3; red in |- *; intros (H4, H5).
 Contradict H1; rewrite (H5 p); auto with arith.
 Contradict H2; rewrite H2; auto with arith.
