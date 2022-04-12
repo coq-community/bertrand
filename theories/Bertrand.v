@@ -60,7 +60,7 @@ case (prime_dec x); intros Hx;
  auto with arith.
 generalize Hx; case x; auto with arith; intros Hx1; Contradict Hx1;
  auto with arith.
-rewrite <- (fun x y f => mult_1_l (prod_nm x y f)).
+rewrite <- (fun x y f => Nat.mul_1_l (prod_nm x y f)).
 pattern 1 at 1 in |- *; rewrite <- (SO_power (S (sqr (2 * n)))).
 apply
  Nat.le_lt_trans with (prod_nm 0 (div (2 * n) 3) (fun x : nat => prime_dirac x));
@@ -107,8 +107,8 @@ intros x H7 H8.
 rewrite not_prime_prime_dirac; auto; apply SO_power; auto.
 auto with arith.
 intros x H7 H8.
-case (le_or_lt x (2 * n)); intros Hp1.
-case (le_or_lt x n); intros Hp2.
+case (Nat.le_gt_cases x (2 * n)); intros Hp1.
+case (Nat.le_gt_cases x n); intros Hp2.
 replace x with (power x (1 + power_div (binomial (2 * n) n) x)).
 apply power_div_not_divides; auto with arith.
 generalize H8; case x; auto with arith.
@@ -167,12 +167,12 @@ auto with arith.
 cut (4 <= div (2 * n) 3); [ intros H1 | idtac ].
 apply Nat.le_trans with (4 * div (2 * n) 3); auto with arith.
 replace 4 with (1 + 3); auto with arith.
-rewrite mult_plus_distr_l; rewrite mult_plus_distr_r.
+rewrite Nat.mul_add_distr_l; rewrite Nat.mul_add_distr_r.
 apply plus_le_compat; auto with arith.
 apply Nat.le_trans with 4; auto with arith.
-rewrite mult_1_l; auto.
+rewrite Nat.mul_1_l; auto.
 apply le_mult; auto with arith.
-apply lt_n_Sm_le.
+apply Nat.lt_succ_r.
 apply lt_mult_right_anti with (z := 3).
 apply Nat.le_lt_trans with (2 * n); auto with arith.
 apply Nat.le_trans with (2 * power 2 7); auto with arith.
@@ -203,7 +203,7 @@ apply mult_lt_bis; auto with arith.
 apply Nat.lt_le_trans with (2 * power 2 7); auto with arith; simpl in |- *;
  auto with arith.
 apply upper_bound; auto with arith.
-apply lt_n_Sm_le.
+apply Nat.lt_succ_r.
 apply lt_mult_right_anti with (z := 2).
 apply Nat.lt_trans with (sqr (2 * n)).
 apply lt_S_n; apply mult_id_lt_inv; auto with arith.
@@ -406,14 +406,14 @@ Theorem Bertrand :
  forall n : nat, 2 <= n -> exists p : nat, prime p /\ n < p /\ p < 2 * n.
 Proof.
 intros n H.
-case (le_or_lt n (power 2 7)); intros H1.
+case (Nat.le_gt_cases n (power 2 7)); intros H1.
 apply postulate_correct_128; auto.
 case (postulate_dec n); auto.
 intros n0;
  absurd
   (power 4 n < power (2 * n) (div (sqr (2 * n)) 2) * power 4 (div (2 * n) 3)).
 2: apply no_prime_imp_spec_inegality; auto.
-2: apply lt_le_weak; auto.
+2: apply Nat.lt_le_incl; auto.
 apply le_not_lt.
 apply INR_le.
 repeat rewrite INR_power; rewrite mult_INR; repeat rewrite INR_power.

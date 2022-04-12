@@ -56,7 +56,7 @@ intros p1 Rec m n H1 H2.
 generalize (ominus_def m n); case (ominus m n); auto with arith.
 intros s Hs; generalize (Rec s n); case (pdiv_aux s n p1).
 intros q r H3; case H3; auto with arith.
-apply lt_n_Sm_le.
+apply Nat.lt_succ_r.
 apply Nat.lt_le_trans with (2 := H1).
 rewrite Hs.
 pattern s at 1 in |- *; replace s with (0 + s); auto with arith.
@@ -103,7 +103,7 @@ Theorem div_unique :
  forall m n p : nat, 0 < n -> n * p <= m -> m < n * (1 + p) -> p = div m n.
 Proof.
 intros m n p H H0 H1.
-case (le_or_lt p (div m n)); intros H2.
+case (Nat.le_gt_cases p (div m n)); intros H2.
 case (le_lt_or_eq _ _ H2); intros H3; auto.
 absurd (n * div m n <= m).
 apply lt_not_le; apply Nat.lt_le_trans with (1 := H1); auto with arith.
@@ -117,12 +117,12 @@ Theorem div_mult_le :
  forall m n p : nat, 0 < n -> p * div m n <= div (p * m) n.
 Proof.
 intros m n p H1.
-apply lt_n_Sm_le; change (p * div m n < 1 + div (p * m) n) in |- *.
+apply Nat.lt_succ_r; change (p * div m n < 1 + div (p * m) n) in |- *.
 apply lt_mult_right_anti with (z := n).
 apply Nat.le_lt_trans with (p * m).
 replace (n * (p * div m n)) with (p * (n * div m n));
  [ idtac | repeat rewrite mult_assoc; rewrite (Nat.mul_comm p); auto ].
-apply (fun m n p : nat => mult_le_compat_l p n m).
+apply (fun m n p : nat => Nat.mul_le_mono_l p n m).
 apply div_le; auto.
 apply div_lt; auto.
 Qed.
@@ -144,7 +144,7 @@ Theorem div_mult_lt2 :
  forall m n p : nat, 0 < n -> div (2 * m) n <= 2 * div m n + 1.
 Proof.
 intros m n p H.
-apply lt_n_Sm_le.
+apply Nat.lt_succ_r.
 replace (S (2 * div m n + 1)) with (2 * (1 + div m n));
  [ apply div_mult_lt
  | repeat (rewrite <- plus_n_O || rewrite <- plus_n_Sm; simpl in |- *) ];

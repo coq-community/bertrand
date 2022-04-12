@@ -160,7 +160,7 @@ Theorem divides_prime_divides :
 Proof.
 intros n; pattern n in |- *; apply lt_wf_ind.
 clear n; intros n Rec H1.
-case (le_or_lt (max_div n) 1); intros H2.
+case (Nat.le_gt_cases (max_div n) 1); intros H2.
 exists n; split; auto with arith.
 split; auto with arith.
 Contradict H1; rewrite H1; auto with arith.
@@ -192,8 +192,8 @@ Proof.
 intros n H H0; split; auto with arith.
 Contradict H; rewrite H; auto with arith.
 intros b (x, H1) H2.
-case (le_or_lt x b); intros H3.
-case (le_or_lt x 1); intros H4.
+case (Nat.le_gt_cases x b); intros H3.
+case (Nat.le_gt_cases x 1); intros H4.
 case (le_lt_or_eq _ _ H4); intros H5.
 case (le_lt_or_eq x 0); auto with arith; intros H6.
 inversion H6.

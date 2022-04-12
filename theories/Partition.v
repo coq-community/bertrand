@@ -36,7 +36,7 @@ Theorem lt_mult_inv : forall a b c : nat, a * b < a * c -> b < c.
 Proof.
 intros a; case a.
 intros b c H1; inversion H1.
-intros a1 b c H; case (le_or_lt c b); auto; intros H1.
+intros a1 b c H; case (Nat.le_gt_cases c b); auto; intros H1.
 absurd (S a1 * c <= S a1 * b); auto with arith.
 Qed.
 
@@ -86,7 +86,7 @@ intros p (H3, (H4, H5)).
 absurd (prime p); auto with arith.
 apply H2; split; auto with arith.
 rewrite plus_Snm_nSm; rewrite <- (S_pred (pred n) 0); auto with arith.
-apply lt_n_Sm_le.
+apply Nat.lt_succ_r.
 rewrite plus_n_Sm; rewrite <- (S_pred n 0); auto with arith.
 replace (n + n) with (2 * n); auto with arith; ring.
 intros p (H3, (H4, H5)).
@@ -331,7 +331,7 @@ rewrite H10; rewrite <- H21; rewrite H6; rewrite H12; rewrite <- H6;
 split.
 intros i (H1, H2); exists (f i).
 case (make_partition_aux_correct (2 * n) f); intros HR1 HR2.
-case (le_or_lt i (f i)); intros H3.
+case (Nat.le_gt_cases i (f i)); intros H3.
 case (le_lt_or_eq _ _ H3); intros H4; auto with arith.
 left; apply HR2; repeat (split; auto with arith).
 case (Hf i); auto with arith.

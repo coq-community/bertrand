@@ -75,10 +75,10 @@ red in |- *; intros H10; Contradict H5; auto; rewrite H10; auto with arith.
 apply SO_divides_all.
 apply H0; auto with arith.
 apply Nat.le_trans with (1 := H4); auto with arith.
-repeat rewrite mult_1_r.
+repeat rewrite Nat.mul_1_r.
 apply H; auto with arith.
 intros x1 H3 H4.
-rewrite mult_1_r in H2; rewrite <- H2; auto with arith.
+rewrite Nat.mul_1_r in H2; rewrite <- H2; auto with arith.
 apply H0; auto with arith.
 apply Nat.le_trans with (1 := H4); auto with arith.
 Qed.
@@ -165,7 +165,7 @@ Theorem prod_power_div :
  prod_nm 0 p (fun x : nat => power (prime_dirac x) (power_div n x)) =
  prod_nm 0 q (fun x : nat => power (prime_dirac x) (power_div n x)).
 Proof.
-intros n p q H H0 H1; case (le_or_lt p q); intros H2.
+intros n p q H H0 H1; case (Nat.le_gt_cases p q); intros H2.
 apply prod_power_div_aux; auto.
 apply sym_equal; apply prod_power_div_aux; auto with arith.
 Qed.
@@ -204,7 +204,7 @@ Proof.
 intros n; generalize (prime_2_or_more n); unfold prime_dirac in |- *;
  generalize (primeb_correct n); case (primeb n); auto with arith.
 intros H1 H2; case (H2 H1); auto with arith; intros H3;
- rewrite H3 || apply lt_le_weak; auto with arith.
+ rewrite H3 || apply Nat.lt_le_incl; auto with arith.
 Qed.
 
 Theorem prod_prime_dirac_le_1 :
@@ -214,7 +214,7 @@ intros n; elim n; auto.
 intros n0 H; rewrite prod_nm_f.
 apply Nat.le_trans with (prod_nm 0 n0 (fun x : nat => prime_dirac x) * 1);
  auto with arith.
-apply (fun m n p : nat => mult_le_compat_l p n m).
+apply (fun m n p : nat => Nat.mul_le_mono_l p n m).
 apply prime_dirac_le_1.
 Qed.
 
@@ -270,43 +270,43 @@ pattern n in |- *; apply lt_wf_ind; clear n.
 intros n; case n.
 simpl in |- *.
 intros Rec f H H0 H1.
-rewrite (H1 0); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 1); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 4); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 6); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 8); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 9); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 10); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 12); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 14); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 15); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 16); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 0); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 1); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 4); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 6); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 8); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 9); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 10); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 12); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 14); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 15); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 16); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
 apply Nat.le_trans with (power c 6).
-simpl in |- *; repeat rewrite mult_1_r; repeat apply le_mult; auto; apply H0;
+simpl in |- *; repeat rewrite Nat.mul_1_r; repeat apply le_mult; auto; apply H0;
  repeat apply le_n_S; auto with arith.
 change (power c 6 <= power c 7) in |- *; apply power_le_mono; auto.
 clear n; intros n; case n.
 simpl in |- *.
 intros Rec f H H0 H1; try assumption.
-rewrite (H1 0); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 1); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 4); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 6); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 8); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 9); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 10); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 12); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 14); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 15); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-rewrite (H1 16); try rewrite mult_1_l; repeat apply le_n_S; auto with arith.
-simpl in |- *; repeat rewrite mult_1_r; repeat apply le_mult; auto; apply H0;
+rewrite (H1 0); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 1); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 4); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 6); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 8); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 9); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 10); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 12); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 14); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 15); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+rewrite (H1 16); try rewrite Nat.mul_1_l; repeat apply le_n_S; auto with arith.
+simpl in |- *; repeat rewrite Nat.mul_1_r; repeat apply le_mult; auto; apply H0;
  repeat apply le_n_S; auto with arith.
 intros n0 Rec f H H0 H1.
 cut (1 <= div (n0 + power 2 4) 2); [ intros Hle | idtac ].
 repeat (rewrite plus_Snm_nSm; rewrite <- plus_n_Sm); repeat rewrite prod_nm_f.
 case (prime_dec (0 + S (n0 + power 2 4))); intros H4.
 rewrite (H1 (0 + S (S (n0 + power 2 4)))); auto with arith.
-rewrite mult_1_r.
+rewrite Nat.mul_1_r.
 replace (div (S (S (n0 + power 2 4))) 2) with (div (2 + (n0 + power 2 4)) 2);
  [ rewrite div_plus | simpl in |- * ]; auto with arith.
 replace (power c (1 + div (n0 + power 2 4) 2 - 1)) with
@@ -322,7 +322,7 @@ rewrite plus_minus_assoc; auto with arith.
 rewrite <- plus_n_Sm; auto with arith.
 apply prime_not_prime_S; auto with arith.
 simpl in |- *; rewrite <- plus_n_Sm; rewrite <- plus_n_Sm; auto with arith.
-rewrite H1; try rewrite mult_1_r; auto with arith.
+rewrite H1; try rewrite Nat.mul_1_r; auto with arith.
 replace (div (S (S (n0 + power 2 4))) 2) with (div (2 + (n0 + power 2 4)) 2);
  [ rewrite div_plus | simpl in |- * ]; auto with arith.
 replace (power c (1 + div (n0 + power 2 4) 2 - 1)) with
@@ -375,7 +375,7 @@ intros x2 Rec H1.
 cut (2 * S (S x2) = S (S x2 + S (S x2))); [ intros H3 | auto with arith ].
 rewrite H3; rewrite prod_nm_f.
 replace (prime_dirac (0 + S (S x2 + S (S x2)))) with 1.
-rewrite mult_1_r; auto.
+rewrite Nat.mul_1_r; auto.
 apply Nat.lt_trans with (power 4 (S x2 + S (S x2))); auto with arith.
 apply Rec; auto with arith.
 rewrite H3; auto with arith.
@@ -403,7 +403,7 @@ apply
   with
     (prod_nm 0 (x1 + 1) (fun x : nat => prime_dirac x) *
      binomial (2 * x1 + 1) (x1 + 1)).
-apply (fun m n p : nat => mult_le_compat_l p n m).
+apply (fun m n p : nat => Nat.mul_le_mono_l p n m).
 apply divides_le; auto with arith.
 apply sym_not_equal; apply lt_O_neq; auto with arith.
 replace (2 * x1 + 1) with (x1 + 1 + x1); auto with arith.
@@ -427,7 +427,7 @@ rewrite <- le_plus_minus; [ ring | auto ].
 apply
  Nat.le_lt_trans
   with (prod_nm 0 (x1 + 1) (fun x : nat => prime_dirac x) * power 2 (2 * x1)).
-apply (fun m n p : nat => mult_le_compat_l p n m).
+apply (fun m n p : nat => Nat.mul_le_mono_l p n m).
 apply binomial_odd.
 replace (power 4 (2 * x1 + 1)) with (power 4 (x1 + 1) * power 2 (2 * x1)).
 repeat rewrite (fun x y => Nat.mul_comm x (power 2 y)).
@@ -514,7 +514,7 @@ generalize H3; inversion H0; auto.
 case m; auto.
 intros n0 H7; left; split; auto with arith.
 intros b H8 H9; apply le_antisym.
-case (le_or_lt (S (S n0)) b); auto; intros H10.
+case (Nat.le_gt_cases (S (S n0)) b); auto; intros H10.
 case (H7 b); auto with arith.
 generalize H8 H9; case b; simpl in |- *; auto with arith.
 intros (x, H11); rewrite Nat.mul_comm in H11; discriminate.

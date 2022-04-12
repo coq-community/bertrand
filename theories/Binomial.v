@@ -129,11 +129,11 @@ Theorem binomial_mono :
 Proof.
 intros n m p H; elim p; auto.
 intros p1 H1; apply Nat.le_trans with (2 := H1).
-case (le_or_lt p1 m); intros H2.
+case (Nat.le_gt_cases p1 m); intros H2.
 rewrite <- (minus_Sn_m m p1); simpl in |- *; auto with arith.
 apply binomial_mono_S.
 apply Nat.le_lt_trans with (2 := H); auto with arith.
-apply (fun m n p : nat => mult_le_compat_l p n m); apply minus_le; 	 
+apply (fun m n p : nat => Nat.mul_le_mono_l p n m); apply minus_le;
   auto with arith.
 repeat rewrite minus_O; auto with arith.
 Qed.
@@ -151,7 +151,7 @@ simpl in |- *; intros; ring.
 intros n H'.
 apply trans_equal with (y := (a + b) * power (a + b) (S n)).
 simpl in |- *; auto.
-rewrite H'; rewrite mult_plus_distr_r; repeat rewrite sum_nm_times.
+rewrite H'; rewrite Nat.mul_add_distr_r; repeat rewrite sum_nm_times.
 rewrite sum_nm_i; rewrite binomial_def1.
 replace (1 * (power a (S n - 0) * power b 0)) with (power a (S n));
  [ idtac | simpl in |- *; ring ]; auto.
@@ -208,7 +208,7 @@ Proof.
 intros n; replace 2 with (1 + 1); auto with arith.
 rewrite exp_Pascal.
 apply sum_nm_ext.
-intros x H; repeat rewrite SO_power || rewrite mult_1_r; auto.
+intros x H; repeat rewrite SO_power || rewrite Nat.mul_1_r; auto.
 Qed.
 
 (** Upper bound for (binomial 2n+1 n) *)
@@ -283,7 +283,7 @@ rewrite <- sum_nm_c with (c := binomial (2 * n) n) (p := 1).
 apply sum_nm_le.
 intros x Hx H4.
 generalize (S_pred _ _ Hn); intros H5; pattern n at 3 in |- *; rewrite H5.
-case (le_or_lt x n); intros H6.
+case (Nat.le_gt_cases x n); intros H6.
 replace x with (S (pred n) - (S (pred n) - x)).
 apply binomial_mono.
 rewrite H5; auto with arith.
@@ -301,7 +301,7 @@ rewrite <- H5; auto with arith.
 apply sym_equal; apply plus_minus; auto with arith.
 rewrite <- minus_plus_le.
 replace (x + 2 * n) with (n + x + n); auto with arith; ring.
-apply lt_le_weak; auto.
+apply Nat.lt_le_incl; auto.
 apply Nat.le_trans with (1 := H4).
 pattern (2 * n) at 2; rewrite <- H3; rewrite <- H1; auto with arith.
 apply Nat.le_trans with (1 := H4).

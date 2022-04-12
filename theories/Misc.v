@@ -142,7 +142,8 @@ intros H1; rewrite H1.
 auto with arith.
 apply Nat.add_cancel_l with (p := a); auto.
 rewrite Nat.add_assoc.
-rewrite le_plus_minus_r; auto.
+rewrite (Nat.add_comm a (b - a)).
+rewrite Nat.sub_add; auto.
 Qed.
 
 Lemma plus_minus_assoc : forall a b c : nat, b <= a -> a - b + c = a + c - b.
@@ -155,7 +156,7 @@ Qed.
 
 Theorem lt_mult_right_anti : forall x y z : nat, z * x < z * y -> x < y.
 Proof.
-intros x y z H0; case (le_or_lt y x); auto; intros H1.
+intros x y z H0; case (Nat.le_gt_cases y x); auto; intros H1.
 Contradict H0; auto; apply le_not_lt; auto with arith.
 Qed.
 
@@ -188,7 +189,7 @@ Qed.
 Theorem minus_le : forall a b c : nat, a <= b + c -> a - c <= b.
 Proof.
 intros a b c H; apply (fun p n m : nat => plus_le_reg_l n m p) with (p := c).
-case (le_or_lt a c); intros H1.
+case (Nat.le_gt_cases a c); intros H1.
 replace (a - c) with 0; auto with arith.
 apply sym_equal; apply minus_O; auto with arith.
 rewrite <- le_plus_minus; auto with arith.
@@ -240,7 +241,7 @@ Defined.
  
 Theorem not_le_lt : forall n m : nat, ~ n <= m -> m < n.
 Proof.
-intros n m H1; case (le_or_lt n m); auto; intros H2; case H1; auto.
+intros n m H1; case (Nat.le_gt_cases n m); auto; intros H2; case H1; auto.
 Qed.
 
 Theorem odd_or_even :
@@ -263,17 +264,17 @@ Qed.
 
 Theorem mult_id_le_inv : forall n m : nat, n * n <= m * m -> n <= m.
 Proof.
-intros n m H; case (le_or_lt n m); auto; intros H1; Contradict H;
+intros n m H; case (Nat.le_gt_cases n m); auto; intros H1; Contradict H;
  apply lt_not_le.
 apply Nat.le_lt_trans with (n * m); auto with arith.
-apply le_mult; auto with arith; apply lt_le_weak; auto.
+apply le_mult; auto with arith; apply Nat.lt_le_incl; auto.
 apply mult_lt_bis; auto with arith; apply Nat.le_lt_trans with (2 := H1);
  auto with arith.
 Qed.
 
 Theorem mult_id_lt_inv : forall n m : nat, n * n < m * m -> n < m.
 Proof.
-intros n m H; case (le_or_lt m n); auto; intros H1; Contradict H;
+intros n m H; case (Nat.le_gt_cases m n); auto; intros H1; Contradict H;
  apply le_not_lt.
 apply Nat.le_trans with (n * m); auto with arith.
 apply le_mult; auto with arith.
@@ -381,12 +382,12 @@ case H; auto with arith.
 exists m; auto with arith.
 intros H5 (H6, H7).
 case (le_lt_or_eq (S n0) m); auto with arith.
-apply lt_n_Sm_le; apply mult_id_lt_inv.
+apply Nat.lt_succ_r; apply mult_id_lt_inv.
 apply Nat.le_lt_trans with (1 := H6); auto with arith.
 intros H0; case (H7 m); auto with arith.
 apply Nat.le_trans with (2 := H1); auto with arith.
 apply Nat.le_trans with (m * 1); auto with arith.
-rewrite mult_1_r; auto with arith.
+rewrite Nat.mul_1_r; auto with arith.
 rewrite <- H3; rewrite <- H3 in H2; simpl in H2; inversion H2.
 simpl in |- *; auto.
 inversion H0.
@@ -404,7 +405,7 @@ Proof.
 intros n m H; elim H; auto with arith.
 intros m0 H0 H1.
 apply Nat.le_trans with (1 := H1).
-apply lt_n_Sm_le; apply mult_id_lt_inv.
+apply Nat.lt_succ_r; apply mult_id_lt_inv.
 apply Nat.le_lt_trans with m0.
 apply sqr_le; auto.
 apply Nat.lt_trans with (S m0); auto with arith; apply sqr_lt; auto.

@@ -104,7 +104,7 @@ Theorem power_div_inv :
  divides (power q r) p -> ~ divides (power q (1 + r)) p -> r = power_div p q.
 Proof.
 intros p q r H H0 H1 H2.
-case (le_or_lt r (power_div p q)); intros H3.
+case (Nat.le_gt_cases r (power_div p q)); intros H3.
 case (le_lt_or_eq _ _ H3); intros H4; auto.
 case H2.
 apply divides_trans with (power q (power_div p q)).
@@ -199,7 +199,7 @@ case (gt_O_eq (power_div p q)); intros H1.
 case (le_lt_or_eq (pred (power_div p q)) r).
 apply le_S_n.
 rewrite <- (fun x => S_pred x 0); auto with arith.
-case (le_or_lt (power_div p q) (S r)); auto.
+case (Nat.le_gt_cases (power_div p q) (S r)); auto.
 intros H2; case Hr; apply divides_trans with (b := power q (power_div p q));
  auto with arith.
 apply power_div_divides; auto with arith.
@@ -217,7 +217,7 @@ rewrite
             (f := fun x : nat => div_dirac p (power q x))
            (g := fun x : nat => 0).
 repeat rewrite sum_nm_c.
-rewrite <- mult_n_O; rewrite mult_1_r; rewrite <- plus_n_O; auto with arith.
+rewrite <- mult_n_O; rewrite Nat.mul_1_r; rewrite <- plus_n_O; auto with arith.
 apply (S_pred (power_div p q) 0); auto with arith.
 intros x H2; replace (1 + pred (power_div p q)) with (power_div p q).
 apply div_dirac_prop2; auto with arith.
@@ -300,7 +300,7 @@ apply divides_trans with (2 := H2); auto with arith.
 intros; apply div_dirac_div; auto with arith.
 apply power_lt_O; apply Nat.lt_trans with 1; auto with arith.
 apply lt_prime; auto.
-case (le_or_lt n r); intros H1.
+case (Nat.le_gt_cases n r); intros H1.
 case (le_lt_or_eq _ _ H1); clear H1; intros H1.
 rewrite sum_nm_split with (q := r) (r := n); auto.
 rewrite sum_nm_ext with (n := 1 + (1 + n)) (g := fun x : nat => 0); auto.

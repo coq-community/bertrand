@@ -92,7 +92,7 @@ apply sum_nm_le; auto with arith.
 intros x H3 H4; apply minus_le.
 rewrite Nat.add_comm; apply div_mult_lt2; auto with arith.
 apply power_lt_O; auto with arith.
-case (le_or_lt (2 + n1) (2 * n)); intros Hl.
+case (Nat.le_gt_cases (2 + n1) (2 * n)); intros Hl.
 apply not_le_lt; apply H2; auto with arith.
 apply Nat.lt_trans with (1 := Hl).
 apply power_id_lt; auto with arith.
@@ -132,7 +132,7 @@ repeat rewrite power_SO.
 replace (div (2 * n) p) with 2.
 replace (div n p) with 1; auto with arith.
 apply div_unique; auto with arith.
-rewrite mult_1_r; auto.
+rewrite Nat.mul_1_r; auto.
 apply plus_lt_reg_l with (p := p).
 apply Nat.le_lt_trans with (n + n); auto with arith.
 replace (n + n) with (2 * n); auto with arith.
@@ -150,5 +150,5 @@ intros H1; Contradict Hp1; auto with arith.
 apply le_not_lt.
 rewrite (fun x => Nat.mul_comm x p); rewrite H1; auto with arith.
 repeat rewrite (fun x => Nat.mul_comm x p); auto with arith.
-simpl in |- *; rewrite mult_1_r; auto.
+simpl in |- *; rewrite Nat.mul_1_r; auto.
 Qed.
