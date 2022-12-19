@@ -53,7 +53,7 @@ Lemma power_mult :
  forall x a b : nat, power x a * power x b = power x (a + b).
 Proof.
 simple induction a; simpl in |- *; auto.
-intros n H' b; rewrite mult_assoc_reverse; rewrite H'; auto.
+intros n H' b; rewrite <- Nat.mul_assoc; rewrite H'; auto.
 Qed.
 
 Lemma power_power : forall x a b : nat, power (power x a) b = power x (a * b).
@@ -94,7 +94,7 @@ Theorem power_le_mono :
 Proof.
 intros p q r H; inversion H; auto with arith.
 repeat rewrite SO_power; auto with arith.
-intros H2; case (le_lt_or_eq _ _ H2); auto; intros H3.
+intros H2; case ((proj1 (Nat.lt_eq_cases _ _)) H2); auto; intros H3.
 apply Nat.lt_le_incl; apply power_lt_mono; auto with arith.
 rewrite H3; auto.
 Qed.
@@ -103,8 +103,8 @@ Theorem power_le_mono_inv :
  forall p q r : nat, 1 < r -> power r p <= power r q -> p <= q.
 Proof.
 intros p q r H H0; case (Nat.le_gt_cases p q); auto; intros H1.
-Contradict H0; auto with arith.
-apply lt_not_le; apply power_lt_mono; auto with arith.
+contradict H0; auto with arith.
+apply Nat.lt_nge; apply power_lt_mono; auto with arith.
 Qed.
 
 Theorem power_id_lt : forall p q : nat, 0 < p -> 1 < q -> p < power q p.
@@ -125,8 +125,8 @@ Theorem power_lt_mono_inv1 :
  forall p q r : nat, 0 < r -> power r p < power r q -> p < q.
 Proof.
 intros p q r Hr H; case (Nat.le_gt_cases q p); auto; intros H1.
-Contradict H; auto with arith.
-apply le_not_lt; apply power_le_mono; auto with arith.
+contradict H; auto with arith.
+apply Nat.le_ngt; apply power_le_mono; auto with arith.
 Qed.
 
 Theorem power_lt_mono_inv2 :

@@ -27,9 +27,9 @@ Proof.
 intros p H.
 case (even_or_odd p); auto; intros H1; left.
 case H; intros H2 H3; apply H3; auto with arith.
-exists (div2 p); auto with arith.
-apply trans_equal with (Div2.double (div2 p)); auto with arith.
-unfold Div2.double in |- *; ring.
+exists (Nat.div2 p); auto with arith.
+apply trans_equal with (Nat.double (Nat.div2 p)); auto with arith.
+unfold Nat.double in |- *; ring.
 Qed.
 
 Theorem lt_mult_inv : forall a b c : nat, a * b < a * c -> b < c.
@@ -60,20 +60,20 @@ intros n m; generalize n; elim m; simpl in |- *; auto; clear n m.
 intros n; generalize (primeb_correct n); case (primeb n).
 case n; simpl in |- *; auto with arith.
 rewrite <- plus_n_O; intros H p (H1, H2); replace p with n;
- try apply le_antisym; auto with arith.
+ try apply Nat.le_antisymm; auto with arith.
 intros m Rec n.
 generalize (primeb_correct n); case (primeb n); auto with arith.
 case n; simpl in |- *; auto with arith.
 intros H; generalize (Rec (S n)); case (bertrand_fun_aux (S n) m);
  auto with arith.
 intros H0 p (H1, H2).
-case (le_lt_or_eq _ _ H1); auto with arith.
+case (proj1 (Nat.lt_eq_cases _ _) H1); auto with arith.
 intros H3; apply H0; auto with arith.
 split; auto with arith.
-rewrite plus_Snm_nSm; auto.
+rewrite Nat.add_succ_comm; auto.
 intros H3; rewrite <- H3; auto.
 intros n1 (H1, (H2, H3)); split; auto with arith; split; auto with arith.
-rewrite <- plus_Snm_nSm; auto with arith.
+rewrite <- Nat.add_succ_comm; auto with arith.
 Qed.
 
 Definition bertrand_fun :
@@ -85,16 +85,16 @@ intros H2; case (Bertrand n); auto.
 intros p (H3, (H4, H5)).
 absurd (prime p); auto with arith.
 apply H2; split; auto with arith.
-rewrite plus_Snm_nSm; rewrite <- (S_pred (pred n) 0); auto with arith.
+rewrite Nat.add_succ_comm; rewrite <- (S_pred (pred n) 0); auto with arith.
 apply Nat.lt_succ_r.
-rewrite plus_n_Sm; rewrite <- (S_pred n 0); auto with arith.
+rewrite plus_n_Sm; rewrite (Nat.lt_succ_pred 0 n); auto with arith.
 replace (n + n) with (2 * n); auto with arith; ring.
 intros p (H3, (H4, H5)).
 split; auto with arith.
 split; auto with arith.
 replace (2 * n) with (S (S n + pred (pred n))); auto with arith.
-rewrite plus_Snm_nSm; rewrite <- (S_pred (pred n) 0); auto with arith.
-rewrite plus_n_Sm; rewrite <- (S_pred n 0); auto with arith; ring.
+rewrite Nat.add_succ_comm; rewrite (Nat.lt_succ_pred 0 (pred n)); auto with arith.
+rewrite plus_n_Sm; rewrite (Nat.lt_succ_pred 0 n); auto with arith; ring.
 Defined.
 
 Definition Partition :
@@ -116,8 +116,8 @@ case Hp;
  | intros Hp1 (Hp2, Hp3) ].
 cut (even (2 * S n)); [ intros Hn | auto with arith ].
 cut (even (pred (p - 2 * S n))); [ intros Heven | idtac ].
-cut (div2 (pred (p - 2 * S n)) < S n); [ intros H4 | idtac ].
-case (Rec (div2 (pred (p - 2 * S n))) H4).
+cut (Nat.div2 (pred (p - 2 * S n)) < S n); [ intros H4 | idtac ].
+case (Rec (Nat.div2 (pred (p - 2 * S n))) H4).
 intros f1 Rf1.
 exists
  (fun x : nat =>

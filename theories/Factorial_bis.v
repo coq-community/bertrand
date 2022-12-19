@@ -33,4 +33,4 @@ Theorem lt_factorial_O : forall n : nat, 0 < factorial n.
 Proof.
 intros n; elim n; simpl in |- *; auto with arith.
 Qed.
-Hint Resolve lt_factorial_O: arith.
+#[export] Hint Resolve lt_factorial_O: arith.

@@ -13,7 +13,6 @@
 (* Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA *)
 (* 02110-1301 USA                                                     *)
 
-
 (***********************************************************************
     Proof of Bertrand's conjecture: PowerDiv.v
                                          Laurent.Thery@inria.fr (2002)
@@ -105,19 +104,19 @@ Theorem power_div_inv :
 Proof.
 intros p q r H H0 H1 H2.
 case (Nat.le_gt_cases r (power_div p q)); intros H3.
-case (le_lt_or_eq _ _ H3); intros H4; auto.
+case (proj1 (Nat.lt_eq_cases _ _) H3); intros H4; auto.
 case H2.
 apply divides_trans with (power q (power_div p q)).
 exists (power q (power_div p q - (1 + r))).
 rewrite power_mult.
-rewrite Nat.add_comm; rewrite <- le_plus_minus; auto with arith.
+rewrite Nat.sub_add; auto with arith.
 apply power_div_divides; auto.
 absurd (divides (power q (1 + power_div p q)) p).
 apply power_div_not_divides; auto.
 apply divides_trans with (2 := H1).
 exists (power q (r - (1 + power_div p q))).
 rewrite power_mult.
-rewrite Nat.add_comm; rewrite <- le_plus_minus; auto with arith.
+rewrite Nat.sub_add; auto with arith.
 Qed.
 
 Theorem power_div_mult_prime :
@@ -136,7 +135,7 @@ red in |- *; intros (q1, H0);
      (div r (power p (power_div r p)))); auto.
 exists q1.
 apply eq_mult with (power p (power_div q p + power_div r p)).
-apply sym_not_eq; apply lt_O_neq.
+apply Nat.neq_0_lt_0.
 rewrite <- power_mult; apply lt_O_mult; auto with arith.
 apply power_lt_O; apply Nat.lt_trans with 1; auto with arith.
 apply power_lt_O; apply Nat.lt_trans with 1; auto with arith.
@@ -195,10 +194,12 @@ Theorem div_dirac_power_div :
  power_div p q = sum_nm 1 r (fun x => div_dirac p (power q x)).
 Proof.
 intros p q r H H0 Hr.
-case (gt_O_eq (power_div p q)); intros H1.
-case (le_lt_or_eq (pred (power_div p q)) r).
+pose proof (Nat.eq_0_gt_0_cases (power_div p q)) as Hor.
+apply or_comm in Hor.
+case Hor; intros H1; clear Hor.
+case (proj1 (Nat.lt_eq_cases (pred (power_div p q)) r)).
 apply le_S_n.
-rewrite <- (fun x => S_pred x 0); auto with arith.
+rewrite (fun x => Nat.lt_succ_pred 0 x); auto with arith.
 case (Nat.le_gt_cases (power_div p q) (S r)); auto.
 intros H2; case Hr; apply divides_trans with (b := power q (power_div p q));
  auto with arith.
@@ -218,7 +219,8 @@ rewrite
            (g := fun x : nat => 0).
 repeat rewrite sum_nm_c.
 rewrite <- mult_n_O; rewrite Nat.mul_1_r; rewrite <- plus_n_O; auto with arith.
-apply (S_pred (power_div p q) 0); auto with arith.
+apply eq_sym.
+apply (Nat.lt_succ_pred 0 (power_div p q)); auto with arith.
 intros x H2; replace (1 + pred (power_div p q)) with (power_div p q).
 apply div_dirac_prop2; auto with arith.
 apply power_lt_O; auto with arith.
@@ -226,15 +228,16 @@ red in |- *; intros H3; absurd (divides (power q (1 + power_div p q)) p).
 apply power_div_not_divides; auto with arith.
 apply divides_trans with (2 := H3).
 exists (power q x); rewrite power_mult; auto with arith.
-simpl in |- *; apply (S_pred (power_div p q) 0); auto with arith.
+apply eq_sym.
+simpl in |- *; apply (Nat.lt_succ_pred 0 (power_div p q)); auto with arith.
 intros x H2; apply div_dirac_prop1; auto with arith.
 apply power_lt_O; auto with arith.
 apply divides_trans with (power q (power_div p q)).
 exists (power q (power_div p q - (1 + x))); rewrite power_mult;
  auto with arith.
-rewrite (fun x y z => Nat.add_comm x (y + z)); rewrite <- le_plus_minus;
- auto with arith.
-rewrite (S_pred (power_div p q) 0); simpl in |- *; auto with arith.
+simpl.
+rewrite Nat.sub_add; auto with arith.
+rewrite <- (Nat.lt_succ_pred 0); simpl in |- *; auto with arith.
 apply power_div_divides; auto with arith.
 intros Hr1; rewrite <- Hr1.
 rewrite
@@ -244,16 +247,18 @@ rewrite
            (f := fun x : nat => div_dirac p (power q x))
            (g := fun x : nat => 1).
 repeat rewrite sum_nm_c.
-rewrite (S_pred (power_div p q) 0); auto with arith.
+apply eq_sym.
+rewrite <- (Nat.lt_succ_pred 0); auto with arith.
 intros x H2; apply div_dirac_prop1; auto with arith.
 apply power_lt_O; auto with arith.
 apply divides_trans with (power q (power_div p q)).
 exists (power q (power_div p q - (1 + x))); rewrite power_mult;
  auto with arith.
-rewrite (fun x y z => Nat.add_comm x (y + z)); rewrite <- le_plus_minus;
- auto with arith.
-rewrite (S_pred (power_div p q) 0); simpl in |- *; auto with arith.
+simpl.
+rewrite Nat.sub_add; auto with arith.
+rewrite <- (Nat.lt_succ_pred 0); simpl in |- *; auto with arith.
 apply power_div_divides; auto with arith.
+apply eq_sym in H1.
 rewrite
  sum_nm_ext
             with
@@ -291,7 +296,7 @@ apply sum_nm_ext.
 intros x H1; apply div_dirac_power_div; auto with arith.
 apply lt_prime; auto.
 red in |- *; intros H2; Contradict H1; auto with arith.
-apply lt_not_le; apply lt_S_n; rewrite <- (S_pred n 0); auto with arith.
+apply Nat.lt_nge; apply Nat.succ_lt_mono; rewrite (Nat.lt_succ_pred 0 n); auto with arith.
 apply Nat.lt_le_trans with (power p n).
 apply power_id_lt; auto with arith.
 apply lt_prime; auto.
@@ -301,7 +306,7 @@ intros; apply div_dirac_div; auto with arith.
 apply power_lt_O; apply Nat.lt_trans with 1; auto with arith.
 apply lt_prime; auto.
 case (Nat.le_gt_cases n r); intros H1.
-case (le_lt_or_eq _ _ H1); clear H1; intros H1.
+case (proj1 (Nat.lt_eq_cases _ _) H1); clear H1; intros H1.
 rewrite sum_nm_split with (q := r) (r := n); auto.
 rewrite sum_nm_ext with (n := 1 + (1 + n)) (g := fun x : nat => 0); auto.
 rewrite sum_nm_c with (c := 0); ring.

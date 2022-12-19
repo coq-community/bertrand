@@ -289,4 +289,4 @@ rewrite power_mult.
 rewrite (Nat.sub_add _ _ H).
 reflexivity.
 Qed.
-Hint Resolve divides_power: arith.
+#[export] Hint Resolve divides_power: arith.

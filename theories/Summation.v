@@ -117,15 +117,17 @@ intros f p q; elim q.
 intros r H; inversion H; simpl in |- *.
 intros n H r H0; inversion H0.
 rewrite sum_nm_f.
-rewrite <- minus_n_n; rewrite <- plus_n_Sm; simpl in |- *; auto.
+rewrite Nat.sub_diag; rewrite <- plus_n_Sm; simpl in |- *; auto.
 rewrite sum_nm_f; rewrite (H r); auto with arith.
-rewrite <- minus_Sn_m; auto with arith.
+rewrite Nat.sub_succ_l; auto with arith.
 rewrite sum_nm_f; auto with arith.
 replace (1 + (p + r) + S (n - (1 + r))) with (p + S n); auto with arith.
-rewrite minus_Sn_m; auto with arith.
+rewrite <- Nat.sub_succ_l; auto with arith.
 replace (1 + (p + r) + (S n - (1 + r))) with (p + (1 + r + (S n - (1 + r))));
- [ idtac | ring ].
-rewrite <- le_plus_minus; auto with arith.
+  [ idtac | ring ].
+simpl.
+rewrite <- (Nat.add_comm (n - r)).
+rewrite Nat.sub_add; auto with arith.
 Qed.
 
 Theorem sum_nm_c : forall c p q : nat, sum_nm p q (fun x => c) = S q * c.
@@ -183,7 +185,7 @@ Proof.
 intros n m f g; generalize n; elim m; clear n m.
 simpl in |- *; auto with arith.
 intros m H n H0; repeat rewrite sum_nm_f; auto with arith.
-apply plus_le_compat; auto with arith.
+apply Nat.add_le_mono; auto with arith.
 apply H; auto with arith.
 intros x H1 H2; apply H0; auto with arith.
 apply Nat.le_trans with (1 := H2); auto with arith.

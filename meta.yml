@@ -31,19 +31,16 @@ license:
   identifier: LGPL-2.1-or-later
 
 supported_coq_versions:
-  text: Coq 8.8 or later
-  opam: '{(>= "8.8" & < "8.16~") | (= "dev")}'
+  text: Coq 8.12 or later
+  opam: '{(>= "8.12" & < "8.18~") | (= "dev")}'
 
 tested_coq_opam_versions:
 - version: 'dev'
+- version: '8.16'
 - version: '8.15'
 - version: '8.14'
 - version: '8.13'
 - version: '8.12'
-- version: '8.11'
-- version: '8.10'
-- version: '8.9'
-- version: '8.8'
 
 tested_coq_nix_versions:
 - coq_version: 'master'

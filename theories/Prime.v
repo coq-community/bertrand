@@ -38,7 +38,7 @@ Lemma not_prime_1 : ~ prime 1.
 Proof.
 red in |- *; intros (H1, H2); auto.
 Qed.
-Hint Resolve div_ref all_divides_O SO_divides_all not_prime_O not_prime_1 : core.
+#[export] Hint Resolve div_ref all_divides_O SO_divides_all not_prime_O not_prime_1 : core.
 
 Lemma lt_prime : forall p : nat, prime p -> 1 < p.
 Proof.
@@ -138,7 +138,7 @@ intros n3; case n3.
 intros H' H H0; split; auto with arith.
 intros b; case b.
 intros (x, H1); rewrite Nat.mul_comm in H1; discriminate.
-intros n0 H1 H2; case (le_lt_or_eq (S n0) (S (S n2))); auto.
+intros n0 H1 H2; case (proj1 (Nat.lt_eq_cases (S n0) (S (S n2)))); auto.
 apply divides_le; auto with arith.
 intros H3; case (H (S n0)); auto with arith.
 generalize H2; case n0; simpl in |- *; auto with arith.
@@ -163,20 +163,20 @@ clear n; intros n Rec H1.
 case (Nat.le_gt_cases (max_div n) 1); intros H2.
 exists n; split; auto with arith.
 split; auto with arith.
-Contradict H1; rewrite H1; auto with arith.
+contradict H1; rewrite H1; auto with arith.
 intros b H H0.
 cut (0 <> b); [ intros H4 | idtac ].
-case (le_lt_or_eq b n); auto with arith.
+case (proj1 (Nat.lt_eq_cases b n)); auto with arith.
 apply divides_le; auto with arith.
-Contradict H1; rewrite H1; auto with arith.
-intros H3; Contradict H.
+contradict H1; rewrite H1; auto with arith.
+intros H3; contradict H.
 apply max_div_prop2; auto with arith.
 apply Nat.le_lt_trans with (1 := H2); auto with arith.
 generalize H0 H4; case b; auto with arith.
 intros HH1 HH2; case HH2; auto.
 intros n1; case n1; auto with arith.
 intros HH1; case HH1; auto with arith.
-Contradict H1; case H; intros x H3; rewrite H3; rewrite <- H1;
+contradict H1; case H; intros x H3; rewrite H3; rewrite <- H1;
  rewrite Nat.mul_comm; auto with arith.
 case (Rec (max_div n)); auto with arith.
 apply max_div_prop3; auto with arith.
@@ -190,14 +190,14 @@ Theorem prime_def1 :
  1 < n -> (forall p : nat, prime p -> p * p <= n -> ~ divides p n) -> prime n.
 Proof.
 intros n H H0; split; auto with arith.
-Contradict H; rewrite H; auto with arith.
+contradict H; rewrite H; auto with arith.
 intros b (x, H1) H2.
 case (Nat.le_gt_cases x b); intros H3.
 case (Nat.le_gt_cases x 1); intros H4.
-case (le_lt_or_eq _ _ H4); intros H5.
-case (le_lt_or_eq x 0); auto with arith; intros H6.
+case (proj1 (Nat.lt_eq_cases _ _) H4); intros H5.
+case (proj1 (Nat.lt_eq_cases x 0)); auto with arith; intros H6.
 inversion H6.
-Contradict H; rewrite H1; rewrite H6; auto with arith.
+contradict H; rewrite H1; rewrite H6; auto with arith.
 rewrite H1; rewrite H5; auto with arith.
 case (divides_prime_divides x); auto with arith.
 intros y (H5, H6); case (H0 y); auto with arith.
@@ -207,12 +207,12 @@ apply le_mult; auto with arith.
 rewrite H1; auto with arith.
 apply le_mult; auto with arith.
 apply Nat.le_trans with (1 := H7); auto.
-Contradict H4; rewrite H4; auto with arith.
+contradict H4; rewrite H4; auto with arith.
 apply divides_trans with (1 := H6); exists b; auto with arith.
 rewrite Nat.mul_comm; auto.
 case (divides_prime_divides b); auto with arith.
 generalize H2 H; rewrite H1; case b; auto with arith.
-intros H4; rewrite Nat.mul_comm; intros H5; Contradict H5; auto with arith.
+intros H4; rewrite Nat.mul_comm; intros H5; contradict H5; auto with arith.
 intros n1; case n1; auto with arith.
 intros H4; case H4; auto with arith.
 intros y (H5, H6); case (H0 y); auto with arith.
@@ -221,7 +221,7 @@ apply Nat.le_trans with (x * y); auto with arith.
 apply le_mult; auto with arith.
 apply Nat.le_trans with (1 := H7); auto with arith.
 rewrite H1; auto with arith.
-Contradict H; rewrite H1; rewrite H; rewrite Nat.mul_comm; auto with arith.
+contradict H; rewrite H1; rewrite H; rewrite Nat.mul_comm; auto with arith.
 apply divides_trans with (1 := H6).
 exists x; auto with arith.
 Qed.

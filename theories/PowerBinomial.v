@@ -39,7 +39,8 @@ rewrite <-
               with
               (f := fun x => div (2 * n) (power p x))
              (g := fun x => 2 * div n (power p x)).
-apply plus_minus.
+apply eq_sym.
+apply Nat.add_sub_eq_l.
 rewrite <- sum_nm_times with (f := fun x : nat => div n (power p x)).
 repeat rewrite <- power_div_fact_prime_div; auto with arith.
 replace (2 * power_div (factorial n) p) with
@@ -109,8 +110,8 @@ Proof.
 intros n p H H0 H1; generalize (power_div_binomial1 n p H H0).
 case (power_div (binomial (2 * n) n) p); auto with arith.
 intros n1; case n1; auto with arith.
-intros n2 H2; Contradict H2; auto with arith.
-apply lt_not_le; apply Nat.lt_le_trans with (power p 2); auto with arith.
+intros n2 H2; contradict H2; auto with arith.
+apply Nat.lt_nge; apply Nat.lt_le_trans with (power p 2); auto with arith.
 apply power_le_mono; auto with arith.
 apply Nat.lt_trans with 1; auto with arith; apply lt_prime; auto with arith.
 Qed.
@@ -133,7 +134,7 @@ replace (div (2 * n) p) with 2.
 replace (div n p) with 1; auto with arith.
 apply div_unique; auto with arith.
 rewrite Nat.mul_1_r; auto.
-apply plus_lt_reg_l with (p := p).
+apply Nat.add_lt_mono_l with (p := p).
 apply Nat.le_lt_trans with (n + n); auto with arith.
 replace (n + n) with (2 * n); auto with arith.
 replace (p + p * (1 + 1)) with (3 * p); auto with arith.
@@ -146,8 +147,8 @@ apply Nat.lt_trans with (2 := Hn); auto.
 apply Nat.lt_le_trans with (1 := Hp1).
 replace (power p (2 + 0)) with (p * p).
 case (prime_2_or_more p); auto with arith.
-intros H1; Contradict Hp1; auto with arith.
-apply le_not_lt.
+intros H1; contradict Hp1; auto with arith.
+apply Nat.le_ngt.
 rewrite (fun x => Nat.mul_comm x p); rewrite H1; auto with arith.
 repeat rewrite (fun x => Nat.mul_comm x p); auto with arith.
 simpl in |- *; rewrite Nat.mul_1_r; auto.

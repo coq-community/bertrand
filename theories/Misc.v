@@ -157,26 +157,26 @@ Qed.
 Theorem lt_mult_right_anti : forall x y z : nat, z * x < z * y -> x < y.
 Proof.
 intros x y z H0; case (Nat.le_gt_cases y x); auto; intros H1.
-Contradict H0; auto; apply le_not_lt; auto with arith.
+contradict H0; auto; apply Nat.le_ngt; auto with arith.
 Qed.
 
 Theorem mult_lt_bis : forall p q r : nat, 0 < r -> p < q -> r * p < r * q.
 Proof.
 intros p q r; case r; auto with arith.
 Qed.
-Hint Resolve mult_lt_bis: arith.
+#[export] Hint Resolve mult_lt_bis: arith.
  
 Theorem lt_O_mult : forall p q : nat, 0 < p -> 0 < q -> 0 < p * q.
 Proof.
 intros p q H1 H2; inversion H1; inversion H2; simpl in |- *; auto with arith.
 Qed.
-Hint Resolve lt_O_mult: arith.
+#[export] Hint Resolve lt_O_mult: arith.
  
 Theorem minus_plus_le :
  forall a b c d : nat, a <= c -> b <= d -> c + d - (a + b) = c - a + (d - b).
 Proof.
 intros a b c d H H0.
-apply sym_equal; apply plus_minus.
+apply Nat.add_sub_eq_l.
 apply trans_equal with (a + (c - a) + (b + (d - b))); auto with arith; ring.
 Qed.
  
@@ -188,11 +188,11 @@ Qed.
 
 Theorem minus_le : forall a b c : nat, a <= b + c -> a - c <= b.
 Proof.
-intros a b c H; apply (fun p n m : nat => plus_le_reg_l n m p) with (p := c).
+intros a b c H; apply (fun p n m : nat => Nat.add_le_mono_l n m p) with (p := c).
 case (Nat.le_gt_cases a c); intros H1.
 replace (a - c) with 0; auto with arith.
 apply sym_equal; apply minus_O; auto with arith.
-rewrite <- le_plus_minus; auto with arith.
+rewrite Nat.add_comm, Nat.sub_add; auto with arith.
 rewrite Nat.add_comm; auto with arith.
 Qed.
 
@@ -264,8 +264,8 @@ Qed.
 
 Theorem mult_id_le_inv : forall n m : nat, n * n <= m * m -> n <= m.
 Proof.
-intros n m H; case (Nat.le_gt_cases n m); auto; intros H1; Contradict H;
- apply lt_not_le.
+intros n m H; case (Nat.le_gt_cases n m); auto; intros H1; contradict H;
+ apply Nat.lt_nge.
 apply Nat.le_lt_trans with (n * m); auto with arith.
 apply le_mult; auto with arith; apply Nat.lt_le_incl; auto.
 apply mult_lt_bis; auto with arith; apply Nat.le_lt_trans with (2 := H1);
@@ -274,8 +274,8 @@ Qed.
 
 Theorem mult_id_lt_inv : forall n m : nat, n * n < m * m -> n < m.
 Proof.
-intros n m H; case (Nat.le_gt_cases m n); auto; intros H1; Contradict H;
- apply le_not_lt.
+intros n m H; case (Nat.le_gt_cases m n); auto; intros H1; contradict H;
+ apply Nat.le_ngt.
 apply Nat.le_trans with (n * m); auto with arith.
 apply le_mult; auto with arith.
 Qed.
@@ -355,10 +355,10 @@ intros n0 H; case H; auto with arith.
 exists 0; split; auto with arith.
 intros H2 (H3, H4); auto.
 apply not_le_lt; auto with arith.
-case (le_lt_or_eq _ _ H2); intros H5.
+case ((proj1 (Nat.lt_eq_cases _ _)) H2); intros H5.
 apply H4; auto with arith.
 rewrite H5; auto with arith.
-apply lt_not_le; auto with arith.
+apply Nat.lt_nge; auto with arith.
 apply Nat.lt_le_trans with (S n); auto with arith.
 pattern (S n) at 1 in |- *; replace (S n) with (S n * 1); auto with arith.
 Qed.
@@ -366,7 +366,7 @@ Qed.
 Theorem sqr_inv : forall n m : nat, m * m <= n -> n < S m * S m -> sqr n = m.
 Proof.
 intros n m H1 H2.
-case (le_lt_or_eq 0 m); auto with arith; intros H3.
+case (proj1 (Nat.lt_eq_cases 0 m)); auto with arith; intros H3.
 cut (m <= n); [ intros H4 | idtac ].
 unfold sqr in |- *;
  generalize
@@ -381,7 +381,7 @@ intros n0 H.
 case H; auto with arith.
 exists m; auto with arith.
 intros H5 (H6, H7).
-case (le_lt_or_eq (S n0) m); auto with arith.
+case (proj1 (Nat.lt_eq_cases (S n0) m)); auto with arith.
 apply Nat.lt_succ_r; apply mult_id_lt_inv.
 apply Nat.le_lt_trans with (1 := H6); auto with arith.
 intros H0; case (H7 m); auto with arith.

@@ -13,7 +13,6 @@
 (* Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA *)
 (* 02110-1301 USA                                                     *)
 
-
 (***********************************************************************
     Proof of Bertrand's conjecture: PrimeDirac.v
                                          Laurent.Thery@inria.fr (2002)
@@ -93,7 +92,7 @@ unfold prime_dirac in |- *; generalize (primeb_correct p); case (primeb p);
 intros H2.
 apply L_Euclides1 with (a := factorial m); auto with arith.
 apply L_Euclides1 with (a := factorial n); auto with arith.
-rewrite <- mult_assoc_reverse.
+rewrite Nat.mul_assoc.
 rewrite (fun x y z => Nat.mul_comm (x * y) z).
 rewrite binomial_fact.
 generalize H1; elim m; simpl in |- *; auto with arith.
@@ -103,10 +102,10 @@ intros H3 H4; inversion H4; auto.
 exists (factorial (n + m1)); rewrite Nat.mul_comm; simpl in |- *; auto.
 apply divides_trans with (1 := H3 H6).
 exists (S (n + m1)); auto.
-red in |- *; intros H3; Contradict H; auto with arith.
-apply le_not_lt; apply prime_div_factorial_le; auto.
-red in |- *; intros H3; Contradict H0; auto with arith.
-apply le_not_lt; apply prime_div_factorial_le; auto.
+red in |- *; intros H3; contradict H; auto with arith.
+apply Nat.le_ngt; apply prime_div_factorial_le; auto.
+red in |- *; intros H3; contradict H0; auto with arith.
+apply Nat.le_ngt; apply prime_div_factorial_le; auto.
 Qed.
  
 Theorem prime_prime_dirac : forall p : nat, prime p -> prime_dirac p = p.
@@ -132,7 +131,7 @@ Theorem prod_power_div_aux :
  prod_nm 0 p (fun x : nat => power (prime_dirac x) (power_div n x)) =
  prod_nm 0 q (fun x : nat => power (prime_dirac x) (power_div n x)).
 Proof.
-intros n p q Hn H H0; case (le_lt_or_eq _ _ H); intros H1;
+intros n p q Hn H H0; case (proj1 (Nat.lt_eq_cases _ _) H); intros H1;
  [ idtac | rewrite H1 ]; auto.
 rewrite prod_nm_split with (r := p) (q := q); auto.
 replace
@@ -234,9 +233,9 @@ Theorem div_plus : forall n m : nat, 0 < n -> div (n + m) n = 1 + div m n.
 Proof.
 intros n m H; apply sym_equal; apply div_unique; auto.
 replace (n * (1 + div m n)) with (n + n * div m n);
- [ apply plus_le_compat_l; apply div_le | ring ]; auto with arith.
+ [ apply Nat.add_le_mono_l; apply div_le | ring ]; auto with arith.
 replace (n * (1 + (1 + div m n))) with (n + n * (1 + div m n));
- [ apply plus_lt_compat_l; apply div_lt | ring ]; auto with arith.
+ [ apply Nat.add_lt_mono_l; apply div_lt | ring ]; auto with arith.
 Qed.
 
 Theorem prod_prime_le_aux :
@@ -303,7 +302,7 @@ simpl in |- *; repeat rewrite Nat.mul_1_r; repeat apply le_mult; auto; apply H0;
  repeat apply le_n_S; auto with arith.
 intros n0 Rec f H H0 H1.
 cut (1 <= div (n0 + power 2 4) 2); [ intros Hle | idtac ].
-repeat (rewrite plus_Snm_nSm; rewrite <- plus_n_Sm); repeat rewrite prod_nm_f.
+repeat (rewrite Nat.add_succ_comm; rewrite <- plus_n_Sm); repeat rewrite prod_nm_f.
 case (prime_dec (0 + S (n0 + power 2 4))); intros H4.
 rewrite (H1 (0 + S (S (n0 + power 2 4)))); auto with arith.
 rewrite Nat.mul_1_r.
@@ -351,11 +350,11 @@ Theorem prod_prime_le :
  prod_nm 0 n (fun x => f x) <= power c (div n 2 - 1).
 Proof.
 intros c n f H H0 H1 H2.
-rewrite (le_plus_minus (power 2 4) n); auto; rewrite Nat.add_comm;
+rewrite <- (Nat.sub_add (power 2 4) n); auto;
  apply prod_prime_le_aux; auto with arith.
-intros x; rewrite Nat.add_comm; rewrite <- (le_plus_minus (power 2 4) n);
+intros x; rewrite (Nat.sub_add (power 2 4) n);
  auto with arith.
-intros x; rewrite Nat.add_comm; rewrite <- (le_plus_minus (power 2 4) n);
+intros x; rewrite (Nat.sub_add (power 2 4) n);
  auto with arith.
 Qed.
 
@@ -405,7 +404,7 @@ apply
      binomial (2 * x1 + 1) (x1 + 1)).
 apply (fun m n p : nat => Nat.mul_le_mono_l p n m).
 apply divides_le; auto with arith.
-apply sym_not_equal; apply lt_O_neq; auto with arith.
+apply Nat.neq_0_lt_0; auto with arith.
 replace (2 * x1 + 1) with (x1 + 1 + x1); auto with arith.
 apply binomial_lt; auto with arith.
 simpl in |- *; ring.
@@ -420,10 +419,13 @@ apply Nat.lt_le_trans with (2 := H); auto with arith.
 rewrite Nat.add_comm; auto with arith.
 replace (x1 + 1 + x1) with (x1 + 2 + (x1 - 1)); auto.
 pattern x1 at 4 in |- *;
- (rewrite le_plus_minus with (n := 1); [ ring | auto ]).
-apply plus_minus.
+ (rewrite <- Nat.sub_add with (n := 1); [ ring | auto ]).
+apply eq_sym.
+apply Nat.add_sub_eq_l.
 repeat rewrite <- Nat.add_assoc.
-rewrite <- le_plus_minus; [ ring | auto ].
+rewrite <- (Nat.add_comm (x1 - 1)).
+simpl.
+rewrite Nat.sub_add; [ ring | auto ].
 apply
  Nat.le_lt_trans
   with (prod_nm 0 (x1 + 1) (fun x : nat => prime_dirac x) * power 2 (2 * x1)).
@@ -476,13 +478,13 @@ intros H2 H3 H4.
     try rewrite <- plus_n_Sm; auto with arith.
 2: intros p0 H2 x H3 H4; red in |- *; intros H5; Contradict H3;
     auto with arith.
-2: apply le_not_lt; apply divides_le; auto with arith.
+2: apply Nat.le_ngt; apply divides_le; auto with arith.
 2: apply sym_not_equal; auto with arith.
 cut (prime n \/ n = 1); [ intros H5; case H5; intros H6 | idtac ].
 rewrite prod_power_div with (q := n); auto with arith.
-pattern n at 2 in |- *; rewrite (S_pred n 0); auto with arith.
+pattern n at 2 in |- *; rewrite <- (Nat.lt_succ_pred 0 n); auto with arith.
 rewrite prod_nm_f; auto with arith.
-rewrite <- (S_pred n 0); auto with arith.
+rewrite (Nat.lt_succ_pred 0 n); auto with arith.
 replace
  (prod_nm 0 (pred n) (fun x : nat => power (prime_dirac x) (power_div n x)))
  with (power 1 (S (pred n))).
@@ -513,7 +515,7 @@ intros x H7 H8; apply not_lt_div; auto with arith.
 generalize H3; inversion H0; auto.
 case m; auto.
 intros n0 H7; left; split; auto with arith.
-intros b H8 H9; apply le_antisym.
+intros b H8 H9; apply Nat.le_antisymm.
 case (Nat.le_gt_cases (S (S n0)) b); auto; intros H10.
 case (H7 b); auto with arith.
 generalize H8 H9; case b; simpl in |- *; auto with arith.

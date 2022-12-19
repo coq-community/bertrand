@@ -37,7 +37,7 @@ an application of the postulate to compute partitions.
 - Coq-community maintainer(s):
   - Laurent Théry ([**@thery**](https://github.com/thery))
 - License: [GNU Lesser General Public License v2.1 or later](LICENSE)
-- Compatible Coq versions: Coq 8.8 or later
+- Compatible Coq versions: Coq 8.12 or later
 - Additional dependencies: none
 - Coq namespace: `Bertrand`
 - Related publication(s):

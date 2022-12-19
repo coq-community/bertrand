@@ -104,15 +104,15 @@ Theorem div_unique :
 Proof.
 intros m n p H H0 H1.
 case (Nat.le_gt_cases p (div m n)); intros H2.
-case (le_lt_or_eq _ _ H2); intros H3; auto.
+case ((proj1 (Nat.lt_eq_cases _ _)) H2); intros H3; auto.
 absurd (n * div m n <= m).
-apply lt_not_le; apply Nat.lt_le_trans with (1 := H1); auto with arith.
+apply Nat.lt_nge; apply Nat.lt_le_trans with (1 := H1); auto with arith.
 apply div_le; auto.
 absurd (m < n * (1 + div m n)).
-apply le_not_lt; apply Nat.le_trans with (2 := H0); auto with arith.
+apply Nat.le_ngt; apply Nat.le_trans with (2 := H0); auto with arith.
 apply div_lt; auto.
 Qed.
- 
+
 Theorem div_mult_le :
  forall m n p : nat, 0 < n -> p * div m n <= div (p * m) n.
 Proof.
@@ -121,7 +121,7 @@ apply Nat.lt_succ_r; change (p * div m n < 1 + div (p * m) n) in |- *.
 apply lt_mult_right_anti with (z := n).
 apply Nat.le_lt_trans with (p * m).
 replace (n * (p * div m n)) with (p * (n * div m n));
- [ idtac | repeat rewrite mult_assoc; rewrite (Nat.mul_comm p); auto ].
+ [ idtac | repeat rewrite Nat.mul_assoc; rewrite (Nat.mul_comm p); auto ].
 apply (fun m n p : nat => Nat.mul_le_mono_l p n m).
 apply div_le; auto.
 apply div_lt; auto.
@@ -134,7 +134,7 @@ intros m n p H H1; apply lt_mult_right_anti with (z := n).
 apply Nat.le_lt_trans with (p * m).
 apply div_le; auto.
 replace (n * (p * (1 + div m n))) with (p * (n * (1 + div m n)));
- [ idtac | repeat rewrite mult_assoc; rewrite (Nat.mul_comm p); auto ].
+ [ idtac | repeat rewrite Nat.mul_assoc; rewrite (Nat.mul_comm p); auto ].
 apply mult_lt_bis; try apply div_lt; auto.
 Qed.
 
@@ -165,7 +165,7 @@ repeat rewrite (Nat.mul_comm q); auto with arith.
 rewrite <- H1; rewrite H2.
 cut (S r1 = q); [ intros H4 | idtac ].
 rewrite plus_n_Sm; rewrite H4; simpl in |- *; ring.
-apply le_antisym; auto with arith.
+apply Nat.le_antisymm; auto with arith.
 apply divides_le; auto with arith.
 apply divides_plus2 with (b := q1 * q).
 exists q1; auto with arith.
@@ -189,8 +189,8 @@ rewrite H2.
 rewrite plus_n_Sm; auto.
 rewrite <- mult_n_Sm; auto.
 repeat rewrite (Nat.mul_comm q); auto with arith.
-apply plus_lt_compat_l; auto with arith.
-case (le_lt_or_eq (S r1) q); auto.
+apply Nat.add_lt_mono_l; auto with arith.
+case (proj1 (Nat.lt_eq_cases (S r1) q)); auto.
 intros H4; case H1; exists (S q1).
 rewrite H2.
 rewrite plus_n_Sm; auto.
