@@ -32,6 +32,7 @@ jobs:
             endGroup
             startGroup "Build knuth dependencies"
               sudo apt-get update -y -q
+              opam pin remove -y dune
               opam pin add -n -y -k path coq-knuth-prime-whyml .
               opam update -y
               opam install --confirm-level=unsafe-yes -j $(nproc) coq-knuth-prime-whyml --deps-only
