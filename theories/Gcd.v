@@ -29,7 +29,7 @@ From Bertrand Require Export Prime Power.
 Definition is_gcd (a b c : nat) : Prop :=
   divides c a /\
   divides c b /\ (forall d : nat, divides d a -> divides d b -> divides d c).
-Hint Resolve div_ref all_divides_O : core.
+#[export] Hint Resolve div_ref all_divides_O : core.
 
 Lemma is_gcd_unic :
  forall a b c d : nat, is_gcd a b c -> is_gcd a b d -> c = d.
@@ -89,10 +89,10 @@ case (zerop a'); intros lta'; [ rewrite lta'; auto | idtac ].
 case (zerop b'); intros ltb'; [ rewrite ltb'; auto | idtac ].
 case (lt_eq_lt_dec a' b'); intros Ca'b';
  [ case Ca'b'; clear Ca'b'; intros Ca'b' | idtac ].
-replace b' with (b' - a' + a'); auto with arith; rewrite plus_comm;
+replace b' with (b' - a' + a'); auto with arith; rewrite Nat.add_comm;
  auto with arith.
 replace b' with (0 + b'); [ rewrite Ca'b' | idtac ]; auto with arith.
-replace a' with (a' - b' + b'); auto with arith; rewrite plus_comm;
+replace a' with (a' - b' + b'); auto with arith; rewrite Nat.add_comm;
  auto with arith.
 Qed.
 
@@ -110,10 +110,10 @@ case (zerop a'); intros lta'; [ rewrite lta'; auto | idtac ].
 case (zerop b'); intros ltb'; [ rewrite ltb'; auto | idtac ].
 case (lt_eq_lt_dec a' b'); intros Ca'b';
  [ case Ca'b'; clear Ca'b'; intros Ca'b' | idtac ].
-replace b' with (b' - a' + a'); auto with arith; rewrite plus_comm;
+replace b' with (b' - a' + a'); auto with arith; rewrite Nat.add_comm;
  auto with arith.
 replace b' with (0 + b'); [ rewrite Ca'b' | idtac ]; auto with arith.
-replace a' with (a' - b' + b'); auto with arith; rewrite plus_comm;
+replace a' with (a' - b' + b'); auto with arith; rewrite Nat.add_comm;
  auto with arith.
 Qed.
 
@@ -124,7 +124,7 @@ Inductive gcd_spec : nat -> nat -> nat -> Prop :=
       forall a b c : nat, a < b -> gcd_spec a (b - a) c -> gcd_spec a b c
   | gcd_spec_ex3 :
       forall a b c : nat, b <= a -> gcd_spec (a - b) b c -> gcd_spec a b c.
-Hint Resolve gcd_spec_ex0 gcd_spec_ex1 : core.
+#[export] Hint Resolve gcd_spec_ex0 gcd_spec_ex1 : core.
 
 Theorem gcd_inv_Or_aux : forall a b c : nat, gcd_spec a b c -> b = 0 -> a = c.
 Proof.
@@ -171,17 +171,17 @@ intros a; exists a; auto.
 intros b; exists b; auto.
 intros a b Rr; case Rr; intros r Hr; exists r.
 apply gcd_spec_ex3; auto with arith.
-rewrite plus_comm; rewrite minus_plus; auto; rewrite <- minus_n_n; auto.
+rewrite Nat.add_sub; auto; rewrite Nat.sub_diag; auto.
 intros a b Rr; case Rr; intros r Hr; exists r.
 case (zerop a); intros lta.
 rewrite lta; simpl in |- *.
 rewrite <- (gcd_inv_Or b r); auto.
 apply gcd_spec_ex3; auto with arith.
-rewrite <- minus_n_n; auto.
+rewrite Nat.sub_diag; auto.
 rewrite <- lta; auto.
 apply gcd_spec_ex2; auto with arith.
 pattern b at 1 in |- *; replace b with (0 + b); auto with arith.
-rewrite plus_comm; rewrite minus_plus; auto; rewrite <- minus_n_n; auto.
+rewrite Nat.add_sub; auto; rewrite Nat.sub_diag; auto.
 Qed.
 
 (** gcd as a function *) 
@@ -191,7 +191,7 @@ Lemma gcd_correct : forall a b : nat, gcd_spec a b (gcd a b).
 Proof.
 intros a b; unfold gcd in |- *; case (gcd_ex a b); simpl in |- *; auto.
 Qed.
-Hint Resolve gcd_correct : core.
+#[export] Hint Resolve gcd_correct : core.
 
 Lemma gcd_spec_uniq :
  forall a b r1 r2 : nat, gcd_spec a b r1 -> gcd_spec a b r2 -> r1 = r2.
@@ -203,14 +203,14 @@ intros a b c H' H'0 H'1 r2 H'2; inversion H'2; auto.
 apply H'1; auto.
 rewrite <- H0; simpl in |- *; rewrite H1; auto.
 apply H'1; auto.
-rewrite <- H; simpl in |- *; rewrite <- minus_n_O; rewrite H1; auto.
-Contradict H; auto with arith.
+rewrite <- H; simpl in |- *; rewrite Nat.sub_0_r; rewrite H1; auto.
+contradict H; auto with arith.
 intros a b c H' H'0 H'1 r2 H'2; inversion H'2; auto.
 apply H'1; auto.
-rewrite <- H0; simpl in |- *; rewrite H1; rewrite <- minus_n_O; auto.
+rewrite <- H0; simpl in |- *; rewrite H1; rewrite Nat.sub_0_r; auto.
 apply H'1; auto.
 rewrite <- H; simpl in |- *; rewrite H1; auto.
-Contradict H; auto with arith.
+contradict H; auto with arith.
 Qed.
 
 Lemma gcd_correct2 : forall a b r : nat, gcd_spec a b r -> gcd a b = r.
@@ -233,7 +233,7 @@ Lemma gcd_def1 : forall x : nat, gcd x x = x.
 Proof.
 intros x; apply gcd_spec_uniq with (a := x) (b := x); auto.
 apply gcd_spec_ex3; auto.
-rewrite <- minus_n_n; auto.
+rewrite Nat.sub_diag; auto.
 Qed.
 
 Lemma gcd_def2 : forall a b : nat, gcd a b = gcd a (b + a).
@@ -242,10 +242,10 @@ intros a b; apply gcd_spec_uniq with (a := a) (b := b + a); auto.
 case (zerop b); intros ltb.
 rewrite ltb; simpl in |- *; rewrite gcd_def0r; auto.
 apply gcd_spec_ex3; auto.
-rewrite <- minus_n_n; auto.
+rewrite Nat.sub_diag; auto.
 apply gcd_spec_ex2; auto with arith.
 replace a with (0 + a); auto with arith.
-rewrite plus_comm; rewrite minus_plus.
+rewrite Nat.add_sub.
 apply gcd_correct; auto.
 Qed.
 
@@ -255,9 +255,9 @@ intros a b; apply gcd_spec_uniq with (a := a + b) (b := b); auto.
 case (zerop a); intros lta.
 rewrite lta; simpl in |- *; rewrite gcd_def0l; auto.
 apply gcd_spec_ex3; auto with arith.
-rewrite <- minus_n_n; auto.
+rewrite Nat.sub_diag; auto.
 apply gcd_spec_ex3; auto with arith.
-rewrite plus_comm; rewrite minus_plus.
+rewrite Nat.add_sub.
 apply gcd_correct; auto.
 Qed.
 
@@ -273,14 +273,14 @@ apply divides_plus1; auto.
 intros d H' H'0.
 apply H3; auto.
 apply divides_plus2 with (b := a); auto.
-rewrite plus_comm; auto.
+rewrite Nat.add_comm; auto.
 intros a b (H1, (H2, H3)); rewrite <- gcd_def3; split; auto.
 apply divides_plus1; auto.
 split; auto.
 intros d H' H'0.
 apply H3; auto.
 apply divides_plus2 with (b := b); auto.
-rewrite plus_comm; auto.
+rewrite Nat.add_comm; auto.
 Qed.
 
 Theorem is_gcd_inv : forall a b c : nat, is_gcd a (a + b) c -> is_gcd a b c.
@@ -314,7 +314,7 @@ Proof.
 intros x a b H' H'0; replace b with (b * gcd x a).
 apply preEuclid; auto with arith.
 exists b; auto with arith.
-rewrite mult_comm; auto.
+rewrite Nat.mul_comm; auto.
 rewrite (is_gcd_unic x a (gcd x a) 1); auto with arith.
 apply gcd_is_gcd; auto.
 Qed.
@@ -349,5 +349,5 @@ intros n2 H'3; Contradict H'3; auto with arith.
 intros n0 H' H'0 H'1.
 case (divides_dec p (power w n0)); intros H; auto.
 apply L_Euclides1 with (a := power w n0); auto.
-rewrite mult_comm; auto.
+rewrite Nat.mul_comm; auto.
 Qed.

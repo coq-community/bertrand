@@ -45,10 +45,10 @@ Lemma sum_nm_f :
  sum_nm n (S m) f = sum_nm n m f + f (n + S m).
 Proof.
 intros n m; generalize n; clear n; elim m; simpl in |- *; auto with arith.
-intros n f; repeat rewrite (fun x y => plus_comm x (S y)); simpl in |- *;
+intros n f; repeat rewrite (fun x y => Nat.add_comm x (S y)); simpl in |- *;
  auto.
 intros n Rec m' f.
-rewrite Rec; repeat (rewrite (plus_comm m'); simpl in |- *); auto with arith.
+rewrite Rec; repeat (rewrite (Nat.add_comm m'); simpl in |- *); auto with arith.
 Qed.
 
 Lemma sum_nm_ext :
@@ -57,11 +57,11 @@ Lemma sum_nm_ext :
  sum_nm n m f = sum_nm n m g.
 Proof.
 intros n m; generalize n; clear n; elim m; simpl in |- *; auto.
-intros n f g H0; generalize (H0 0); rewrite plus_comm; simpl in |- *;
+intros n f g H0; generalize (H0 0); rewrite Nat.add_comm; simpl in |- *;
  auto with arith.
 intros m' Rec n f g H0.
 rewrite (Rec (S n) f g).
-generalize (H0 0); rewrite plus_comm; simpl in |- *; intros tmp;
+generalize (H0 0); rewrite Nat.add_comm; simpl in |- *; intros tmp;
  auto with arith.
 intros x H'; simpl in |- *; rewrite plus_n_Sm; auto with arith.
 Qed.
@@ -92,11 +92,11 @@ Lemma inv_sum_nm :
  (forall x : nat, x <= i -> P (f (n + x))) -> P (sum_nm n i f).
 Proof.
 intros P n i f; generalize n; clear n; elim i; simpl in |- *; auto.
-intros n H H0; generalize (H0 0); rewrite plus_comm; simpl in |- *;
+intros n H H0; generalize (H0 0); rewrite Nat.add_comm; simpl in |- *;
  auto with arith.
 intros i' Rec n Pi Hx.
 apply Pi; auto.
-generalize (Hx 0); rewrite plus_comm; simpl in |- *; intros tmp;
+generalize (Hx 0); rewrite Nat.add_comm; simpl in |- *; intros tmp;
  auto with arith.
 apply Rec; auto.
 intros x H'; simpl in |- *; rewrite plus_n_Sm; auto with arith.
@@ -117,15 +117,17 @@ intros f p q; elim q.
 intros r H; inversion H; simpl in |- *.
 intros n H r H0; inversion H0.
 rewrite sum_nm_f.
-rewrite <- minus_n_n; rewrite <- plus_n_Sm; simpl in |- *; auto.
+rewrite Nat.sub_diag; rewrite <- plus_n_Sm; simpl in |- *; auto.
 rewrite sum_nm_f; rewrite (H r); auto with arith.
-rewrite <- minus_Sn_m; auto with arith.
+rewrite Nat.sub_succ_l; auto with arith.
 rewrite sum_nm_f; auto with arith.
 replace (1 + (p + r) + S (n - (1 + r))) with (p + S n); auto with arith.
-rewrite minus_Sn_m; auto with arith.
+rewrite <- Nat.sub_succ_l; auto with arith.
 replace (1 + (p + r) + (S n - (1 + r))) with (p + (1 + r + (S n - (1 + r))));
- [ idtac | ring ].
-rewrite <- le_plus_minus; auto with arith.
+  [ idtac | ring ].
+simpl.
+rewrite <- (Nat.add_comm (n - r)).
+rewrite Nat.sub_add; auto with arith.
 Qed.
 
 Theorem sum_nm_c : forall c p q : nat, sum_nm p q (fun x => c) = S q * c.
@@ -183,10 +185,10 @@ Proof.
 intros n m f g; generalize n; elim m; clear n m.
 simpl in |- *; auto with arith.
 intros m H n H0; repeat rewrite sum_nm_f; auto with arith.
-apply plus_le_compat; auto with arith.
+apply Nat.add_le_mono; auto with arith.
 apply H; auto with arith.
 intros x H1 H2; apply H0; auto with arith.
-apply le_trans with (1 := H2); auto with arith.
+apply Nat.le_trans with (1 := H2); auto with arith.
 Qed.
 
 Theorem sum_nm_minus :
@@ -201,8 +203,8 @@ repeat rewrite sum_nm_f.
 rewrite minus_plus_le; auto with arith.
 rewrite H; auto.
 intros x H1 H2; apply H0; auto with arith.
-apply le_trans with (1 := H2); auto with arith.
+apply Nat.le_trans with (1 := H2); auto with arith.
 apply sum_nm_le; auto.
 intros x H1 H2; apply H0; auto with arith.
-apply le_trans with (1 := H2); auto with arith.
+apply Nat.le_trans with (1 := H2); auto with arith.
 Qed.

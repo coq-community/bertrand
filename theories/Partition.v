@@ -27,16 +27,16 @@ Proof.
 intros p H.
 case (even_or_odd p); auto; intros H1; left.
 case H; intros H2 H3; apply H3; auto with arith.
-exists (div2 p); auto with arith.
-apply trans_equal with (Div2.double (div2 p)); auto with arith.
-unfold Div2.double in |- *; ring.
+exists (Nat.div2 p); auto with arith.
+apply trans_equal with (Nat.double (Nat.div2 p)); auto with arith.
+unfold Nat.double in |- *; ring.
 Qed.
 
 Theorem lt_mult_inv : forall a b c : nat, a * b < a * c -> b < c.
 Proof.
 intros a; case a.
 intros b c H1; inversion H1.
-intros a1 b c H; case (le_or_lt c b); auto; intros H1.
+intros a1 b c H; case (Nat.le_gt_cases c b); auto; intros H1.
 absurd (S a1 * c <= S a1 * b); auto with arith.
 Qed.
 
@@ -60,20 +60,20 @@ intros n m; generalize n; elim m; simpl in |- *; auto; clear n m.
 intros n; generalize (primeb_correct n); case (primeb n).
 case n; simpl in |- *; auto with arith.
 rewrite <- plus_n_O; intros H p (H1, H2); replace p with n;
- try apply le_antisym; auto with arith.
+ try apply Nat.le_antisymm; auto with arith.
 intros m Rec n.
 generalize (primeb_correct n); case (primeb n); auto with arith.
 case n; simpl in |- *; auto with arith.
 intros H; generalize (Rec (S n)); case (bertrand_fun_aux (S n) m);
  auto with arith.
 intros H0 p (H1, H2).
-case (le_lt_or_eq _ _ H1); auto with arith.
+case (proj1 (Nat.lt_eq_cases _ _) H1); auto with arith.
 intros H3; apply H0; auto with arith.
 split; auto with arith.
-rewrite plus_Snm_nSm; auto.
+rewrite Nat.add_succ_comm; auto.
 intros H3; rewrite <- H3; auto.
 intros n1 (H1, (H2, H3)); split; auto with arith; split; auto with arith.
-rewrite <- plus_Snm_nSm; auto with arith.
+rewrite <- Nat.add_succ_comm; auto with arith.
 Qed.
 
 Definition bertrand_fun :
@@ -85,16 +85,16 @@ intros H2; case (Bertrand n); auto.
 intros p (H3, (H4, H5)).
 absurd (prime p); auto with arith.
 apply H2; split; auto with arith.
-rewrite plus_Snm_nSm; rewrite <- (S_pred (pred n) 0); auto with arith.
-apply lt_n_Sm_le.
-rewrite plus_n_Sm; rewrite <- (S_pred n 0); auto with arith.
+rewrite Nat.add_succ_comm; rewrite <- (S_pred (pred n) 0); auto with arith.
+apply Nat.lt_succ_r.
+rewrite plus_n_Sm; rewrite (Nat.lt_succ_pred 0 n); auto with arith.
 replace (n + n) with (2 * n); auto with arith; ring.
 intros p (H3, (H4, H5)).
 split; auto with arith.
 split; auto with arith.
 replace (2 * n) with (S (S n + pred (pred n))); auto with arith.
-rewrite plus_Snm_nSm; rewrite <- (S_pred (pred n) 0); auto with arith.
-rewrite plus_n_Sm; rewrite <- (S_pred n 0); auto with arith; ring.
+rewrite Nat.add_succ_comm; rewrite (Nat.lt_succ_pred 0 (pred n)); auto with arith.
+rewrite plus_n_Sm; rewrite (Nat.lt_succ_pred 0 n); auto with arith; ring.
 Defined.
 
 Definition Partition :
@@ -116,8 +116,8 @@ case Hp;
  | intros Hp1 (Hp2, Hp3) ].
 cut (even (2 * S n)); [ intros Hn | auto with arith ].
 cut (even (pred (p - 2 * S n))); [ intros Heven | idtac ].
-cut (div2 (pred (p - 2 * S n)) < S n); [ intros H4 | idtac ].
-case (Rec (div2 (pred (p - 2 * S n))) H4).
+cut (Nat.div2 (pred (p - 2 * S n)) < S n); [ intros H4 | idtac ].
+case (Rec (Nat.div2 (pred (p - 2 * S n))) H4).
 intros f1 Rf1.
 exists
  (fun x : nat =>
@@ -134,7 +134,7 @@ simpl in |- *; rewrite <- plus_n_Sm; auto with arith.
 intros H1 (H2, H3).
 intros m1 (H5, H6).
 cut (m1 <= p);
- [ intros Hm1 | apply le_trans with (1 := H6); auto with arith ].
+ [ intros Hm1 | apply Nat.le_trans with (1 := H6); auto with arith ].
 split.
 case (le_lt_dec m1 (2 * S n)); intros H7; auto with arith.
 case (le_lt_dec (p - 2 * S n) m1); intros H8; auto with arith.
@@ -147,7 +147,7 @@ red in |- *; intros H; apply (not_even_and_odd p); auto with arith.
 replace p with (2 * m1); auto with arith.
 simpl in |- *; pattern m1 at 1 in |- *; rewrite <- H.
 rewrite <- plus_n_O.
-rewrite plus_comm; apply le_plus_minus_r; auto.
+rewrite Nat.add_comm; apply le_plus_minus_r; auto.
 cut (forall x : nat, 2 * x = Div2.double x);
  [ intros tmp; rewrite tmp | idtac ].
 rewrite <- even_double; auto with arith.
@@ -159,15 +159,15 @@ case (le_lt_dec (p - m1) (2 * S n)); intros H9; auto with arith.
 case (le_lt_dec (p - 2 * S n) (p - m1)); intros H10; auto with arith.
 split.
 apply sym_equal; apply plus_minus.
-apply sym_equal; rewrite plus_comm.
+apply sym_equal; rewrite Nat.add_comm.
 apply le_plus_minus_r; auto with arith.
 split; auto.
 split; auto.
 apply plus_lt_reg_l with (p := m1); auto with arith.
 rewrite le_plus_minus_r; auto with arith.
-apply le_lt_trans with (2 := H1); auto with arith.
+apply Nat.le_lt_trans with (2 := H1); auto with arith.
 rewrite <- plus_n_O; auto.
-rewrite plus_comm; rewrite le_plus_minus_r; auto with arith.
+rewrite Nat.add_comm; rewrite le_plus_minus_r; auto with arith.
 absurd (2 * S n < m1); auto with arith.
 apply plus_lt_reg_l with (p := p).
 pattern p at 1 in |- *; rewrite <- (le_plus_minus_r m1); auto with arith.
@@ -179,7 +179,7 @@ absurd (m1 < p - 2 * S n); auto with arith.
 apply plus_lt_reg_l with (p := 2 * S n); auto with arith.
 rewrite le_plus_minus_r; auto with arith.
 rewrite <- (le_plus_minus_r m1 p); auto with arith.
-rewrite (plus_comm m1); auto with arith.
+rewrite (Nat.add_comm m1); auto with arith.
 case (Rf1 m1); auto with arith.
 split; auto with arith.
 cut (forall x : nat, 2 * x = Div2.double x);
@@ -200,7 +200,7 @@ intros H14; absurd (2 * div2 (pred (p - 2 * S n)) < f1 m1); auto with arith.
 cut (forall x : nat, 2 * x = Div2.double x);
  [ intros tmp; rewrite tmp | idtac ].
 rewrite <- even_double; auto with arith.
-apply lt_trans with (2 := H14).
+apply Nat.lt_trans with (2 := H14).
 apply lt_S_n.
 rewrite <- S_pred with (m := 0); auto with arith.
 apply le_lt_n_Sm; auto with arith.
@@ -331,7 +331,7 @@ rewrite H10; rewrite <- H21; rewrite H6; rewrite H12; rewrite <- H6;
 split.
 intros i (H1, H2); exists (f i).
 case (make_partition_aux_correct (2 * n) f); intros HR1 HR2.
-case (le_or_lt i (f i)); intros H3.
+case (Nat.le_gt_cases i (f i)); intros H3.
 case (le_lt_or_eq _ _ H3); intros H4; auto with arith.
 left; apply HR2; repeat (split; auto with arith).
 case (Hf i); auto with arith.
@@ -354,5 +354,5 @@ case (HR1 _ _ H1).
 intros H2 (H3, (H4, H5)); auto.
 rewrite H5; auto.
 case (Hf i); auto with arith.
-rewrite (plus_comm i); intuition.
+rewrite (Nat.add_comm i); intuition.
 Qed.

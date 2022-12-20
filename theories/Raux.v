@@ -25,14 +25,14 @@ From Coq Require Import Rbase Rfunctions Ranalysis Rtrigo.
 From Coq Require Export Rpower.
 From Bertrand Require Export Misc Div.
 
-Hint Resolve exp_pos: real.
-Hint Resolve exp_increasing: real.
-Hint Resolve ln_increasing: real.
-Hint Resolve sqrt_lt_R0: real.
-Hint Resolve Rmult_lt_0_compat: real.
-Hint Resolve Rplus_lt_compat_l: real.
-Hint Resolve Rinv_0_lt_compat: real.
-Hint Resolve Rlt_not_eq: real.
+#[export] Hint Resolve exp_pos: real.
+#[export] Hint Resolve exp_increasing: real.
+#[export] Hint Resolve ln_increasing: real.
+#[export] Hint Resolve sqrt_lt_R0: real.
+#[export] Hint Resolve Rmult_lt_0_compat: real.
+#[export] Hint Resolve Rplus_lt_compat_l: real.
+#[export] Hint Resolve Rinv_0_lt_compat: real.
+#[export] Hint Resolve Rlt_not_eq: real.
 
 (** Axuillary properties of reals functions *)
 
@@ -41,7 +41,7 @@ Proof.
 intros r1 r2 H; replace 0%R with (r1 - r1)%R; unfold Rminus in |- *;
  auto with real.
 Qed.
-Hint Resolve Rlt_Rminus_ZERO: real.
+#[export] Hint Resolve Rlt_Rminus_ZERO: real.
 
 Theorem P_Rmin : forall (P : R -> Prop) (x y : R), P x -> P y -> P (Rmin x y).
 Proof.
@@ -51,7 +51,7 @@ Qed.
 Theorem Rle_pow :
  forall (e : R) (n m : nat), (1 < e)%R -> n <= m -> (e ^ n <= e ^ m)%R.
 Proof.
-intros e n m H H0; case (le_lt_or_eq _ _ H0); auto with real.
+intros e n m H H0; case (proj1 (Nat.lt_eq_cases _ _) H0); auto with real.
 intros H1; rewrite H1; auto with real.
 Qed.
 
