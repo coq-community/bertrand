@@ -22,6 +22,11 @@
 From Coq Require Import Div2 Even Wf_nat Arith ArithRing List.
 From Bertrand Require Import Bertrand.
 
+Lemma even_double n : Nat.Even n -> n = Nat.double (Nat.div2 n).
+Proof.
+intros [x ->]; rewrite Nat.div2_double; unfold Nat.double; ring.
+Qed.
+
 Theorem prime_2 : forall p : nat, prime p -> p = 2 \/ Nat.Odd p.
 Proof.
 intros p H.
@@ -29,7 +34,7 @@ case (Nat.Even_or_Odd p); auto; intros H1; left.
 case H; intros H2 H3; apply H3; auto with arith.
 exists (Nat.div2 p); auto with arith.
 apply trans_equal with (Nat.double (Nat.div2 p)); auto with arith.
-rewrite <- Nat.Even_double; auto.
+rewrite <- even_double; auto.
 unfold Nat.double in |- *; ring.
 Qed.
 
@@ -153,7 +158,7 @@ rewrite <- plus_n_O.
 rewrite Nat.sub_add; auto.
 cut (forall x : nat, 2 * x = Nat.double x);
  [ intros tmp; rewrite tmp | idtac ].
-rewrite <- Nat.Even_double; auto with arith.
+rewrite <- even_double; auto with arith.
 generalize H8; case (p - 2 * S n); simpl in |- *; auto with arith.
 intros x; simpl in |- *; unfold Nat.double in |- *; auto with arith.
 case (le_lt_dec m1 (2 * S n)); intros H7; auto with arith.
@@ -186,7 +191,7 @@ case (Rf1 m1); auto with arith.
 split; auto with arith.
 cut (forall x : nat, 2 * x = Nat.double x);
  [ intros tmp; rewrite tmp | idtac ].
-rewrite <- Nat.Even_double; auto with arith.
+rewrite <- even_double; auto with arith.
 generalize H8; case (p - 2 * S n); simpl in |- *; auto with arith.
 intros x; simpl in |- *; unfold Nat.double in |- *; auto with arith.
 intros H9 (H10, ((H11, H12), H13)).
@@ -195,13 +200,13 @@ case (le_lt_dec (p - 2 * S n) (f1 m1)); auto with arith.
 intros H14; absurd (2 * Nat.div2 (pred (p - 2 * S n)) < f1 m1); auto with arith.
 cut (forall x : nat, 2 * x = Nat.double x);
  [ intros tmp; rewrite tmp | idtac ].
-rewrite <- Nat.Even_double; auto with arith.
+rewrite <- even_double; auto with arith.
 generalize H14; case (p - 2 * S n); simpl in |- *; auto with arith.
 intros x; simpl in |- *; unfold Nat.double in |- *; auto with arith.
 intros H14; absurd (2 * Nat.div2 (pred (p - 2 * S n)) < f1 m1); auto with arith.
 cut (forall x : nat, 2 * x = Nat.double x);
  [ intros tmp; rewrite tmp | idtac ].
-rewrite <- Nat.Even_double; auto with arith.
+rewrite <- even_double; auto with arith.
 apply Nat.lt_trans with (2 := H14).
 apply Nat.succ_lt_mono.
 rewrite Nat.succ_pred_pos; auto with arith.
@@ -217,7 +222,7 @@ absurd (2 * S n < m1); auto with arith.
 apply lt_mult_inv with (a := 2); auto with arith.
 cut (forall x : nat, 2 * x = Nat.double x);
  [ intros tmp; rewrite tmp | idtac ].
-rewrite <- Nat.Even_double; auto with arith.
+rewrite <- even_double; auto with arith.
 apply Nat.succ_lt_mono.
 rewrite Nat.succ_pred_pos; auto with arith.
 apply Nat.lt_succ_r; auto with arith.
