@@ -97,7 +97,7 @@ Proof.
 intros n m.
 apply simpl_mult_r with (n := factorial n); auto with arith.
 apply simpl_mult_r with (n := factorial m); auto with arith.
-repeat rewrite mult_assoc_reverse.
+repeat rewrite <- Nat.mul_assoc.
 pattern (n + m) at 2 in |- *; rewrite Nat.add_comm.
 pattern (factorial n * factorial m) at 2 in |- *; rewrite Nat.mul_comm.
 repeat rewrite binomial_fact; auto.
@@ -112,9 +112,9 @@ intros m; case m; simpl in |- *; auto with arith.
 clear n; intros n Rec m; case m; clear m.
 case n; simpl in |- *; auto with arith.
 intros m; rewrite <- plus_n_O; rewrite <- plus_n_Sm; intros Hm.
-case (le_lt_or_eq (S (S (m + m))) n); auto with arith; intros H1.
+case (le_lt_eq_dec (S (S (m + m))) n); auto with arith; intros H1.
 rewrite (Nat.add_comm (binomial n (S m))).
-apply plus_le_compat; auto.
+apply Nat.add_le_mono; auto.
 apply Nat.le_trans with (binomial n (S m)); auto with arith.
 apply Rec; rewrite <- plus_n_O; auto with arith.
 apply Nat.lt_trans with (S m + m); auto with arith.
@@ -130,7 +130,7 @@ Proof.
 intros n m p H; elim p; auto.
 intros p1 H1; apply Nat.le_trans with (2 := H1).
 case (Nat.le_gt_cases p1 m); intros H2.
-rewrite <- (minus_Sn_m m p1); simpl in |- *; auto with arith.
+rewrite (Nat.sub_succ_l p1 m); simpl in |- *; auto with arith.
 apply binomial_mono_S.
 apply Nat.le_lt_trans with (2 := H); auto with arith.
 apply (fun m n p : nat => Nat.mul_le_mono_l p n m); apply minus_le;
@@ -156,8 +156,8 @@ rewrite sum_nm_i; rewrite binomial_def1.
 replace (1 * (power a (S n - 0) * power b 0)) with (power a (S n));
  [ idtac | simpl in |- *; ring ]; auto.
 rewrite sum_nm_f; rewrite binomial_def3.
-replace (S n - (0 + S n)) with 0; [ idtac | simpl in |- *; apply minus_n_n ];
- auto.
+replace (S n - (0 + S n)) with 0; [ idtac | simpl in |- *;
+  rewrite Nat.sub_diag]; auto. 
 replace (power a 0) with 1; auto.
 replace (b * (1 * (1 * power b (0 + S n)))) with (b * power b (S n));
  [ idtac | simpl in |- *; ring ]; auto.
@@ -217,8 +217,8 @@ Theorem binomial_odd :
  forall n : nat, binomial (2 * n + 1) (n + 1) <= power 2 (2 * n).
 Proof.
 intros n.
-case (le_lt_or_eq 0 n); auto with arith; intros H1.
-apply mult_S_le_reg_l with (n := 1).
+case (le_lt_eq_dec 0 n); auto with arith; intros H1.
+apply (Nat.mul_le_mono_pos_l _ _ 2); auto with arith.
 pattern 2 at 3 in |- *; rewrite <- (power_SO 2).
 rewrite power_mult.
 replace (1 + 2 * n) with (2 * n + 1) by apply Nat.add_comm.
@@ -236,9 +236,9 @@ apply Nat.le_trans with (sum_nm n 1 (fun x : nat => binomial (2 * n + 1) x));
  auto with arith.
 replace (n + 1) with (S n); simpl in |- *; auto; rewrite Nat.add_comm; auto.
 replace 1 with (0 + 1); auto with arith.
-simpl in |- *; rewrite <- (S_pred n 0); auto with arith.
-apply plus_minus; auto with arith; ring.
-simpl in |- *; rewrite <- (S_pred n 0); auto with arith.
+simpl in |- *; rewrite (Nat.lt_succ_pred 0); auto with arith.
+rewrite <- Nat.add_assoc, (Nat.add_comm _ (_ + 1)), Nat.add_sub; ring.
+simpl in |- *; rewrite (Nat.lt_succ_pred 0); auto with arith.
 apply Nat.le_lt_trans with n; auto with arith.
 pattern n at 1 in |- *; replace n with (n + 0); auto with arith.
 replace (2 * n + 1) with (n + (n + 1)); auto with arith.
@@ -261,7 +261,7 @@ cut (S (2 * n - 2) = 2 * n - 1);
  | generalize Hn; case n; simpl in |- *; auto;
     try (intros H1; inversion H1; fail);
     (intros n1; repeat rewrite <- plus_n_Sm; simpl in |- *;
-      rewrite <- minus_n_O) ]; auto.
+      rewrite Nat.sub_0_r) ]; auto.
 cut (2 * n - 2 < 2 * n - 1); [ intros H2 | rewrite <- H1; auto with arith ].
 cut (S (2 * n - 1) = 2 * n);
  [ intros H3
@@ -275,52 +275,50 @@ rewrite sum_nm_split with (p := 1) (r := 2 * n - 2); auto with arith.
 replace (1 + (1 + (2 * n - 2))) with (2 * n);
  [ idtac | generalize H1 H3; simpl in |- *; intros H4; rewrite H4; auto ].
 replace (2 * n - 1 - (1 + (2 * n - 2))) with 0;
- [ idtac | rewrite <- H1; apply minus_n_n ].
+ [ idtac | rewrite <- H1, Nat.sub_diag; auto ].
 apply Nat.le_trans with (1 + (S (2 * n - 2) * binomial (2 * n) n + 1)).
-repeat apply plus_le_compat; auto with arith.
+repeat apply Nat.add_le_mono; auto with arith.
 case n; simpl in |- *; auto.
 rewrite <- sum_nm_c with (c := binomial (2 * n) n) (p := 1).
 apply sum_nm_le.
 intros x Hx H4.
-generalize (S_pred _ _ Hn); intros H5; pattern n at 3 in |- *; rewrite H5.
+assert (Hx2n : x <= 2 * n).
+apply Nat.le_trans with (1 := H4).
+pattern (2 * n) at 2; rewrite <- H3; rewrite <- H1; auto with arith.
+generalize (Nat.lt_succ_pred _ _ Hn); intros H5; rewrite <- H5 at 3.
 case (Nat.le_gt_cases x n); intros H6.
 replace x with (S (pred n) - (S (pred n) - x)).
 apply binomial_mono.
-rewrite H5; auto with arith.
 rewrite <- H5; auto with arith.
-apply sym_equal; apply plus_minus; auto with arith.
-rewrite Nat.add_comm; apply le_plus_minus; auto with arith.
-pattern (2 * n) at 1 in |- *; rewrite (le_plus_minus x (2 * n));
- auto with arith.
+rewrite H5; auto with arith.
+apply Nat.add_sub_eq_l.
+apply Nat.sub_add; auto.
+rewrite <- (Nat.sub_add x (2 * n)) at 1; auto with arith.
+rewrite Nat.add_comm.
 rewrite binomial_comp with (n := x).
-rewrite <- (le_plus_minus x (2 * n)); auto with arith.
+rewrite Nat.add_comm, Nat.sub_add; auto with arith.
 replace (2 * n - x) with (S (pred n) - (x - n)).
 apply binomial_mono.
-rewrite H5; auto with arith.
 rewrite <- H5; auto with arith.
-apply sym_equal; apply plus_minus; auto with arith.
-rewrite <- minus_plus_le.
-replace (x + 2 * n) with (n + x + n); auto with arith; ring.
-apply Nat.lt_le_incl; auto.
-apply Nat.le_trans with (1 := H4).
-pattern (2 * n) at 2; rewrite <- H3; rewrite <- H1; auto with arith.
-apply Nat.le_trans with (1 := H4).
-pattern (2 * n) at 2; rewrite <- H3; rewrite <- H1; auto with arith.
-apply Nat.le_trans with (1 := H4).
-pattern (2 * n) at 2; rewrite <- H3; rewrite <- H1; auto with arith.
+rewrite H5; auto with arith.
+replace x with (n + (x - n)) at 2; auto with arith.
+rewrite Nat.sub_add_distr.
+replace (2 * n) with (n + n) by ring.
+rewrite Nat.add_sub; auto.
 simpl in |- *; rewrite binomial_def3; auto with arith.
 replace (1 + (S (2 * n - 2) * binomial (2 * n) n + 1)) with
  (2 + S (2 * n - 2) * binomial (2 * n) n); [ idtac | ring ].
 rewrite H1.
 replace (2 * n * binomial (2 * n) n) with
  (binomial (2 * n) n + (2 * n - 1) * binomial (2 * n) n).
-apply plus_le_compat; auto with arith.
+apply Nat.add_le_mono; auto with arith.
 generalize Hn; elim n; auto with arith.
 intros n1; case n1; auto with arith.
 intros n0 H Hn0; replace (2 * S (S n0)) with (S (S (2 * S n0)));
  auto with arith.
 2: simpl in |- *; repeat rewrite <- plus_n_Sm; auto.
 repeat rewrite binomial_def4; auto with arith.
-apply le_plus_trans; rewrite Nat.add_comm; auto with arith.
+refine (Nat.le_trans  _ _ _ _ (Nat.le_add_r _ _)); 
+  rewrite Nat.add_comm; auto with arith.
 pattern (2 * n) at 4 in |- *; rewrite <- H3; auto.
 Qed.
