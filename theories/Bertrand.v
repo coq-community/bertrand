@@ -196,7 +196,8 @@ replace 4 with (power 2 2); auto with arith.
 rewrite power_power; apply binomial_even; auto with arith.
 apply Nat.lt_le_trans with (2 := H); auto with arith; simpl in |- *;
  auto with arith.
-rewrite (le_plus_minus 1 (div (sqr (2 * n)) 2)).
+rewrite <- (Nat.sub_add 1 (div (sqr (2 * n)) 2)).
+rewrite Nat.add_comm.
 rewrite <- power_mult; rewrite power_SO.
 rewrite <- (Nat.mul_assoc (2 * n)).
 apply mult_lt_bis; auto with arith.
