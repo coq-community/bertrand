@@ -22,6 +22,7 @@
 From Coq Require Import Div2 Even Wf_nat Arith ArithRing List.
 From Bertrand Require Import Bertrand.
 
+(*** All these theorems are in coq 8.16 *)
 Lemma even_double n : Nat.Even n -> n = Nat.double (Nat.div2 n).
 Proof.
 intros [x ->]; rewrite Nat.div2_double; unfold Nat.double; ring.
@@ -31,6 +32,15 @@ Lemma even_mul_l n m : Nat.Even n -> Nat.Even (n * m).
 Proof.
 intros [x ->]; exists (x * m); ring.
 Qed.
+
+Lemma odd_add_even_inv_r  n m : Nat.Odd (n + m) -> Nat.Odd n -> Nat.Even m.
+Proof.
+intros [x Hmn] [y Hn]; exists (x - y).
+rewrite Nat.mul_sub_distr_l, <- Nat.sub_succ.
+rewrite <- Nat.add_1_r, <- Hmn, <- Nat.add_1_r, <- Hn.
+rewrite Nat.add_comm, Nat.add_sub; auto.
+Qed.
+(***  *)
 
 Theorem prime_2 : forall p : nat, prime p -> p = 2 \/ Nat.Odd p.
 Proof.
@@ -238,7 +248,7 @@ apply Nat.add_lt_mono_l with (p := 2 * S n); auto with arith.
 rewrite (Nat.add_comm _ (p - 2 * S n)), Nat.sub_add; auto with arith.
 rewrite <- plus_n_O; auto.
 intros x; simpl in |- *; unfold Nat.double in |- *; auto with arith.
-apply (Nat.Odd_add_Even_inv_r 1); auto with arith.
+apply (odd_add_even_inv_r 1); auto with arith.
 change (Nat.Odd (S (pred (p - 2 * S n)))) in |- *.
 rewrite Nat.succ_pred_pos.
 apply (Nat.Odd_add_Odd_inv_r (2 * S n)); auto.
