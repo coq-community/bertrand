@@ -40,6 +40,18 @@ rewrite Nat.mul_sub_distr_l, <- Nat.sub_succ.
 rewrite <- Nat.add_1_r, <- Hmn, <- Nat.add_1_r, <- Hn.
 rewrite Nat.add_comm, Nat.add_sub; auto.
 Qed.
+
+Lemma odd_add_odd_inv_r n m :  Nat.Odd (n + m) -> Nat.Even n -> Nat.Odd m.
+Proof.
+destruct m as [|m].
+rewrite Nat.add_0_r; intros; case (Nat.Even_Odd_False n); auto.
+intros [x Hmn] [y Hn]; exists (x - y).
+rewrite Nat.mul_sub_distr_l, <- Nat.sub_succ.
+rewrite <- (Nat.add_1_r (2 * x)), <- Hmn, <- Hn.
+rewrite <- (Nat.add_succ_comm n), (Nat.add_comm (S n)).
+rewrite Nat.add_sub, Nat.add_1_r; auto.
+Qed.
+
 (***  *)
 
 Theorem prime_2 : forall p : nat, prime p -> p = 2 \/ Nat.Odd p.
@@ -251,7 +263,7 @@ intros x; simpl in |- *; unfold Nat.double in |- *; auto with arith.
 apply (odd_add_even_inv_r 1); auto with arith.
 change (Nat.Odd (S (pred (p - 2 * S n)))) in |- *.
 rewrite Nat.succ_pred_pos.
-apply (Nat.Odd_add_Odd_inv_r (2 * S n)); auto.
+apply (odd_add_odd_inv_r (2 * S n)); auto.
 rewrite Nat.add_comm, Nat.sub_add; auto with arith.
 case (prime_2 p); auto.
 intros H9.
