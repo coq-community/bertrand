@@ -27,6 +27,11 @@ Proof.
 intros [x ->]; rewrite Nat.div2_double; unfold Nat.double; ring.
 Qed.
 
+Lemma even_mul_l n m : Nat.Even n -> Nat.Even (n * m).
+Proof.
+intros [x ->]; exists (x * m); ring.
+Qed.
+
 Theorem prime_2 : forall p : nat, prime p -> p = 2 \/ Nat.Odd p.
 Proof.
 intros p H.
@@ -121,7 +126,7 @@ case Hp;
  [ simpl in |- *; rewrite <- plus_n_Sm; auto with arith
  | intros Hp1 (Hp2, Hp3) ].
 cut (Nat.Even (2 * S n)); 
-  [ intros Hn | apply Nat.Even_mul_l; exists 1; auto].
+  [ intros Hn | apply even_mul_l; exists 1; auto].
 cut (Nat.Even (pred (p - 2 * S n))); [ intros Heven | idtac ].
 cut (Nat.div2 (pred (p - 2 * S n)) < S n); [ intros H4 | idtac ].
 case (Rec (Nat.div2 (pred (p - 2 * S n))) H4).
@@ -152,7 +157,7 @@ absurd (p <= 2 * S n); auto with arith; rewrite H9; auto with arith.
 replace 2 with (2 * 1) at 1 by auto; auto with arith.
 red in |- *; intros H; apply (Nat.Even_Odd_False  p); auto with arith.
 replace p with (2 * m1).
-apply Nat.Even_mul_l; exists 1; auto.
+apply even_mul_l; exists 1; auto.
 simpl in |- *; pattern m1 at 1 in |- *; rewrite <- H.
 rewrite <- plus_n_O.
 rewrite Nat.sub_add; auto.
