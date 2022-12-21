@@ -22,13 +22,14 @@
 From Coq Require Import Div2 Even Wf_nat Arith ArithRing List.
 From Bertrand Require Import Bertrand.
 
-Theorem prime_2 : forall p : nat, prime p -> p = 2 \/ odd p.
+Theorem prime_2 : forall p : nat, prime p -> p = 2 \/ Nat.Odd p.
 Proof.
 intros p H.
-case (even_or_odd p); auto; intros H1; left.
+case (Nat.Even_or_Odd p); auto; intros H1; left.
 case H; intros H2 H3; apply H3; auto with arith.
 exists (Nat.div2 p); auto with arith.
 apply trans_equal with (Nat.double (Nat.div2 p)); auto with arith.
+rewrite <- Nat.Even_double; auto.
 unfold Nat.double in |- *; ring.
 Qed.
 
@@ -85,7 +86,7 @@ intros H2; case (Bertrand n); auto.
 intros p (H3, (H4, H5)).
 absurd (prime p); auto with arith.
 apply H2; split; auto with arith.
-rewrite Nat.add_succ_comm; rewrite <- (S_pred (pred n) 0); auto with arith.
+rewrite Nat.add_succ_comm, Nat.succ_pred_pos; auto with arith.
 apply Nat.lt_succ_r.
 rewrite plus_n_Sm; rewrite (Nat.lt_succ_pred 0 n); auto with arith.
 replace (n + n) with (2 * n); auto with arith; ring.
@@ -114,8 +115,9 @@ intros p Hp.
 case Hp;
  [ simpl in |- *; rewrite <- plus_n_Sm; auto with arith
  | intros Hp1 (Hp2, Hp3) ].
-cut (even (2 * S n)); [ intros Hn | auto with arith ].
-cut (even (pred (p - 2 * S n))); [ intros Heven | idtac ].
+cut (Nat.Even (2 * S n)); 
+  [ intros Hn | apply Nat.Even_mul_l; exists 1; auto].
+cut (Nat.Even (pred (p - 2 * S n))); [ intros Heven | idtac ].
 cut (Nat.div2 (pred (p - 2 * S n)) < S n); [ intros H4 | idtac ].
 case (Rec (Nat.div2 (pred (p - 2 * S n))) H4).
 intros f1 Rf1.
@@ -142,103 +144,101 @@ case (le_lt_dec (p - 2 * S n) m1); intros H8; auto with arith.
 2: split; auto.
 case (prime_2 p); auto; intros H9.
 absurd (p <= 2 * S n); auto with arith; rewrite H9; auto with arith.
-case n; simpl in |- *; auto with arith.
-red in |- *; intros H; apply (not_even_and_odd p); auto with arith.
-replace p with (2 * m1); auto with arith.
+replace 2 with (2 * 1) at 1 by auto; auto with arith.
+red in |- *; intros H; apply (Nat.Even_Odd_False  p); auto with arith.
+replace p with (2 * m1).
+apply Nat.Even_mul_l; exists 1; auto.
 simpl in |- *; pattern m1 at 1 in |- *; rewrite <- H.
 rewrite <- plus_n_O.
-rewrite Nat.add_comm; apply le_plus_minus_r; auto.
-cut (forall x : nat, 2 * x = Div2.double x);
+rewrite Nat.sub_add; auto.
+cut (forall x : nat, 2 * x = Nat.double x);
  [ intros tmp; rewrite tmp | idtac ].
-rewrite <- even_double; auto with arith.
+rewrite <- Nat.Even_double; auto with arith.
 generalize H8; case (p - 2 * S n); simpl in |- *; auto with arith.
-intros x; simpl in |- *; unfold Div2.double in |- *; auto with arith.
+intros x; simpl in |- *; unfold Nat.double in |- *; auto with arith.
 case (le_lt_dec m1 (2 * S n)); intros H7; auto with arith.
 case (le_lt_dec (p - 2 * S n) m1); intros H8; auto with arith.
 case (le_lt_dec (p - m1) (2 * S n)); intros H9; auto with arith.
 case (le_lt_dec (p - 2 * S n) (p - m1)); intros H10; auto with arith.
 split.
-apply sym_equal; apply plus_minus.
-apply sym_equal; rewrite Nat.add_comm.
-apply le_plus_minus_r; auto with arith.
+apply Nat.add_sub_eq_l.
+rewrite Nat.sub_add; auto with arith.
+rewrite Nat.sub_add; auto with arith.
 split; auto.
 split; auto.
-apply plus_lt_reg_l with (p := m1); auto with arith.
-rewrite le_plus_minus_r; auto with arith.
+apply Nat.le_add_le_sub_r.
+rewrite Nat.add_1_l.
+apply Nat.le_succ_l.
 apply Nat.le_lt_trans with (2 := H1); auto with arith.
-rewrite <- plus_n_O; auto.
-rewrite Nat.add_comm; rewrite le_plus_minus_r; auto with arith.
 absurd (2 * S n < m1); auto with arith.
-apply plus_lt_reg_l with (p := p).
-pattern p at 1 in |- *; rewrite <- (le_plus_minus_r m1); auto with arith.
-pattern p at 2 in |- *; rewrite <- (le_plus_minus_r (2 * S n));
- auto with arith.
+apply Nat.add_lt_mono_l with (p := p).
+pattern p at 1 in |- *; rewrite <- (Nat.sub_add m1); auto with arith.
+rewrite (Nat.add_comm _ m1).
+pattern p at 2 in |- *; rewrite <- (Nat.sub_add (2 * S n)); auto with arith.
+rewrite (Nat.add_comm (p - _) (2 * S n)).
 replace (m1 + (p - m1) + 2 * S n) with (2 * S n + (p - m1) + m1);
  auto with arith; ring.
 absurd (m1 < p - 2 * S n); auto with arith.
-apply plus_lt_reg_l with (p := 2 * S n); auto with arith.
-rewrite le_plus_minus_r; auto with arith.
-rewrite <- (le_plus_minus_r m1 p); auto with arith.
-rewrite (Nat.add_comm m1); auto with arith.
+apply Nat.add_lt_mono_l  with (p := 2 * S n); auto with arith.
+rewrite (Nat.add_comm _ (_ - _)), Nat.sub_add; auto with arith.
+rewrite <- (Nat.sub_add m1 p); auto with arith.
 case (Rf1 m1); auto with arith.
 split; auto with arith.
-cut (forall x : nat, 2 * x = Div2.double x);
+cut (forall x : nat, 2 * x = Nat.double x);
  [ intros tmp; rewrite tmp | idtac ].
-rewrite <- even_double; auto with arith.
+rewrite <- Nat.Even_double; auto with arith.
 generalize H8; case (p - 2 * S n); simpl in |- *; auto with arith.
-intros x; simpl in |- *; unfold Div2.double in |- *; auto with arith.
+intros x; simpl in |- *; unfold Nat.double in |- *; auto with arith.
 intros H9 (H10, ((H11, H12), H13)).
 case (le_lt_dec (f1 m1) (2 * S n)); auto with arith.
 case (le_lt_dec (p - 2 * S n) (f1 m1)); auto with arith.
-intros H14; absurd (2 * div2 (pred (p - 2 * S n)) < f1 m1); auto with arith.
-cut (forall x : nat, 2 * x = Div2.double x);
+intros H14; absurd (2 * Nat.div2 (pred (p - 2 * S n)) < f1 m1); auto with arith.
+cut (forall x : nat, 2 * x = Nat.double x);
  [ intros tmp; rewrite tmp | idtac ].
-rewrite <- even_double; auto with arith.
+rewrite <- Nat.Even_double; auto with arith.
 generalize H14; case (p - 2 * S n); simpl in |- *; auto with arith.
-intros x; simpl in |- *; unfold Div2.double in |- *; auto with arith.
-intros H14; absurd (2 * div2 (pred (p - 2 * S n)) < f1 m1); auto with arith.
-cut (forall x : nat, 2 * x = Div2.double x);
+intros x; simpl in |- *; unfold Nat.double in |- *; auto with arith.
+intros H14; absurd (2 * Nat.div2 (pred (p - 2 * S n)) < f1 m1); auto with arith.
+cut (forall x : nat, 2 * x = Nat.double x);
  [ intros tmp; rewrite tmp | idtac ].
-rewrite <- even_double; auto with arith.
+rewrite <- Nat.Even_double; auto with arith.
 apply Nat.lt_trans with (2 := H14).
-apply lt_S_n.
-rewrite <- S_pred with (m := 0); auto with arith.
-apply le_lt_n_Sm; auto with arith.
-apply (fun p n m : nat => plus_le_reg_l n m p) with (p := 2 * S n).
-rewrite le_plus_minus_r; auto with arith.
+apply Nat.succ_lt_mono.
+rewrite Nat.succ_pred_pos; auto with arith.
+apply Nat.lt_succ_r; auto with arith.
+apply (fun p n m : nat => Nat.add_le_mono_l n m p) with (p := 2 * S n).
+rewrite Nat.add_comm, Nat.sub_add; auto with arith.
 replace (2 * S n + 2 * S n) with (2 * (2 * S n)); auto with arith; ring.
-apply plus_lt_reg_l with (p := 2 * S n); auto with arith.
-rewrite le_plus_minus_r; auto with arith.
+apply Nat.add_lt_mono_l with (p := 2 * S n); auto with arith.
+rewrite (Nat.add_comm _ (p - 2 * S n)), Nat.sub_add; auto with arith.
 rewrite <- plus_n_O; auto.
-intros x; simpl in |- *; unfold Div2.double in |- *; auto with arith.
+intros x; simpl in |- *; unfold Nat.double in |- *; auto with arith.
 absurd (2 * S n < m1); auto with arith.
 apply lt_mult_inv with (a := 2); auto with arith.
-cut (forall x : nat, 2 * x = Div2.double x);
+cut (forall x : nat, 2 * x = Nat.double x);
  [ intros tmp; rewrite tmp | idtac ].
-rewrite <- even_double; auto with arith.
-apply lt_S_n.
-rewrite <- S_pred with (m := 0); auto with arith.
-apply le_lt_n_Sm; auto with arith.
-apply (fun p n m : nat => plus_le_reg_l n m p) with (p := 2 * S n).
-rewrite le_plus_minus_r; auto with arith.
+rewrite <- Nat.Even_double; auto with arith.
+apply Nat.succ_lt_mono.
+rewrite Nat.succ_pred_pos; auto with arith.
+apply Nat.lt_succ_r; auto with arith.
+apply (fun p n m : nat => Nat.add_le_mono_l n m p) with (p := 2 * S n).
+rewrite Nat.add_comm, Nat.sub_add; auto with arith.
 replace (2 * S n + 2 * S n) with (2 * (2 * S n)); auto with arith; ring.
-apply plus_lt_reg_l with (p := 2 * S n); auto with arith.
-rewrite le_plus_minus_r; auto with arith.
+apply Nat.add_lt_mono_l with (p := 2 * S n); auto with arith.
+rewrite (Nat.add_comm _ (p - 2 * S n)), Nat.sub_add; auto with arith.
 rewrite <- plus_n_O; auto.
-intros x; simpl in |- *; unfold Div2.double in |- *; auto with arith.
-apply (odd_plus_even_inv_r 1); auto with arith.
-change (odd (S (pred (p - 2 * S n)))) in |- *.
-rewrite <- (S_pred (p - 2 * S n) 0).
-apply (odd_plus_odd_inv_r (2 * S n)).
-rewrite le_plus_minus_r; auto with arith.
+intros x; simpl in |- *; unfold Nat.double in |- *; auto with arith.
+apply (Nat.Odd_add_Even_inv_r 1); auto with arith.
+change (Nat.Odd (S (pred (p - 2 * S n)))) in |- *.
+rewrite Nat.succ_pred_pos.
+apply (Nat.Odd_add_Odd_inv_r (2 * S n)); auto.
+rewrite Nat.add_comm, Nat.sub_add; auto with arith.
 case (prime_2 p); auto.
 intros H9.
 absurd (p <= 2 * S n); auto with arith.
 rewrite H9; case n; simpl in |- *; auto with arith.
-apply even_mult_l; auto with arith.
-apply plus_lt_reg_l with (p := 2 * S n); auto with arith.
-rewrite le_plus_minus_r; auto with arith.
-rewrite <- plus_n_O; auto.
+apply lt_minus_O_lt; auto.
+exists 0; auto.
 Defined.
 
 Fixpoint make_partition_aux (f : nat -> nat) (n : nat) {struct n} :
@@ -269,7 +269,7 @@ intros H; split.
 intros i j H1; case (Rec i j); auto.
 intros H2 (H3, H4); auto with arith.
 intros i (H1, (H2, H3)).
-case (le_lt_or_eq _ _ H2); auto with arith.
+case (le_lt_eq_dec _ _ H2); auto with arith.
 intros H4; absurd (f i <= i); auto with arith; rewrite H4; auto with arith.
 intros H; split.
 intros i j [H1| H1]; auto.
@@ -278,7 +278,7 @@ intros H2 H3; rewrite <- H2; rewrite <- H3; auto with arith.
 case (Rec i j); auto.
 intros H2 (H3, H4); auto with arith.
 intros i (H1, (H2, H3)).
-case (le_lt_or_eq _ _ H2); auto with arith.
+case (le_lt_eq_dec _ _ H2); auto with arith.
 Qed.
 
 Definition make_partition : nat -> list (nat * nat).
@@ -332,7 +332,7 @@ split.
 intros i (H1, H2); exists (f i).
 case (make_partition_aux_correct (2 * n) f); intros HR1 HR2.
 case (Nat.le_gt_cases i (f i)); intros H3.
-case (le_lt_or_eq _ _ H3); intros H4; auto with arith.
+case (le_lt_eq_dec _ _ H3); intros H4; auto with arith.
 left; apply HR2; repeat (split; auto with arith).
 case (Hf i); auto with arith.
 intros H5; case H5; auto.
