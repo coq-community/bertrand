@@ -107,15 +107,15 @@ intros f p q; elim q.
 intros r H; inversion H; simpl in |- *.
 intros n H r H0; inversion H0.
 rewrite prod_nm_f.
-rewrite <- minus_n_n; rewrite <- plus_n_Sm; simpl in |- *; auto.
+rewrite Nat.sub_diag; rewrite <- plus_n_Sm; simpl in |- *; auto.
 rewrite prod_nm_f; rewrite (H r); auto with arith.
-rewrite <- minus_Sn_m; auto with arith.
+rewrite Nat.sub_succ_l; auto with arith.
 rewrite prod_nm_f; auto with arith.
 replace (1 + (p + r) + S (n - (1 + r))) with (p + S n); auto with arith.
-rewrite minus_Sn_m; auto with arith.
+rewrite <- Nat.sub_succ_l; auto with arith.
 replace (1 + (p + r) + (S n - (1 + r))) with (p + (1 + r + (S n - (1 + r))));
  [ idtac | ring ].
-rewrite <- le_plus_minus; auto with arith.
+rewrite (Nat.add_comm (1 + r)), Nat.sub_add; auto with arith.
 Qed.
 
 Theorem prod_nm_c :
