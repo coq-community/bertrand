@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: coq-community/docker-coq-action@v1
         with:
-          custom_image: 'coqorg/coq:8.13'
+          custom_image: 'coqorg/coq:8.18'
           custom_script: |
             {{before_install}}
             startGroup "Build bertrand dependencies"

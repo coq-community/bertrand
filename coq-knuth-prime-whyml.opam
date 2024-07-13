@@ -18,10 +18,10 @@ build: [
   [make "why"]
 ]
 depends: [
-  "coq" {= "8.13.2"}
-  "why3" {= "1.4.1"}
-  "why3-coq" {= "1.4.1"}
-  "alt-ergo" {= "2.4.1"}
+  "coq" {= "8.18.0"}
+  "why3" {= "1.7.2"}
+  "why3-coq" {= "1.7.2"}
+  "alt-ergo" {= "2.5.4"}
   "coq-bertrand" {= version}
 ]
 
