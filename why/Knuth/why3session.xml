@@ -151,12 +151,12 @@
            <goal name="prime&#39;vc.27.1.1.1.0.1.0.0.0.0" expl="asserted formula" proved="true">
            <transf name="split_vc" proved="true" >
             <goal name="prime&#39;vc.27.1.1.1.0.1.0.0.0.0.0" expl="asserted formula" proved="true">
-            <transf name="assert" proved="true" arg1="(x * x &lt;= x * y /\ y * x &lt;= y * y)">
+            <transf name="assert" proved="true" arg1="(x * x &lt;= y * x /\ x * y &lt;= y * y)">
              <goal name="prime&#39;vc.27.1.1.1.0.1.0.0.0.0.0.0" expl="asserted formula" proved="true">
-             <proof prover="2"><path name="Knuth_Knuth_h_4.v"/><result status="valid" time="0.304876"/></proof>
+             <proof prover="0"><result status="valid" time="0.043956" steps="341"/></proof>
              </goal>
              <goal name="prime&#39;vc.27.1.1.1.0.1.0.0.0.0.0.1" expl="asserted formula" proved="true">
-             <proof prover="0"><result status="valid" time="0.035812" steps="103"/></proof>
+             <proof prover="0"><result status="valid" time="0.035121" steps="103"/></proof>
              </goal>
             </transf>
             </goal>
