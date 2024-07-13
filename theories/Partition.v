@@ -19,7 +19,7 @@
                                          Laurent.Thery@inria.fr (2002)
   *********************************************************************)
 
-From Coq Require Import Div2 Even Wf_nat Arith ArithRing List.
+From Coq Require Import Wf_nat Arith ArithRing List.
 From Bertrand Require Import Bertrand.
 
 (*** All these theorems are in coq 8.16 *)
