@@ -187,7 +187,6 @@
   </transf>
   </goal>
   <goal name="prime&#39;vc.28" expl="loop invariant preservation" proved="true">
-  <proof prover="2"><path name="Knuth_Knuth_primeqtvc_1.v"/><result status="unknown" time="0.287442"/></proof>
   <transf name="assert" proved="true" arg1="(j &lt; i - 1 \/ j = i - 1)" arg2="as" arg3="h">
    <goal name="prime&#39;vc.28.0" expl="asserted formula" proved="true">
    <proof prover="0"><result status="valid" time="0.031720" steps="77"/></proof>
