@@ -10,8 +10,8 @@ Follow the instructions on https://github.com/coq-community/templates to regener
 [![Zulip][zulip-shield]][zulip-link]
 [![DOI][doi-shield]][doi-link]
 
-[docker-action-shield]: https://github.com/coq-community/bertrand/workflows/Docker%20CI/badge.svg?branch=master
-[docker-action-link]: https://github.com/coq-community/bertrand/actions?query=workflow:"Docker%20CI"
+[docker-action-shield]: https://github.com/coq-community/bertrand/actions/workflows/docker-action.yml/badge.svg?branch=master
+[docker-action-link]: https://github.com/coq-community/bertrand/actions/workflows/docker-action.yml
 
 [contributing-shield]: https://img.shields.io/badge/contributions-welcome-%23f7931e.svg
 [contributing-link]: https://github.com/coq-community/manifesto/blob/master/CONTRIBUTING.md
@@ -37,7 +37,7 @@ an application of the postulate to compute partitions.
 - Coq-community maintainer(s):
   - Laurent Théry ([**@thery**](https://github.com/thery))
 - License: [GNU Lesser General Public License v2.1 or later](LICENSE)
-- Compatible Coq versions: Coq 8.12 or later
+- Compatible Coq versions: Coq 8.18 or later
 - Additional dependencies: none
 - Coq namespace: `Bertrand`
 - Related publication(s):
@@ -101,15 +101,15 @@ let part30 = part 15;;
 ## Replaying the WhyML program correctness proof
 
 To replay the proof of correctness for the WhyML program for computing primes,
-first make sure the following packages are installed (in addition to Coq 8.13.2
+first make sure the following packages are installed (in addition to Coq 8.18.0
 and the proof of Bertrand's postulate):
 
-- [Alt-Ergo 2.4.1](https://alt-ergo.ocamlpro.com)
+- [Alt-Ergo 2.5.4](https://alt-ergo.ocamlpro.com)
 - [Why3 1.4.1](http://why3.lri.fr) and its Coq library
 
 These packages can be installed via OPAM using the following command:
 ```
-opam install alt-ergo.2.4.1 why3.1.4.1 why3-coq.1.4.1
+opam install alt-ergo.2.5.4 why3.1.7.2 why3-coq.1.7.2
 ```
 Then, the proof can be replayed by running
 ```

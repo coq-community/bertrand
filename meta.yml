@@ -31,16 +31,12 @@ license:
   identifier: LGPL-2.1-or-later
 
 supported_coq_versions:
-  text: Coq 8.12 or later
-  opam: '{(>= "8.12" & < "8.18~") | (= "dev")}'
+  text: Coq 8.18 or later
+  opam: '{(>= "8.18" & <= "8.20~") | (= "dev")}'
 
 tested_coq_opam_versions:
 - version: 'dev'
-- version: '8.16'
-- version: '8.15'
-- version: '8.14'
-- version: '8.13'
-- version: '8.12'
+- version: '8.18'
 
 tested_coq_nix_versions:
 - coq_version: 'master'
@@ -95,15 +91,15 @@ documentation: |
   ## Replaying the WhyML program correctness proof
 
   To replay the proof of correctness for the WhyML program for computing primes,
-  first make sure the following packages are installed (in addition to Coq 8.13.2
+  first make sure the following packages are installed (in addition to Coq 8.18.0
   and the proof of Bertrand's postulate):
 
-  - [Alt-Ergo 2.4.1](https://alt-ergo.ocamlpro.com)
+  - [Alt-Ergo 2.5.4](https://alt-ergo.ocamlpro.com)
   - [Why3 1.4.1](http://why3.lri.fr) and its Coq library
 
   These packages can be installed via OPAM using the following command:
   ```
-  opam install alt-ergo.2.4.1 why3.1.4.1 why3-coq.1.4.1
+  opam install alt-ergo.2.5.4 why3.1.7.2 why3-coq.1.7.2
   ```
   Then, the proof can be replayed by running
   ```
