@@ -53,16 +53,20 @@ Parameter mixfix_lblsmnrb:
   forall {a:Type} {a_WT:WhyType a}, array a -> Numbers.BinNums.Z -> a ->
   array a.
 
+Axiom mixfix_lblsmnrb'spec'0 :
+  forall {a:Type} {a_WT:WhyType a},
+  forall (a1:array a) (i:Numbers.BinNums.Z) (v:a),
+  ((length (mixfix_lblsmnrb a1 i v)) = (length a1)).
+
 Axiom mixfix_lblsmnrb'spec :
   forall {a:Type} {a_WT:WhyType a},
   forall (a1:array a) (i:Numbers.BinNums.Z) (v:a),
-  ((length (mixfix_lblsmnrb a1 i v)) = (length a1)) /\
   ((elts (mixfix_lblsmnrb a1 i v)) = (map.Map.set (elts a1) i v)).
 
 Parameter make:
   forall {a:Type} {a_WT:WhyType a}, Numbers.BinNums.Z -> a -> array a.
 
-Axiom make'spec :
+Axiom make_spec :
   forall {a:Type} {a_WT:WhyType a},
   forall (n:Numbers.BinNums.Z) (v:a), (0%Z <= n)%Z ->
   (forall (i:Numbers.BinNums.Z), (0%Z <= i)%Z /\ (i < n)%Z ->
@@ -167,9 +171,20 @@ Axiom H11 : (0%Z <= j1)%Z.
 
 Axiom H12 : (j1 < i)%Z.
 
-Axiom H13 : ~ ((b1 = Init.Datatypes.true) /\ ((mixfix_lbrb a2 j1) <= s)%Z).
+Parameter o: Init.Datatypes.bool.
 
-Axiom H14 : ~ (b1 = Init.Datatypes.true).
+Parameter o1: Numbers.BinNums.Z.
+
+Axiom H13 :
+  ((b1 = Init.Datatypes.true) ->
+   (o1 = (mixfix_lbrb a2 j1)) /\
+   ((o1 <= s)%Z -> (o = Init.Datatypes.true)) /\
+   (~ (o1 <= s)%Z -> (o = Init.Datatypes.false))) /\
+  (~ (b1 = Init.Datatypes.true) -> (o = Init.Datatypes.false)).
+
+Axiom H14 : ~ (o = Init.Datatypes.true).
+
+Axiom H15 : ~ (b1 = Init.Datatypes.true).
 
 Parameter m1: Numbers.BinNums.Z.
 
@@ -193,3 +208,6 @@ assert (H5 : x = Z.to_nat n1); try lia.
 apply H1; try lia.
 exists (Z.to_nat y); lia.
 Qed.
+
+
+
